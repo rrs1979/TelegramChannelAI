@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+published_hashes.json
+*.jpg
+*.png
+.venv/
