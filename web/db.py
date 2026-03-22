@@ -68,6 +68,7 @@ def init_db():
                 published_at TEXT DEFAULT (datetime('now'))
             );
         """)
+    seed_published()
 
 
 # --- sources ---
@@ -173,6 +174,39 @@ def update_queue_status(queue_id, status):
         conn.execute(
             "UPDATE queue SET status = ?, reviewed_at = ? WHERE id = ?",
             (status, now, queue_id)
+        )
+
+
+# --- published ---
+
+def get_published(limit=100):
+    with db_conn() as conn:
+        return [dict(r) for r in conn.execute(
+            "SELECT * FROM published ORDER BY published_at DESC LIMIT ?", (limit,)
+        ).fetchall()]
+
+
+def seed_published():
+    """Insert a few sample posts if table is empty (for dev/demo)."""
+    with db_conn() as conn:
+        count = conn.execute("SELECT COUNT(*) FROM published").fetchone()[0]
+        if count > 0:
+            return
+
+        samples = [
+            (1001, "5 underrated Python libraries every backend dev should know about. "
+             "Thread below with code examples and real benchmarks.",
+             "python_weekly", "2026-03-20 14:30:00"),
+            (1002, "The market is shifting. Here's what 3 months of tracking crypto "
+             "sentiment on Telegram taught me about predicting price moves.",
+             "crypto_signals", "2026-03-19 09:15:00"),
+            (1003, "New AI image generators compared: Flux vs SDXL vs Midjourney v6. "
+             "Quality, speed, and cost breakdown with sample outputs.",
+             "tech_news_daily", "2026-03-18 18:45:00"),
+        ]
+        conn.executemany(
+            "INSERT INTO published (telegram_msg_id, text, source, published_at) VALUES (?, ?, ?, ?)",
+            samples,
         )
 
 

@@ -12,7 +12,7 @@ from web.config import SECRET_KEY, PORT, DEBUG
 from web.db import (
     init_db, get_stats, get_sources, add_source, remove_source,
     toggle_source, get_queue, update_queue_status, get_last_run,
-    get_runs, start_run, finish_run, add_to_queue,
+    get_runs, start_run, finish_run, add_to_queue, get_published,
 )
 
 app = Flask(__name__)
@@ -42,6 +42,12 @@ def queue_page():
     status = request.args.get("status", "pending")
     items = get_queue(status)
     return render_template("queue.html", items=items, current_status=status)
+
+
+@app.route("/published")
+def published_page():
+    posts = get_published()
+    return render_template("published.html", posts=posts)
 
 
 # ---------- API ----------
