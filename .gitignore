@@ -5,3 +5,5 @@ published_hashes.json
 *.jpg
 *.png
 .venv/
+web/logs/
+web/data.db

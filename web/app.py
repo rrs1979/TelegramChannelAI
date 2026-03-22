@@ -2,7 +2,9 @@
 
 import os
 import sys
+import logging
 import threading
+from logging.handlers import RotatingFileHandler
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 
 # add parent dir so we can import channel_ai if needed
@@ -18,16 +20,55 @@ from web.db import (
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
+# --- logging setup ---
+LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
+log_handler = RotatingFileHandler(
+    os.path.join(LOG_DIR, "app.log"), maxBytes=1_000_000, backupCount=3
+)
+log_handler.setFormatter(logging.Formatter(
+    "%(asctime)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+))
+log_handler.setLevel(logging.INFO)
+
+logger = logging.getLogger("channelai")
+logger.setLevel(logging.DEBUG if DEBUG else logging.INFO)
+logger.addHandler(log_handler)
+
+# also log to console in dev mode
+if DEBUG:
+    logger.addHandler(logging.StreamHandler())
+
 # init db on startup
 init_db()
+logger.info("App started, db initialized")
+
+
+# ---------- error handlers ----------
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("base.html"), 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    logger.error(f"500 error: {e}")
+    return jsonify({"error": "internal server error"}), 500
 
 
 # ---------- pages ----------
 
 @app.route("/")
 def dashboard():
-    stats = get_stats()
-    runs = get_runs(10)
+    try:
+        stats = get_stats()
+        runs = get_runs(10)
+    except Exception as e:
+        logger.error(f"Dashboard load failed: {e}")
+        stats = {"total_published": 0, "total_sources": 0, "queue_size": 0, "total_runs": 0, "last_run": None}
+        runs = []
     return render_template("dashboard.html", stats=stats, runs=runs)
 
 
@@ -72,6 +113,7 @@ def api_add_source():
     result = add_source(username, data.get("title", ""), data.get("subscribers", 0))
     if result is None:
         return jsonify({"error": "already exists or invalid"}), 409
+    logger.info(f"Source added: @{result}")
     return jsonify({"ok": True, "username": result}), 201
 
 
@@ -108,6 +150,8 @@ def api_run_pipeline():
 
     run_id = start_run()
 
+    logger.info(f"Pipeline run #{run_id} started")
+
     # run in background thread so we don't block the request
     def _run():
         try:
@@ -117,7 +161,9 @@ def api_run_pipeline():
             results = loop.run_until_complete(run_cycle())
             published = len(results) if results else 0
             finish_run(run_id, posts_published=published, status="completed")
+            logger.info(f"Pipeline run #{run_id} done, {published} posts published")
         except Exception as e:
+            logger.error(f"Pipeline run #{run_id} failed: {e}")
             finish_run(run_id, status="failed", errors=str(e))
 
     t = threading.Thread(target=_run, daemon=True)
