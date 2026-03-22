@@ -4,7 +4,7 @@ TelegramChannelAI — Automated Telegram channel management via Pollinations.ai
 Scans news sources, rewrites with AI, generates images, publishes to Telegram.
 Uses Pollinations.ai as unified backend for Claude, GPT, Perplexity, and Flux.
 
-Author: Roman Seredenko (github.com/rrs1979)
+Author: Roman Rebrov (github.com/rrs1979)
 License: MIT
 """
 
