@@ -8,6 +8,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 # add parent dir so we can import channel_ai if needed
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
+from web.config import SECRET_KEY, PORT, DEBUG
 from web.db import (
     init_db, get_stats, get_sources, add_source, remove_source,
     toggle_source, get_queue, update_queue_status, get_last_run,
@@ -15,7 +16,7 @@ from web.db import (
 )
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET", "dev-key-change-me")
+app.secret_key = SECRET_KEY
 
 # init db on startup
 init_db()
@@ -138,6 +139,4 @@ def form_delete_source(source_id):
 # ---------- run ----------
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))
-    debug = os.getenv("FLASK_ENV", "development") == "development"
-    app.run(host="0.0.0.0", port=port, debug=debug)
+    app.run(host="0.0.0.0", port=PORT, debug=DEBUG)

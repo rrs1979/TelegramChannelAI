@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timezone
 from contextlib import contextmanager
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "data.db")
+from web.config import DB_PATH
 
 
 def get_db():
