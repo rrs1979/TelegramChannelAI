@@ -1,5 +1,8 @@
 # TelegramChannelAI
 
+[![Powered by Pollinations.ai](https://img.shields.io/badge/Powered%20by-Pollinations.ai-green?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDIgMC04LTMuNTgtOC04czMuNTgtOCA4LTggOCAzLjU4IDggOC0zLjU4IDgtOCA4eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=)](https://pollinations.ai)
+[![GitHub stars](https://img.shields.io/github/stars/rrs1979/TelegramChannelAI?style=flat)](https://github.com/rrs1979/TelegramChannelAI)
+
 Automated Telegram channel management powered by [Pollinations.ai](https://pollinations.ai).
 
 Scans news sources, rewrites content with AI, generates images, and publishes to Telegram channels — all automated.
