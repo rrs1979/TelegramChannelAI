@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - PORT=5000
+      - FLASK_ENV=production
+    volumes:
+      - ./web/data.db:/app/web/data.db
+    restart: unless-stopped

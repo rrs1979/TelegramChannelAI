@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Queue{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between flex-wrap gap-3">
+    <h1 class="text-2xl font-bold">Approval Queue</h1>
+    <div class="flex gap-2 text-sm">
+        <a href="/queue?status=pending"
+            class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'pending' else 'bg-dark-800 text-gray-400' }}">
+            Pending
+        </a>
+        <a href="/queue?status=approved"
+            class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'approved' else 'bg-dark-800 text-gray-400' }}">
+            Approved
+        </a>
+        <a href="/queue?status=rejected"
+            class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'rejected' else 'bg-dark-800 text-gray-400' }}">
+            Rejected
+        </a>
+        <a href="/queue?status=all"
+            class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'all' else 'bg-dark-800 text-gray-400' }}">
+            All
+        </a>
+    </div>
+</div>
+
+{% if items %}
+<div class="space-y-4">
+    {% for item in items %}
+    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30" data-id="{{ item.id }}">
+        <div class="flex items-start justify-between gap-4 mb-3">
+            <div class="flex items-center gap-2">
+                <span class="text-gray-500 text-xs">#{{ item.id }}</span>
+                <span class="text-blue-400 text-sm">{{ item.source }}</span>
+                <span class="text-gray-600 text-xs">{{ item.created_at[:16] if item.created_at else '' }}</span>
+            </div>
+            <div>
+                {% if item.status == 'pending' %}
+                    <span class="bg-yellow-900/50 text-yellow-400 px-2 py-0.5 rounded text-xs">pending</span>
+                {% elif item.status == 'approved' %}
+                    <span class="bg-green-900/50 text-green-400 px-2 py-0.5 rounded text-xs">approved</span>
+                {% else %}
+                    <span class="bg-red-900/50 text-red-400 px-2 py-0.5 rounded text-xs">rejected</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- original -->
+        <details class="mb-3">
+            <summary class="text-xs text-gray-500 cursor-pointer hover:text-gray-300">Original text</summary>
+            <div class="mt-2 text-sm text-gray-400 bg-dark-900 rounded p-3 whitespace-pre-wrap">{{ item.original_text[:500] }}</div>
+        </details>
+
+        <!-- rewritten preview -->
+        {% if item.rewritten_text %}
+        <div class="text-sm bg-dark-900 rounded p-3 mb-3 whitespace-pre-wrap leading-relaxed">{{ item.rewritten_text[:800] }}</div>
+        {% endif %}
+
+        {% if item.status == 'pending' %}
+        <div class="flex gap-2">
+            <button onclick="approveItem({{ item.id }})"
+                class="bg-green-700 hover:bg-green-600 px-3 py-1 rounded text-sm transition">Approve</button>
+            <button onclick="rejectItem({{ item.id }})"
+                class="bg-red-800 hover:bg-red-700 px-3 py-1 rounded text-sm transition">Reject</button>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-gray-500 text-sm">Nothing in queue ({{ current_status }}).</p>
+{% endif %}
+{% endblock %}

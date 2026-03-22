@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Sources{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Source Channels</h1>
+</div>
+
+<!-- add form -->
+<div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30 mb-6">
+    <form id="add-source-form" class="flex gap-3 items-end flex-wrap">
+        <div>
+            <label class="block text-xs text-gray-400 mb-1">Channel username</label>
+            <input type="text" name="username" id="input-username" placeholder="@channel_name"
+                class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
+        </div>
+        <div>
+            <label class="block text-xs text-gray-400 mb-1">Title (optional)</label>
+            <input type="text" name="title" id="input-title" placeholder="Channel Title"
+                class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-48">
+        </div>
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded text-sm font-medium transition">
+            Add Source
+        </button>
+    </form>
+</div>
+
+<!-- table -->
+<div class="overflow-x-auto">
+    <table class="w-full text-sm" id="sources-table">
+        <thead>
+            <tr class="text-gray-400 text-left border-b border-gray-700/30">
+                <th class="pb-2 pr-4">Username</th>
+                <th class="pb-2 pr-4">Title</th>
+                <th class="pb-2 pr-4">Subscribers</th>
+                <th class="pb-2 pr-4">Added</th>
+                <th class="pb-2 pr-4">Active</th>
+                <th class="pb-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sources %}
+            <tr class="border-b border-gray-800/50" data-id="{{ s.id }}">
+                <td class="py-2 pr-4">
+                    <a href="https://t.me/{{ s.username }}" target="_blank" class="text-blue-400 hover:underline">
+                        @{{ s.username }}
+                    </a>
+                </td>
+                <td class="py-2 pr-4">{{ s.title or '—' }}</td>
+                <td class="py-2 pr-4">{{ s.subscribers }}</td>
+                <td class="py-2 pr-4 text-gray-500">{{ s.added_at[:10] if s.added_at else '' }}</td>
+                <td class="py-2 pr-4">
+                    {% if s.is_active %}
+                        <span class="bg-green-900/50 text-green-400 px-2 py-0.5 rounded text-xs">yes</span>
+                    {% else %}
+                        <span class="bg-gray-800 text-gray-500 px-2 py-0.5 rounded text-xs">no</span>
+                    {% endif %}
+                </td>
+                <td class="py-2 flex gap-2">
+                    <button onclick="toggleSource({{ s.id }})"
+                        class="text-yellow-400 hover:text-yellow-300 text-xs">toggle</button>
+                    <button onclick="deleteSource({{ s.id }})"
+                        class="text-red-400 hover:text-red-300 text-xs">remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if not sources %}
+<p class="text-gray-500 text-sm mt-4">No sources added yet.</p>
+{% endif %}
+{% endblock %}
