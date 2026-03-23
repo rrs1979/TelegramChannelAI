@@ -5,7 +5,7 @@ import sys
 import logging
 import threading
 from logging.handlers import RotatingFileHandler
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, Response
 
 # add parent dir so we can import channel_ai if needed
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -64,6 +64,11 @@ def server_error(e):
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"}), 200
+
+
+@app.route("/robots.txt")
+def robots():
+    return Response("User-agent: *\nDisallow: /\n", mimetype="text/plain")
 
 
 # ---------- pages ----------
