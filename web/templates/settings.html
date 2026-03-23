@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-2xl font-bold">Settings</h1>
+    <p class="text-gray-500 text-sm mt-1">Pipeline and API configuration. Saved to <code class="text-gray-400">.env</code>.</p>
+</div>
+
+<form method="POST" action="/settings" class="max-w-xl space-y-6">
+
+    <!-- Pollinations -->
+    <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Pollinations API Key</label>
+        <input type="password" name="pollinations_key"
+            value="{{ settings.POLLINATIONS_API_KEY }}"
+            placeholder="pk_..."
+            class="w-full bg-dark-800 border border-gray-700/50 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+        <p class="text-xs text-gray-600 mt-1">Used for text and image generation. Leave blank if using free tier.</p>
+    </div>
+
+    <!-- Telegram API -->
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Telegram API ID</label>
+            <input type="text" name="telegram_api_id"
+                value="{{ settings.TELEGRAM_API_ID }}"
+                placeholder="12345678"
+                class="w-full bg-dark-800 border border-gray-700/50 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Telegram API Hash</label>
+            <input type="password" name="telegram_api_hash"
+                value="{{ settings.TELEGRAM_API_HASH }}"
+                placeholder="0123456789abcdef..."
+                class="w-full bg-dark-800 border border-gray-700/50 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+        </div>
+    </div>
+
+    <!-- Channel -->
+    <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Channel ID</label>
+        <input type="text" name="channel_id"
+            value="{{ settings.CHANNEL_ID }}"
+            placeholder="-1001234567890"
+            class="w-full bg-dark-800 border border-gray-700/50 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+        <p class="text-xs text-gray-600 mt-1">Numeric Telegram channel ID (starts with -100).</p>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Pipeline Interval (sec)</label>
+            <input type="number" name="pipeline_interval"
+                value="{{ settings.PIPELINE_INTERVAL }}"
+                min="300" step="300"
+                class="w-full bg-dark-800 border border-gray-700/50 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+            <p class="text-xs text-gray-600 mt-1">How often to auto-run. Default 3600 (1h).</p>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
+            <select name="pipeline_mode"
+                class="w-full bg-dark-800 border border-gray-700/50 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+                <option value="auto" {% if settings.PIPELINE_MODE == 'auto' %}selected{% endif %}>Auto (publish immediately)</option>
+                <option value="semi-auto" {% if settings.PIPELINE_MODE == 'semi-auto' %}selected{% endif %}>Semi-auto (queue for review)</option>
+            </select>
+            <p class="text-xs text-gray-600 mt-1">Semi-auto puts posts in Queue for approval first.</p>
+        </div>
+    </div>
+
+    <div class="pt-2">
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded text-sm font-medium transition">
+            Save Settings
+        </button>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// toggle password visibility on click
+document.querySelectorAll('input[type="password"]').forEach(input => {
+    input.addEventListener('dblclick', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+    });
+});
+</script>
+{% endblock %}

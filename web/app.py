@@ -10,7 +10,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 # add parent dir so we can import channel_ai if needed
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from web.config import SECRET_KEY, PORT, DEBUG
+from web.config import SECRET_KEY, PORT, DEBUG, load_settings, save_settings
 from web.db import (
     init_db, get_stats, get_sources, add_source, remove_source,
     toggle_source, get_queue, update_queue_status, get_last_run,
@@ -96,6 +96,25 @@ def published_page():
 def analytics_page():
     data = get_analytics()
     return render_template("analytics.html", analytics=data)
+
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings_page():
+    if request.method == "POST":
+        fields = {
+            "POLLINATIONS_API_KEY": request.form.get("pollinations_key", "").strip(),
+            "TELEGRAM_API_ID": request.form.get("telegram_api_id", "").strip(),
+            "TELEGRAM_API_HASH": request.form.get("telegram_api_hash", "").strip(),
+            "CHANNEL_ID": request.form.get("channel_id", "").strip(),
+            "PIPELINE_INTERVAL": request.form.get("pipeline_interval", "3600").strip(),
+            "PIPELINE_MODE": request.form.get("pipeline_mode", "semi-auto").strip(),
+        }
+        save_settings(fields)
+        logger.info("Settings updated")
+        return redirect(url_for("settings_page"))
+
+    settings = load_settings()
+    return render_template("settings.html", settings=settings)
 
 
 # ---------- API ----------
