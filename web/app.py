@@ -59,6 +59,13 @@ def server_error(e):
     return jsonify({"error": "internal server error"}), 500
 
 
+# ---------- health check ----------
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
 # ---------- pages ----------
 
 @app.route("/")
