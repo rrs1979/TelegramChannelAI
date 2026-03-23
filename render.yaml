@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: telegramchannelai
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn web.app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: FLASK_ENV
+        value: production
