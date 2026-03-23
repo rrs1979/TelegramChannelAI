@@ -68,7 +68,18 @@ def init_db():
                 published_at TEXT DEFAULT (datetime('now'))
             );
         """)
+
+        # add analytics columns to pipeline_runs if missing
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(pipeline_runs)").fetchall()]
+        if "posts_generated" not in cols:
+            conn.execute("ALTER TABLE pipeline_runs ADD COLUMN posts_generated INTEGER DEFAULT 0")
+        if "cost_usd" not in cols:
+            conn.execute("ALTER TABLE pipeline_runs ADD COLUMN cost_usd REAL DEFAULT 0.0")
+        if "duration_ms" not in cols:
+            conn.execute("ALTER TABLE pipeline_runs ADD COLUMN duration_ms INTEGER DEFAULT 0")
+
     seed_published()
+    seed_pipeline_runs()
 
 
 # --- sources ---
@@ -228,3 +239,95 @@ def get_stats():
             "total_runs": total_runs,
             "last_run": last_run,
         }
+
+
+# --- analytics ---
+
+def get_analytics():
+    """Return daily pipeline stats for charts."""
+    with db_conn() as conn:
+        rows = conn.execute("""
+            SELECT
+                date(started_at) as day,
+                COUNT(*) as runs,
+                SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+                SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+                SUM(COALESCE(posts_generated, posts_scanned)) as generated,
+                SUM(posts_published) as published,
+                ROUND(SUM(COALESCE(cost_usd, 0)), 2) as cost,
+                AVG(COALESCE(duration_ms, 0)) as avg_duration
+            FROM pipeline_runs
+            WHERE started_at IS NOT NULL
+            GROUP BY date(started_at)
+            ORDER BY day DESC
+            LIMIT 30
+        """).fetchall()
+
+        days = [dict(r) for r in rows]
+        days.reverse()  # oldest first for charts
+
+        # totals for the doughnut
+        totals = conn.execute("""
+            SELECT
+                SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+                SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
+                SUM(CASE WHEN status = 'running' THEN 1 ELSE 0 END) as running
+            FROM pipeline_runs
+        """).fetchone()
+
+        return {
+            "daily": days,
+            "totals": {
+                "completed": totals[0] or 0,
+                "failed": totals[1] or 0,
+                "running": totals[2] or 0,
+            },
+        }
+
+
+def seed_pipeline_runs():
+    """Insert sample pipeline runs for the last 14 days if table is mostly empty."""
+    with db_conn() as conn:
+        count = conn.execute("SELECT COUNT(*) FROM pipeline_runs").fetchone()[0]
+        if count > 5:
+            return
+
+        import random
+        from datetime import timedelta
+
+        base = datetime(2026, 3, 10, tzinfo=timezone.utc)
+        samples = []
+        for day_offset in range(14):
+            day = base + timedelta(days=day_offset)
+            # 1-3 runs per day
+            for run_idx in range(random.randint(1, 3)):
+                hour = 8 + run_idx * 4 + random.randint(0, 2)
+                started = day.replace(hour=hour, minute=random.randint(0, 59))
+
+                status = random.choices(["completed", "failed"], weights=[85, 15])[0]
+                generated = random.randint(3, 12)
+                published = random.randint(1, generated) if status == "completed" else 0
+                cost = round(random.uniform(0.01, 0.04) * generated, 3)
+                duration = random.randint(12000, 90000)
+
+                finished = started + timedelta(milliseconds=duration)
+
+                samples.append((
+                    started.isoformat(),
+                    finished.isoformat(),
+                    status,
+                    generated,  # posts_scanned
+                    published,
+                    "" if status == "completed" else "Timeout on source @tech_daily",
+                    generated,
+                    cost,
+                    duration,
+                ))
+
+        conn.executemany(
+            """INSERT INTO pipeline_runs
+               (started_at, finished_at, status, posts_scanned, posts_published, errors,
+                posts_generated, cost_usd, duration_ms)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            samples,
+        )

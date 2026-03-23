@@ -15,6 +15,7 @@ from web.db import (
     init_db, get_stats, get_sources, add_source, remove_source,
     toggle_source, get_queue, update_queue_status, get_last_run,
     get_runs, start_run, finish_run, add_to_queue, get_published,
+    get_analytics,
 )
 
 app = Flask(__name__)
@@ -89,6 +90,12 @@ def queue_page():
 def published_page():
     posts = get_published()
     return render_template("published.html", posts=posts)
+
+
+@app.route("/analytics")
+def analytics_page():
+    data = get_analytics()
+    return render_template("analytics.html", analytics=data)
 
 
 # ---------- API ----------
