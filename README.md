@@ -17,6 +17,19 @@ Scans news sources, rewrites content with AI, generates images, and publishes to
 - **Telegram publishing** — posts with images, polls, and reactions
 - **Duplicate detection** — prevents republishing the same story
 - **Exclusion filters** — skip sensitive topics (configurable)
+- **Web dashboard** — manage sources, review queue, see published posts
+- **Analytics** — pipeline performance charts (runs, costs, success rate)
+- **Settings UI** — configure API keys and pipeline mode from the browser
+
+## Screenshots
+
+| Dashboard | Analytics |
+|-----------|-----------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Analytics](docs/screenshots/analytics.png) |
+
+| Queue | Settings |
+|-------|----------|
+| ![Queue](docs/screenshots/queue.png) | ![Settings](docs/screenshots/settings.png) |
 
 ## Architecture
 
@@ -38,25 +51,50 @@ News Sources (40+ channels)
 
 ## Quick Start
 
+### Local development
+
 ```bash
-# Clone
 git clone https://github.com/rrs1979/TelegramChannelAI.git
 cd TelegramChannelAI
 
-# Install
+# create virtualenv (optional but recommended)
+python -m venv .venv
+source .venv/bin/activate   # Linux/Mac
+.venv\Scripts\activate      # Windows
+
+# install deps
 pip install -r requirements.txt
 
-# Configure
+# configure
 cp .env.example .env
-# Edit .env with your keys
+# edit .env with your API keys (or configure later via Settings page)
 
-# Run
+# run the web dashboard
+python -m web.app
+# open http://localhost:5000
+
+# run the pipeline directly (headless)
 python channel_ai.py
 ```
 
+### Docker
+
+```bash
+git clone https://github.com/rrs1979/TelegramChannelAI.git
+cd TelegramChannelAI
+
+cp .env.example .env
+# edit .env
+
+docker compose up --build
+# dashboard at http://localhost:5000
+```
+
+The Docker setup runs the Flask dashboard on port 5000. SQLite data is persisted in a volume.
+
 ## Configuration
 
-Create `.env` file:
+Create `.env` file (or use the Settings page in the dashboard):
 
 ```env
 POLLINATIONS_API_KEY=your_pollinations_key
@@ -64,6 +102,8 @@ TELEGRAM_API_ID=your_telegram_api_id
 TELEGRAM_API_HASH=your_telegram_api_hash
 TELEGRAM_SESSION=your_session_string
 CHANNEL_ID=your_channel_telegram_id
+PIPELINE_INTERVAL=3600
+PIPELINE_MODE=semi-auto
 ```
 
 ## Requirements
