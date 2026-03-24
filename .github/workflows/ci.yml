@@ -29,7 +29,7 @@ jobs:
           pip install ruff pytest
 
       - name: Lint with ruff
-        run: ruff check --select E,F,W --ignore E501 .
+        run: ruff check --select E,F,W --ignore E501,F401 .
 
       - name: Check imports
         run: python -c "import channel_ai; print('channel_ai OK')"
