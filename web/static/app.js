@@ -77,8 +77,20 @@ async function rejectItem(id) {
     if (el) el.remove();
 }
 
+// show last-updated timestamp
+function showUpdatedTime() {
+    const el = document.getElementById('last-updated');
+    if (!el) return;
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    el.textContent = 'Updated at ' + hh + ':' + mm + ':' + ss;
+}
+
 // auto-refresh stats on dashboard (every 30s)
 if (document.getElementById('stat-published')) {
+    showUpdatedTime();
     setInterval(async () => {
         try {
             const s = await api('/api/stats');
@@ -86,6 +98,7 @@ if (document.getElementById('stat-published')) {
             document.getElementById('stat-sources').textContent = s.total_sources;
             document.getElementById('stat-queue').textContent = s.queue_size;
             document.getElementById('stat-runs').textContent = s.total_runs;
+            showUpdatedTime();
         } catch (e) {
             // silently fail, not critical
         }
