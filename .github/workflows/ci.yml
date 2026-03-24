@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff pytest
+
+      - name: Lint with ruff
+        run: ruff check --select E,F,W --ignore E501 .
+
+      - name: Check imports
+        run: python -c "import channel_ai; print('channel_ai OK')"
+
+      - name: Check web app imports
+        run: python -c "from web.app import app; print('web.app OK')"
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short
+        env:
+          POLLINATIONS_API_KEY: test
+          TELEGRAM_API_ID: '0'
+          TELEGRAM_API_HASH: test
