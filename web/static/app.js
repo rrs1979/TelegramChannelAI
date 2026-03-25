@@ -64,6 +64,16 @@ async function toggleSource(id) {
     location.reload();
 }
 
+// copy text to clipboard
+function copyText(btn) {
+    const block = btn.closest('.relative').querySelector('.post-text');
+    if (!block) return;
+    navigator.clipboard.writeText(block.textContent.trim()).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    });
+}
+
 // queue
 async function approveItem(id) {
     await api(`/api/queue/${id}/approve`, 'POST');
