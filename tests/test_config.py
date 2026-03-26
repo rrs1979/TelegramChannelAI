@@ -18,12 +18,39 @@ def test_web_app_imports():
     assert app is not None
 
 
-def test_channel_prompts_structure():
+def test_channel_configs_structure():
     import channel_ai
-    assert "default" in channel_ai.CHANNEL_PROMPTS
-    prompt = channel_ai.CHANNEL_PROMPTS["default"]
-    assert "system_prompt" in prompt
-    assert "language" in prompt
+    assert "default" in channel_ai.CHANNEL_CONFIGS
+    cfg = channel_ai.CHANNEL_CONFIGS["default"]
+    assert "system_prompt" in cfg
+    assert "language" in cfg
+    assert "channel_id" in cfg
+    assert "sources" in cfg
+
+
+def test_channel_configs_from_env():
+    import json
+    os.environ["CHANNEL_CONFIGS"] = json.dumps({
+        "test_ch": {
+            "channel_id": 123,
+            "system_prompt": "test",
+            "language": "en",
+            "search_topics": [],
+        }
+    })
+    import importlib
+    import channel_ai
+    importlib.reload(channel_ai)
+    assert "test_ch" in channel_ai.CHANNEL_CONFIGS
+    assert channel_ai.CHANNEL_CONFIGS["test_ch"]["channel_id"] == 123
+    assert "sources" in channel_ai.CHANNEL_CONFIGS["test_ch"]
+    del os.environ["CHANNEL_CONFIGS"]
+    importlib.reload(channel_ai)
+
+
+def test_run_all_channels_exists():
+    import channel_ai
+    assert hasattr(channel_ai, "run_all_channels")
 
 
 def test_exclusions_list():

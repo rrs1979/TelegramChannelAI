@@ -106,7 +106,7 @@ def add_source(username, title="", subscribers=0):
             return None
 
 
-def remove_source(source_id):
+def remove_source(source_id: int):
     with db_conn() as conn:
         conn.execute("DELETE FROM sources WHERE id = ?", (source_id,))
 

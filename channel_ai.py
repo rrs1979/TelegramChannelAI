@@ -34,24 +34,40 @@ POLLINATIONS_KEY = os.getenv("POLLINATIONS_API_KEY", "")
 TELEGRAM_API_ID = int(os.getenv("TELEGRAM_API_ID", "0"))
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH", "")
 TELEGRAM_SESSION = os.getenv("TELEGRAM_SESSION", "")
-CHANNEL_ID = int(os.getenv("CHANNEL_ID", "0"))
 
-# Source channels to monitor (add your own)
-SOURCE_CHANNELS = [
+# Source channels to monitor (default set, overridable per channel config)
+DEFAULT_SOURCES = [
     "truexanewsua", "u_now", "voynareal", "UaOnlii",
     "oko_ua", "novynu_ukraina", "DeepStateUA", "TCH_channel",
     "uniannet", "suspilnenews", "ukrpravda_news", "censor_net",
 ]
 
-# Channel personality
-CHANNEL_PROMPTS = {
-    "default": {
-        "system_prompt": """You are a news channel editor. Rewrite the news in an engaging style.
-Format: HTML for Telegram. Include fact-check section. 200-300 words.""",
-        "language": "en",
-        "search_topics": ["breaking news", "politics"],
-    },
+# Per-channel configs: each key maps to a target channel with its own personality.
+# Override via CHANNEL_CONFIGS env var (JSON) or fall back to CHANNEL_ID env var.
+_DEFAULT_PROMPT = {
+    "channel_id": int(os.getenv("CHANNEL_ID", "0")),
+    "system_prompt": "You are a news channel editor. Rewrite the news in an engaging style.\n"
+                     "Format: HTML for Telegram. Include fact-check section. 200-300 words.",
+    "language": "en",
+    "search_topics": ["breaking news", "politics"],
+    "sources": DEFAULT_SOURCES,
 }
+
+
+def _load_channel_configs():
+    raw = os.getenv("CHANNEL_CONFIGS", "")
+    if raw:
+        try:
+            configs = json.loads(raw)
+            for cfg in configs.values():
+                cfg.setdefault("sources", DEFAULT_SOURCES)
+            return configs
+        except (json.JSONDecodeError, AttributeError):
+            pass
+    return {"default": _DEFAULT_PROMPT}
+
+
+CHANNEL_CONFIGS = _load_channel_configs()
 
 # Topics to skip
 EXCLUSIONS = [
@@ -361,8 +377,8 @@ async def publish_post(client, channel_entity, result):
 # MAIN
 # ═══════════════════════════════════════════
 
-async def run_cycle(channel_username="default", max_posts=3):
-    """Run one full pipeline cycle."""
+async def run_cycle(channel_key="default", max_posts=3):
+    """Run one full pipeline cycle for a single channel config."""
     from telethon import TelegramClient
     from telethon.sessions import StringSession
     from telethon.tl.types import PeerChannel
@@ -375,12 +391,17 @@ async def run_cycle(channel_username="default", max_posts=3):
         print("ERROR: Telegram credentials not set")
         return
 
-    prompt_config = CHANNEL_PROMPTS.get(channel_username, CHANNEL_PROMPTS["default"])
+    channel_cfg = CHANNEL_CONFIGS.get(channel_key)
+    if not channel_cfg:
+        print(f"ERROR: unknown channel config '{channel_key}'")
+        return
 
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] Starting pipeline...")
+    channel_id = channel_cfg.get("channel_id", 0)
+    sources = channel_cfg.get("sources", DEFAULT_SOURCES)
+
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] Starting pipeline for '{channel_key}'...")
     load_hashes()
 
-    # Connect to Telegram
     client = TelegramClient(StringSession(TELEGRAM_SESSION), TELEGRAM_API_ID, TELEGRAM_API_HASH)
     await client.connect()
 
@@ -388,17 +409,15 @@ async def run_cycle(channel_username="default", max_posts=3):
         print("ERROR: Telegram session expired")
         return
 
-    # 1. Scan sources
-    print(f"  Scanning {len(SOURCE_CHANNELS)} channels...")
+    print(f"  Scanning {len(sources)} channels...")
     t0 = time.time()
-    posts = await scan_sources(client, SOURCE_CHANNELS)
+    posts = await scan_sources(client, sources)
     print(f"  Found {len(posts)} posts ({time.time()-t0:.1f}s)")
 
     if not posts:
         await client.disconnect()
         return
 
-    # 2. Filter duplicates
     unique = [p for p in posts if not is_duplicate(p["text"])]
     selected = unique[:max_posts]
     print(f"  Selected {len(selected)} (filtered {len(posts)-len(unique)} duplicates)")
@@ -408,32 +427,38 @@ async def run_cycle(channel_username="default", max_posts=3):
         await client.disconnect()
         return
 
-    # 3. Process each post
     results = []
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=_ssl_ctx())) as session:
         for i, post in enumerate(selected):
             print(f"  [{i+1}/{len(selected)}] Processing: {post['text'][:50]}...")
             t1 = time.time()
-            result = await process_post(session, post, prompt_config)
+            result = await process_post(session, post, channel_cfg)
             if result:
                 results.append(result)
                 print(f"    Done ({time.time()-t1:.1f}s)")
             await asyncio.sleep(2)
 
-    # 4. Publish
-    if results and CHANNEL_ID:
-        channel_entity = await client.get_entity(PeerChannel(CHANNEL_ID))
+    if results and channel_id:
+        channel_entity = await client.get_entity(PeerChannel(channel_id))
         for result in results:
             msg_id = await publish_post(client, channel_entity, result)
-            print(f"  Published: msg_id={msg_id}")
+            print(f"  Published to '{channel_key}': msg_id={msg_id}")
             await asyncio.sleep(5)
 
     await client.disconnect()
     save_hashes()
 
-    print(f"  Pipeline complete: {len(results)} posts published")
+    print(f"  Pipeline complete for '{channel_key}': {len(results)} posts published")
     return results
 
 
+async def run_all_channels(max_posts=3):
+    """Run the pipeline for every configured channel sequentially."""
+    all_results = {}
+    for key in CHANNEL_CONFIGS:
+        all_results[key] = await run_cycle(channel_key=key, max_posts=max_posts)
+    return all_results
+
+
 if __name__ == "__main__":
-    asyncio.run(run_cycle())
+    asyncio.run(run_all_channels())

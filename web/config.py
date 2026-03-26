@@ -26,6 +26,7 @@ SETTINGS_KEYS = [
     "TELEGRAM_API_ID",
     "TELEGRAM_API_HASH",
     "CHANNEL_ID",
+    "CHANNEL_CONFIGS",
     "PIPELINE_INTERVAL",
     "PIPELINE_MODE",
 ]
@@ -38,6 +39,7 @@ def load_settings():
         "TELEGRAM_API_ID": os.getenv("TELEGRAM_API_ID", ""),
         "TELEGRAM_API_HASH": os.getenv("TELEGRAM_API_HASH", ""),
         "CHANNEL_ID": os.getenv("CHANNEL_ID", ""),
+        "CHANNEL_CONFIGS": os.getenv("CHANNEL_CONFIGS", ""),
         "PIPELINE_INTERVAL": os.getenv("PIPELINE_INTERVAL", "3600"),
         "PIPELINE_MODE": os.getenv("PIPELINE_MODE", "semi-auto"),
     }

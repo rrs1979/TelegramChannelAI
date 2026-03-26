@@ -1,6 +1,7 @@
 """Flask dashboard for TelegramChannelAI pipeline."""
 
 import os
+import re
 import sys
 import logging
 import threading
@@ -94,6 +95,8 @@ def sources_page():
 @app.route("/queue")
 def queue_page():
     status = request.args.get("status", "pending")
+    if status not in ("pending", "approved", "rejected", "published"):
+        status = "pending"
     items = get_queue(status)
     return render_template("queue.html", items=items, current_status=status)
 
@@ -113,13 +116,27 @@ def analytics_page():
 @app.route("/settings", methods=["GET", "POST"])
 def settings_page():
     if request.method == "POST":
+        # validate pipeline interval is a positive integer
+        raw_interval = request.form.get("pipeline_interval", "3600").strip()
+        try:
+            interval = int(raw_interval)
+            if interval < 60 or interval > 86400:
+                raise ValueError
+        except (ValueError, TypeError):
+            interval = 3600
+
+        # validate pipeline mode against allowed values
+        mode = request.form.get("pipeline_mode", "semi-auto").strip()
+        if mode not in ("manual", "semi-auto", "auto"):
+            mode = "semi-auto"
+
         fields = {
             "POLLINATIONS_API_KEY": request.form.get("pollinations_key", "").strip(),
             "TELEGRAM_API_ID": request.form.get("telegram_api_id", "").strip(),
             "TELEGRAM_API_HASH": request.form.get("telegram_api_hash", "").strip(),
             "CHANNEL_ID": request.form.get("channel_id", "").strip(),
-            "PIPELINE_INTERVAL": request.form.get("pipeline_interval", "3600").strip(),
-            "PIPELINE_MODE": request.form.get("pipeline_mode", "semi-auto").strip(),
+            "PIPELINE_INTERVAL": str(interval),
+            "PIPELINE_MODE": mode,
         }
         save_settings(fields)
         logger.info("Settings updated")
@@ -144,11 +161,15 @@ def api_sources():
 @app.route("/api/sources", methods=["POST"])
 def api_add_source():
     data = request.get_json() or {}
-    username = data.get("username", "").strip()
-    if not username:
-        return jsonify({"error": "username required"}), 400
+    username = data.get("username", "").strip().lstrip("@")
+    if not username or not re.match(r'^[A-Za-z][A-Za-z0-9_]{3,30}$', username):
+        return jsonify({"error": "invalid username"}), 400
 
-    result = add_source(username, data.get("title", ""), data.get("subscribers", 0))
+    subscribers = data.get("subscribers", 0)
+    if not isinstance(subscribers, int) or subscribers < 0:
+        subscribers = 0
+
+    result = add_source(username, data.get("title", ""), subscribers)
     if result is None:
         return jsonify({"error": "already exists or invalid"}), 409
     logger.info(f"Source added: @{result}")
@@ -194,10 +215,10 @@ def api_run_pipeline():
     def _run():
         try:
             import asyncio
-            from channel_ai import run_cycle
+            from channel_ai import run_all_channels
             loop = asyncio.new_event_loop()
-            results = loop.run_until_complete(run_cycle())
-            published = len(results) if results else 0
+            all_results = loop.run_until_complete(run_all_channels())
+            published = sum(len(r) for r in (all_results or {}).values() if r)
             finish_run(run_id, posts_published=published, status="completed")
             logger.info(f"Pipeline run #{run_id} done, {published} posts published")
         except Exception as e:
