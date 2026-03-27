@@ -98,6 +98,25 @@ function showUpdatedTime() {
     el.textContent = 'Updated at ' + hh + ':' + mm + ':' + ss;
 }
 
+// keyboard shortcuts
+document.addEventListener('keydown', function (e) {
+    // Ctrl+S on settings page — submit the form
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        var form = document.querySelector('form[action="/settings"]');
+        if (form) {
+            e.preventDefault();
+            form.submit();
+        }
+    }
+
+    // Escape — collapse open details panels (queue page)
+    if (e.key === 'Escape') {
+        document.querySelectorAll('details[open]').forEach(function (d) {
+            d.removeAttribute('open');
+        });
+    }
+});
+
 // auto-refresh stats on dashboard (every 30s)
 if (document.getElementById('stat-published')) {
     showUpdatedTime();
