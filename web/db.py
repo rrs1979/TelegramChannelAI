@@ -27,6 +27,7 @@ def db_conn():
 
 
 def init_db():
+    """Create tables if they don't exist and apply schema migrations."""
     with db_conn() as conn:
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS sources (
