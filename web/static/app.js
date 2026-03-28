@@ -115,6 +115,15 @@ document.addEventListener('keydown', function (e) {
             d.removeAttribute('open');
         });
     }
+
+    // Ctrl+R on dashboard — run pipeline instead of reloading the page
+    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+        var runBtn = document.getElementById('btn-run');
+        if (runBtn && !runBtn.disabled) {
+            e.preventDefault();
+            runPipeline();
+        }
+    }
 });
 
 // auto-refresh stats on dashboard (every 30s)
