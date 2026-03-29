@@ -129,16 +129,37 @@ document.addEventListener('keydown', function (e) {
 // auto-refresh stats on dashboard (every 30s)
 if (document.getElementById('stat-published')) {
     showUpdatedTime();
-    setInterval(async () => {
-        try {
-            const s = await api('/api/stats');
-            document.getElementById('stat-published').textContent = s.total_published;
-            document.getElementById('stat-sources').textContent = s.total_sources;
-            document.getElementById('stat-queue').textContent = s.queue_size;
-            document.getElementById('stat-runs').textContent = s.total_runs;
-            showUpdatedTime();
-        } catch (e) {
-            // silently fail, not critical
+
+    var refreshTimer = null;
+    var toggleBox = document.getElementById('auto-refresh-toggle');
+
+    function refreshStats() {
+        refreshTimer = setInterval(async () => {
+            try {
+                const s = await api('/api/stats');
+                document.getElementById('stat-published').textContent = s.total_published;
+                document.getElementById('stat-sources').textContent = s.total_sources;
+                document.getElementById('stat-queue').textContent = s.queue_size;
+                document.getElementById('stat-runs').textContent = s.total_runs;
+                showUpdatedTime();
+            } catch (e) {}
+        }, 30000);
+    }
+
+    if (localStorage.getItem('autoRefresh') === 'off') {
+        toggleBox.checked = false;
+    } else {
+        refreshStats();
+    }
+
+    toggleBox.addEventListener('change', function () {
+        if (this.checked) {
+            localStorage.setItem('autoRefresh', 'on');
+            refreshStats();
+        } else {
+            localStorage.setItem('autoRefresh', 'off');
+            clearInterval(refreshTimer);
+            refreshTimer = null;
         }
-    }, 30000);
+    });
 }

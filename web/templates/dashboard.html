@@ -7,10 +7,17 @@
         <h1 class="text-2xl font-bold">Dashboard</h1>
         <p class="text-xs text-gray-500 mt-1" id="last-updated"></p>
     </div>
-    <button onclick="runPipeline()" id="btn-run"
-        class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium transition">
-        Run Pipeline
-    </button>
+    <div class="flex items-center gap-3">
+        <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
+            <input type="checkbox" id="auto-refresh-toggle" checked
+                class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
+            Auto-refresh
+        </label>
+        <button onclick="runPipeline()" id="btn-run"
+            class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-medium transition">
+            Run Pipeline
+        </button>
+    </div>
 </div>
 
 <!-- stat cards -->
