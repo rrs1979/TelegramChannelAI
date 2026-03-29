@@ -22,19 +22,19 @@
 
 <!-- stat cards -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <div class="text-gray-400 text-xs uppercase tracking-wide">Published</div>
         <div class="text-2xl font-bold mt-1" id="stat-published">{{ stats.total_published }}</div>
     </div>
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <div class="text-gray-400 text-xs uppercase tracking-wide">Sources</div>
         <div class="text-2xl font-bold mt-1" id="stat-sources">{{ stats.total_sources }}</div>
     </div>
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <div class="text-gray-400 text-xs uppercase tracking-wide">Queue</div>
         <div class="text-2xl font-bold mt-1" id="stat-queue">{{ stats.queue_size }}</div>
     </div>
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <div class="text-gray-400 text-xs uppercase tracking-wide">Pipeline Runs</div>
         <div class="text-2xl font-bold mt-1" id="stat-runs">{{ stats.total_runs }}</div>
     </div>
@@ -42,7 +42,7 @@
 
 <!-- last run -->
 {% if stats.last_run %}
-<div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30 mb-8">
+<div class="card mb-8">
     <h2 class="text-sm font-medium text-gray-400 mb-2">Last Pipeline Run</h2>
     <div class="flex flex-wrap gap-4 text-sm">
         <div>
