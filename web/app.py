@@ -235,9 +235,10 @@ def api_run_pipeline():
 
 @app.route("/sources/add", methods=["POST"])
 def form_add_source():
-    username = request.form.get("username", "").strip()
-    if username:
-        add_source(username)
+    username = request.form.get("username", "").strip().lstrip("@")
+    if not username or not re.match(r'^[A-Za-z][A-Za-z0-9_]{3,30}$', username):
+        return redirect(url_for("sources_page"))
+    add_source(username)
     return redirect(url_for("sources_page"))
 
 

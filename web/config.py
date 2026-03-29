@@ -1,6 +1,7 @@
 """App configuration — reads from .env or falls back to defaults."""
 
 import os
+import secrets
 from dotenv import load_dotenv
 
 ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
@@ -9,7 +10,7 @@ load_dotenv(ENV_PATH)
 # server
 PORT = int(os.getenv("PORT", 5000))
 DEBUG = os.getenv("FLASK_ENV", "development") == "development"
-SECRET_KEY = os.getenv("FLASK_SECRET", "dev-key-change-me")
+SECRET_KEY = os.getenv("FLASK_SECRET") or secrets.token_hex(32)
 
 # database
 DB_PATH = os.getenv("DB_PATH", os.path.join(os.path.dirname(__file__), "data.db"))

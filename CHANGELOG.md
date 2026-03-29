@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.1] - 2026-03-29
+
+### Fixed
+- Replaced hardcoded fallback secret key with random token generation
+- Added missing input validation on form-based source add endpoint
+
 ## [1.2.0] - 2026-03-24
 
 ### Added
