@@ -10,10 +10,10 @@ Scans news sources, rewrites content with AI, generates images, and publishes to
 ## Features
 
 - **Multi-source scanning** — monitors 40+ Telegram channels for trending news
-- **AI rewriting** — rewrites news in your channel's unique voice/style via Claude
+- **Smart rewriting** — rewrites news in your channel's unique voice/style
 - **Fact-checking** — verifies claims via Perplexity search before publishing
 - **Image generation** — creates relevant images via Flux model
-- **Humanization** — second-pass GPT rewrite to remove "AI-speak"
+- **Humanization** — second-pass rewrite for natural, human-sounding language
 - **Telegram publishing** — posts with images, polls, and reactions
 - **Duplicate detection** — prevents republishing the same story
 - **Exclusion filters** — skip sensitive topics (configurable)
@@ -40,9 +40,9 @@ News Sources (40+ channels)
         |
     [Fact-checker] ── Perplexity search for confirmation + source URLs
         |
-    [Rewriter] ──── Claude rewrites in channel style + adds analysis
+    [Rewriter] ──── rewrites in channel style + adds analysis
         |
-    [Humanizer] ──── GPT removes AI artifacts, adds natural language
+    [Humanizer] ──── polishes text for natural, human-sounding language
         |
     [Image Gen] ──── Flux generates topic-relevant image (768x432)
         |
@@ -118,8 +118,8 @@ PIPELINE_MODE=semi-auto
 1. **Scanner** connects to Telegram via Telethon and reads latest posts from configured source channels
 2. **Deduplicator** checks if the story was already published (hash-based, 48h window)
 3. **Fact-checker** sends the story to Perplexity for verification and source URLs
-4. **Rewriter** uses Claude (via Pollinations) to rewrite in your channel's style
-5. **Humanizer** passes through GPT to remove AI patterns and add natural language
+4. **Rewriter** rewrites in your channel's style via Pollinations
+5. **Humanizer** polishes the text for natural, conversational language
 6. **Image generator** creates a Flux image prompt and generates a 768x432 image
 7. **Publisher** sends to Telegram channel with optional poll and reaction seeding
 
@@ -127,7 +127,7 @@ PIPELINE_MODE=semi-auto
 
 This project uses Pollinations.ai as the unified AI backend:
 
-- **Text generation**: Claude, GPT, Perplexity — all via single API
+- **Text generation**: multiple models via single API (rewriting, fact-checking, humanization)
 - **Image generation**: Flux model for photorealistic images
 - **Cost**: ~$0.01-0.02 per post (text + image + fact-check)
 

@@ -1,8 +1,8 @@
 """
 TelegramChannelAI — Automated Telegram channel management via Pollinations.ai
 
-Scans news sources, rewrites with AI, generates images, publishes to Telegram.
-Uses Pollinations.ai as unified backend for Claude, GPT, Perplexity, and Flux.
+Scans news sources, rewrites content, generates images, publishes to Telegram.
+Uses Pollinations.ai as unified backend for text generation, fact-checking, and images.
 
 Author: Roman Rebrov (github.com/rrs1979)
 License: MIT
@@ -244,7 +244,7 @@ async def process_post(session, post, prompt_config):
         msg_link = f"https://t.me/{post['source_username']}/{post['msg_id']}"
         source_link = f"{post['source']} | {msg_link}"
 
-    # 3. Rewrite via Claude
+    # 3. Rewrite in channel style
     rewritten = await ai_call(
         session, "claude",
         prompt_config["system_prompt"],
@@ -259,7 +259,7 @@ async def process_post(session, post, prompt_config):
         print(f"  Skipped (exclusion): {post['text'][:50]}...")
         return None
 
-    # 4. Humanize via GPT
+    # 4. Humanize — make it sound natural
     humanized = await ai_call(
         session, "openai",
         "Humanize this text. Keep HTML formatting. Replace formal language with conversational. "
