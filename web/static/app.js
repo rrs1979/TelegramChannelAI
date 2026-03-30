@@ -88,6 +88,20 @@ async function rejectItem(id) {
     if (el) el.remove();
 }
 
+// show relative time for last pipeline run
+function updateLastRunAgo(ts) {
+    var el = document.getElementById('last-run-ago');
+    if (!el) return;
+    if (ts) el.dataset.ts = ts;
+    var started = el.dataset.ts;
+    if (!started) return;
+    var diff = Math.floor((Date.now() - new Date(started + 'Z').getTime()) / 1000);
+    if (diff < 60) el.textContent = 'Last: just now';
+    else if (diff < 3600) el.textContent = 'Last: ' + Math.floor(diff / 60) + 'm ago';
+    else if (diff < 86400) el.textContent = 'Last: ' + Math.floor(diff / 3600) + 'h ago';
+    else el.textContent = 'Last: ' + Math.floor(diff / 86400) + 'd ago';
+}
+
 // show last-updated timestamp
 function showUpdatedTime() {
     const el = document.getElementById('last-updated');
@@ -130,6 +144,7 @@ document.addEventListener('keydown', function (e) {
 // auto-refresh stats on dashboard (every 30s)
 if (document.getElementById('stat-published')) {
     showUpdatedTime();
+    updateLastRunAgo();
 
     var refreshTimer = null;
     var toggleBox = document.getElementById('auto-refresh-toggle');
@@ -143,6 +158,8 @@ if (document.getElementById('stat-published')) {
                 document.getElementById('stat-queue').textContent = s.queue_size;
                 document.getElementById('stat-runs').textContent = s.total_runs;
                 showUpdatedTime();
+                var lr = s.last_run;
+                updateLastRunAgo(lr ? lr.started_at : null);
             } catch (e) {}
         }, 30000);
     }
