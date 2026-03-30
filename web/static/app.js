@@ -82,6 +82,7 @@ async function approveItem(id) {
 }
 
 async function rejectItem(id) {
+    if (!confirm('Reject this post? It will be discarded.')) return;
     await api(`/api/queue/${id}/reject`, 'POST');
     const el = document.querySelector(`div[data-id="${id}"]`);
     if (el) el.remove();
