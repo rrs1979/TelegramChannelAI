@@ -111,7 +111,7 @@ def remove_source(source_id: int):
         conn.execute("DELETE FROM sources WHERE id = ?", (source_id,))
 
 
-def toggle_source(source_id):
+def toggle_source(source_id: int):
     with db_conn() as conn:
         conn.execute(
             "UPDATE sources SET is_active = NOT is_active WHERE id = ?",
