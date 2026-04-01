@@ -179,7 +179,7 @@ def get_queue(status="pending"):
         ).fetchall()]
 
 
-def update_queue_status(queue_id, status):
+def update_queue_status(queue_id: int, status):
     now = datetime.now(timezone.utc).isoformat()
     with db_conn() as conn:
         conn.execute(
