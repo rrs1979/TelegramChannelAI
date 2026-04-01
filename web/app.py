@@ -35,7 +35,8 @@ log_handler.setFormatter(logging.Formatter(
 log_handler.setLevel(logging.INFO)
 
 logger = logging.getLogger("channelai")
-logger.setLevel(logging.DEBUG if DEBUG else logging.INFO)
+_log_level = os.getenv("LOG_LEVEL", "DEBUG" if DEBUG else "INFO").upper()
+logger.setLevel(getattr(logging, _log_level, logging.INFO))
 logger.addHandler(log_handler)
 
 # also log to console in dev mode
