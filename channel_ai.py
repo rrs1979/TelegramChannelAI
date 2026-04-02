@@ -152,6 +152,8 @@ async def generate_image(prompt, vpn_proxy=None):
             ) as r:
                 if r.status == 200 and "image" in r.headers.get("content-type", ""):
                     data = await r.read()
+                    # Pollinations sometimes returns a tiny placeholder on timeout;
+                    # real generated images are always well above 3 KB.
                     if len(data) > 3000:
                         path.write_bytes(data)
                         return str(path)
@@ -215,6 +217,8 @@ def save_hashes():
 
 
 def is_duplicate(text):
+    # Only hash first 100 chars — headlines are enough to catch reposts,
+    # and body text often varies between sources covering the same story.
     h = hashlib.md5(text[:100].lower().encode()).hexdigest()
     if h in _published_hashes:
         return True
