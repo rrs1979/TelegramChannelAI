@@ -43,7 +43,9 @@
             {% for s in sources %}
             <tr class="border-b border-gray-800/50" data-id="{{ s.id }}">
                 <td class="py-2 pr-4">
-                    <a href="https://t.me/{{ s.username }}" target="_blank" class="text-blue-400 hover:underline">
+                    <a href="https://t.me/{{ s.username }}" target="_blank"
+                        title="Open @{{ s.username }} in Telegram"
+                        class="text-blue-400 hover:underline">
                         @{{ s.username }}
                     </a>
                 </td>
@@ -59,8 +61,10 @@
                 </td>
                 <td class="py-2 flex gap-2">
                     <button onclick="toggleSource({{ s.id }})"
+                        title="Pause or resume this source"
                         class="text-yellow-400 hover:text-yellow-300 text-xs">toggle</button>
                     <button onclick="deleteSource({{ s.id }})"
+                        title="Remove this source channel"
                         class="text-red-400 hover:text-red-300 text-xs">remove</button>
                 </td>
             </tr>
