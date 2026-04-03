@@ -5,7 +5,7 @@
 <div class="mb-6 flex items-center justify-between">
     <div>
         <h1 class="text-2xl font-bold">Dashboard</h1>
-        <p class="text-xs text-gray-500 mt-1" id="last-updated"></p>
+        <p class="muted mt-1" id="last-updated"></p>
     </div>
     <div class="flex items-center gap-3">
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
@@ -38,7 +38,7 @@
         <div class="text-gray-400 text-xs uppercase tracking-wide">Pipeline Runs</div>
         <div class="text-2xl font-bold mt-1" id="stat-runs">{{ stats.total_runs }}</div>
         {% if stats.last_run %}
-        <div class="text-xs text-gray-500 mt-1" id="last-run-ago" data-ts="{{ stats.last_run.started_at }}"></div>
+        <div class="muted mt-1" id="last-run-ago" data-ts="{{ stats.last_run.started_at }}"></div>
         {% endif %}
     </div>
 </div>
