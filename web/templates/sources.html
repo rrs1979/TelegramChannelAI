@@ -12,6 +12,8 @@
         <div>
             <label class="block text-xs text-gray-400 mb-1">Channel username</label>
             <input type="text" name="username" id="input-username" placeholder="@channel_name"
+                required minlength="5" maxlength="33" pattern="@?[a-zA-Z][a-zA-Z0-9_]{3,31}"
+                title="Telegram username: letters, digits, underscores (5-32 chars)"
                 class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
         </div>
         <div>

@@ -39,9 +39,13 @@ const addForm = document.getElementById('add-source-form');
 if (addForm) {
     addForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const username = document.getElementById('input-username').value.trim();
+        let username = document.getElementById('input-username').value.trim().replace(/^@/, '');
         const title = document.getElementById('input-title').value.trim();
         if (!username) return;
+        if (!/^[a-zA-Z][a-zA-Z0-9_]{3,31}$/.test(username)) {
+            alert('Invalid username — use letters, digits and underscores (5-32 chars)');
+            return;
+        }
 
         const btn = addForm.querySelector('button[type="submit"]');
         btn.disabled = true;
