@@ -28,6 +28,17 @@
             50% { opacity: .85; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
         }
         .status-pulse { animation: pulse-dot 2s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner {
+            display: inline-block;
+            width: .85em; height: .85em;
+            border: 2px solid rgba(255,255,255,.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+            vertical-align: middle;
+            margin-right: .35em;
+        }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">

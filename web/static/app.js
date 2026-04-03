@@ -43,11 +43,28 @@ if (addForm) {
         const title = document.getElementById('input-title').value.trim();
         if (!username) return;
 
-        const data = await api('/api/sources', 'POST', { username, title });
-        if (data.ok) {
-            location.reload();
-        } else {
-            alert(data.error || 'Failed to add');
+        const btn = addForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        var dot = document.createElement('span');
+        dot.className = 'spinner';
+        btn.textContent = '';
+        btn.appendChild(dot);
+        btn.appendChild(document.createTextNode('Adding\u2026'));
+        btn.classList.add('opacity-50');
+
+        try {
+            const data = await api('/api/sources', 'POST', { username, title });
+            if (data.ok) {
+                location.reload();
+            } else {
+                alert(data.error || 'Failed to add');
+            }
+        } catch (err) {
+            alert('Network error: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Add Source';
+            btn.classList.remove('opacity-50');
         }
     });
 }
