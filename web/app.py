@@ -164,7 +164,7 @@ def api_add_source():
     data = request.get_json() or {}
     username = data.get("username", "").strip().lstrip("@")
     if not username or not re.match(r'^[A-Za-z][A-Za-z0-9_]{3,30}$', username):
-        return jsonify({"error": "invalid username"}), 400
+        return jsonify({"error": "Username must start with a letter and be 4-31 characters (letters, digits, underscores)"}), 400
 
     subscribers = data.get("subscribers", 0)
     if not isinstance(subscribers, int) or subscribers < 0:
@@ -172,7 +172,7 @@ def api_add_source():
 
     result = add_source(username, data.get("title", ""), subscribers)
     if result is None:
-        return jsonify({"error": "already exists or invalid"}), 409
+        return jsonify({"error": "This channel is already in your sources list"}), 409
     logger.info(f"Source added: @{result}")
     return jsonify({"ok": True, "username": result}), 201
 
@@ -206,7 +206,7 @@ def api_run_pipeline():
     """Trigger pipeline run (async, returns immediately)."""
     last = get_last_run()
     if last and last.get("status") == "running":
-        return jsonify({"error": "pipeline already running"}), 409
+        return jsonify({"error": "Pipeline is already running, please wait for it to finish"}), 409
 
     run_id = start_run()
 
