@@ -96,17 +96,47 @@ function copyText(btn) {
 }
 
 // queue
-async function approveItem(id) {
-    await api(`/api/queue/${id}/approve`, 'POST');
-    const el = document.querySelector(`div[data-id="${id}"]`);
-    if (el) el.remove();
+async function approveItem(id, btn) {
+    var wrap = btn.parentElement;
+    wrap.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+    var prev = btn.textContent;
+    btn.textContent = '';
+    var dot = document.createElement('span');
+    dot.className = 'spinner';
+    btn.appendChild(dot);
+    btn.appendChild(document.createTextNode('Approving\u2026'));
+
+    try {
+        await api(`/api/queue/${id}/approve`, 'POST');
+        var el = document.querySelector(`div[data-id="${id}"]`);
+        if (el) el.remove();
+    } catch (e) {
+        alert('Could not approve: ' + e.message);
+        wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
+        btn.textContent = prev;
+    }
 }
 
-async function rejectItem(id) {
+async function rejectItem(id, btn) {
     if (!confirm('Reject this post? It will be discarded.')) return;
-    await api(`/api/queue/${id}/reject`, 'POST');
-    const el = document.querySelector(`div[data-id="${id}"]`);
-    if (el) el.remove();
+    var wrap = btn.parentElement;
+    wrap.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+    var prev = btn.textContent;
+    btn.textContent = '';
+    var dot = document.createElement('span');
+    dot.className = 'spinner';
+    btn.appendChild(dot);
+    btn.appendChild(document.createTextNode('Rejecting\u2026'));
+
+    try {
+        await api(`/api/queue/${id}/reject`, 'POST');
+        var el = document.querySelector(`div[data-id="${id}"]`);
+        if (el) el.remove();
+    } catch (e) {
+        alert('Could not reject: ' + e.message);
+        wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
+        btn.textContent = prev;
+    }
 }
 
 // show relative time for last pipeline run
