@@ -192,6 +192,18 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
+// filter published posts
+var searchInput = document.getElementById('published-search');
+if (searchInput) {
+    searchInput.addEventListener('input', function () {
+        var q = this.value.toLowerCase();
+        document.querySelectorAll('.space-y-3 > details').forEach(function (el) {
+            var text = el.textContent.toLowerCase();
+            el.style.display = text.includes(q) ? '' : 'none';
+        });
+    });
+}
+
 // auto-refresh stats on dashboard (every 30s)
 if (document.getElementById('stat-published')) {
     showUpdatedTime();

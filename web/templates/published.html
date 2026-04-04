@@ -2,9 +2,15 @@
 {% block title %}Published{% endblock %}
 
 {% block content %}
-<div class="mb-6">
-    <h1 class="text-2xl font-bold">Published Posts</h1>
-    <p class="text-gray-500 text-sm mt-1">Archive of everything that went live.</p>
+<div class="mb-6 flex items-center justify-between flex-wrap gap-3">
+    <div>
+        <h1 class="text-2xl font-bold">Published Posts</h1>
+        <p class="text-gray-500 text-sm mt-1">Archive of everything that went live.</p>
+    </div>
+    {% if posts %}
+    <input type="text" id="published-search" placeholder="Search posts…"
+        class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-64">
+    {% endif %}
 </div>
 
 {% if posts %}
