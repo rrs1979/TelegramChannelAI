@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.2] - 2026-04-05
+
+### Fixed
+- Sanitize newline characters in settings values to prevent .env injection
+
 ## [1.2.1] - 2026-03-29
 
 ### Fixed

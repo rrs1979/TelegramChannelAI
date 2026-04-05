@@ -59,11 +59,12 @@ def save_settings(fields):
                     key, _, val = line.partition("=")
                     existing[key.strip()] = val.strip()
 
-    # update with new values
+    # update with new values (strip newlines to prevent .env injection)
     for key in SETTINGS_KEYS:
         if key in fields:
-            existing[key] = fields[key]
-            os.environ[key] = fields[key]  # update runtime too
+            clean = fields[key].replace("\n", "").replace("\r", "")
+            existing[key] = clean
+            os.environ[key] = clean  # update runtime too
 
     with open(ENV_PATH, "w") as f:
         for key, val in existing.items():
