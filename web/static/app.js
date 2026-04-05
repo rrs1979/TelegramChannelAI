@@ -95,6 +95,14 @@ function copyText(btn) {
     });
 }
 
+function copyValue(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        var prev = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = prev; }, 1200);
+    });
+}
+
 // queue
 async function approveItem(id, btn) {
     var wrap = btn.parentElement;

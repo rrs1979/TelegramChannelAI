@@ -50,6 +50,9 @@
                         class="text-blue-400 hover:underline">
                         @{{ s.username }}
                     </a>
+                    <button onclick="copyValue('@{{ s.username }}', this)"
+                        class="text-gray-600 hover:text-gray-300 text-xs ml-1 transition"
+                        title="Copy username">copy</button>
                 </td>
                 <td class="py-2 pr-4">{{ s.title or '—' }}</td>
                 <td class="py-2 pr-4">{{ s.subscribers }}</td>
