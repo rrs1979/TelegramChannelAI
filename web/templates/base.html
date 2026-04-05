@@ -40,20 +40,34 @@
             vertical-align: middle;
             margin-right: .35em;
         }
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            z-index: 50;
+            padding: .5rem 1rem;
+            background: #252540;
+            color: #fff;
+            font-size: .875rem;
+            border-radius: 0 0 .375rem 0;
+        }
+        .skip-link:focus { left: 0; }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
     <!-- nav -->
-    <nav class="bg-dark-800 border-b border-gray-700/50">
+    <nav class="bg-dark-800 border-b border-gray-700/50" aria-label="Main navigation">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-6">
             <a href="/" class="text-lg font-bold text-white">ChannelAI</a>
             <div class="flex gap-4 text-sm">
-                <a href="/" class="hover:text-white {% if request.path == '/' %}text-white{% else %}text-gray-400{% endif %}">Dashboard</a>
-                <a href="/sources" class="hover:text-white {% if request.path == '/sources' %}text-white{% else %}text-gray-400{% endif %}">Sources</a>
-                <a href="/queue" class="hover:text-white {% if '/queue' in request.path %}text-white{% else %}text-gray-400{% endif %}">Queue</a>
-                <a href="/published" class="hover:text-white {% if request.path == '/published' %}text-white{% else %}text-gray-400{% endif %}">Published</a>
-                <a href="/analytics" class="hover:text-white {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}">Analytics</a>
-                <a href="/settings" class="hover:text-white {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}">Settings</a>
+                <a href="/" class="hover:text-white {% if request.path == '/' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/' %}aria-current="page"{% endif %}>Dashboard</a>
+                <a href="/sources" class="hover:text-white {% if request.path == '/sources' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/sources' %}aria-current="page"{% endif %}>Sources</a>
+                <a href="/queue" class="hover:text-white {% if '/queue' in request.path %}text-white{% else %}text-gray-400{% endif %}" {% if '/queue' in request.path %}aria-current="page"{% endif %}>Queue</a>
+                <a href="/published" class="hover:text-white {% if request.path == '/published' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/published' %}aria-current="page"{% endif %}>Published</a>
+                <a href="/analytics" class="hover:text-white {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
+                <a href="/settings" class="hover:text-white {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/settings' %}aria-current="page"{% endif %}>Settings</a>
             </div>
             <div class="ml-auto">
                 <span id="status-dot" class="inline-block w-2 h-2 rounded-full bg-green-500 status-pulse"></span>
@@ -63,7 +77,7 @@
     </nav>
 
     <!-- content -->
-    <main class="max-w-6xl mx-auto px-4 py-6">
+    <main id="main-content" class="max-w-6xl mx-auto px-4 py-6">
         {% block content %}{% endblock %}
     </main>
 
