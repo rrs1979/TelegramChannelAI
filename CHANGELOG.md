@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0] - 2026-04-06
+
+### Added
+- Copy button for source channel usernames
+- Skip-to-content link and aria attributes on navigation
+- Search filter on published posts page
+- Loading state for queue approve/reject buttons
+- Channel username validation in add-source form
+- `.muted` utility class for subdued text
+
+### Changed
+- Smooth hover transitions for nav links and cards
+- Friendlier API error messages for sources and pipeline
+
+### Fixed
+- Inconsistent input colors on settings page
+
 ## [1.2.2] - 2026-04-05
 
 ### Fixed
