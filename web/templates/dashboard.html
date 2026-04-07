@@ -70,6 +70,9 @@
         <div>
             <span class="text-gray-500">Errors:</span>
             <span class="text-red-400">{{ stats.last_run.errors[:100] }}</span>
+            <button onclick="copyValue({{ stats.last_run.errors|tojson }}, this)"
+                class="text-gray-600 hover:text-gray-300 text-xs ml-1 transition"
+                title="Copy full error">copy</button>
         </div>
         {% endif %}
     </div>
