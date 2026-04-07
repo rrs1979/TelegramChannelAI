@@ -80,7 +80,9 @@ async function deleteSource(id) {
     if (row) row.remove();
 }
 
-async function toggleSource(id) {
+async function toggleSource(id, isActive) {
+    const action = isActive ? 'Pause this source?' : 'Resume this source?';
+    if (!confirm(action)) return;
     await api(`/api/sources/${id}/toggle`, 'POST');
     location.reload();
 }
