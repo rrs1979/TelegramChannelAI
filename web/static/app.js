@@ -24,7 +24,7 @@ async function runPipeline() {
             setTimeout(() => location.reload(), 3000);
         }
     } catch (e) {
-        alert('Failed: ' + e.message);
+        alert('Could not start the pipeline. Check your connection and try again.');
     } finally {
         setTimeout(() => {
             btn.disabled = false;
@@ -64,7 +64,7 @@ if (addForm) {
                 alert(data.error || 'Failed to add');
             }
         } catch (err) {
-            alert('Network error: ' + err.message);
+            alert('Could not reach the server. Check your connection and try again.');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Add Source';
@@ -121,7 +121,7 @@ async function approveItem(id, btn) {
         var el = document.querySelector(`div[data-id="${id}"]`);
         if (el) el.remove();
     } catch (e) {
-        alert('Could not approve: ' + e.message);
+        alert('Could not approve this post. Please refresh the page and try again.');
         wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
         btn.textContent = prev;
     }
@@ -143,7 +143,7 @@ async function rejectItem(id, btn) {
         var el = document.querySelector(`div[data-id="${id}"]`);
         if (el) el.remove();
     } catch (e) {
-        alert('Could not reject: ' + e.message);
+        alert('Could not reject this post. Please refresh the page and try again.');
         wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
         btn.textContent = prev;
     }
