@@ -202,6 +202,32 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
+// queue auto-refresh (reload page every 45s)
+var queueToggle = document.getElementById('queue-auto-refresh');
+if (queueToggle) {
+    var queueTimer = null;
+
+    function startQueueRefresh() {
+        queueTimer = setInterval(function () { location.reload(); }, 45000);
+    }
+
+    if (localStorage.getItem('queueAutoRefresh') === 'on') {
+        queueToggle.checked = true;
+        startQueueRefresh();
+    }
+
+    queueToggle.addEventListener('change', function () {
+        if (this.checked) {
+            localStorage.setItem('queueAutoRefresh', 'on');
+            startQueueRefresh();
+        } else {
+            localStorage.setItem('queueAutoRefresh', 'off');
+            clearInterval(queueTimer);
+            queueTimer = null;
+        }
+    });
+}
+
 // filter published posts
 var searchInput = document.getElementById('published-search');
 if (searchInput) {
