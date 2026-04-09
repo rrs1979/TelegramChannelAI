@@ -107,6 +107,7 @@ function copyValue(text, btn) {
 
 // queue
 async function approveItem(id, btn) {
+    if (!confirm('Publish this post to the channel?')) return;
     var wrap = btn.parentElement;
     wrap.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
     var prev = btn.textContent;
