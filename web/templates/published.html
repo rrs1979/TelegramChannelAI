@@ -35,6 +35,7 @@
                     class="absolute top-2 right-2 text-xs text-gray-500 hover:text-gray-200 bg-dark-700 px-2 py-0.5 rounded transition">Copy</button>
                 <div class="post-text text-sm text-gray-300 whitespace-pre-wrap leading-relaxed pr-14">{{ post.text }}</div>
             </div>
+            <span class="text-xs text-gray-600">{{ post.text|length }} chars</span>
             {% if post.telegram_msg_id %}
             <div class="mt-2 text-xs text-gray-600">msg_id: {{ post.telegram_msg_id }}</div>
             {% endif %}
