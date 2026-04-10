@@ -35,12 +35,18 @@ TELEGRAM_API_ID = int(os.getenv("TELEGRAM_API_ID", "0"))
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH", "")
 TELEGRAM_SESSION = os.getenv("TELEGRAM_SESSION", "")
 
-# Source channels to monitor (default set, overridable per channel config)
-DEFAULT_SOURCES = [
-    "truexanewsua", "u_now", "voynareal", "UaOnlii",
-    "oko_ua", "novynu_ukraina", "DeepStateUA", "TCH_channel",
-    "uniannet", "suspilnenews", "ukrpravda_news", "censor_net",
-]
+# Source channels to monitor (default set, overridable per channel config).
+# Override with DEFAULT_SOURCES env var (comma-separated).
+_sources_env = os.getenv("DEFAULT_SOURCES", "")
+DEFAULT_SOURCES = (
+    [s.strip() for s in _sources_env.split(",") if s.strip()]
+    if _sources_env
+    else [
+        "truexanewsua", "u_now", "voynareal", "UaOnlii",
+        "oko_ua", "novynu_ukraina", "DeepStateUA", "TCH_channel",
+        "uniannet", "suspilnenews", "ukrpravda_news", "censor_net",
+    ]
+)
 
 # Per-channel configs: each key maps to a target channel with its own personality.
 # Override via CHANNEL_CONFIGS env var (JSON) or fall back to CHANNEL_ID env var.
