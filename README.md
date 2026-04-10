@@ -161,6 +161,25 @@ EXCLUSIONS = [
 ]
 ```
 
+## FAQ
+
+**What's the difference between Auto and Semi-auto mode?**
+
+- **Auto** — the pipeline scans, rewrites, and publishes directly to your channel. Fully hands-off.
+- **Semi-auto** — posts go into a review queue first. You approve or reject each one from the dashboard before it gets published. Good for getting started or when you want editorial control.
+
+Change the mode in Settings or set `PIPELINE_MODE=auto` / `PIPELINE_MODE=semi-auto` in `.env`.
+
+**Can I use my own list of source channels?**
+
+Yes. Set `DEFAULT_SOURCES` in `.env` with a comma-separated list of Telegram channel usernames (without the `@`):
+
+```env
+DEFAULT_SOURCES=truexanewsua,u_now,voynareal
+```
+
+This overrides the built-in default list. You can also manage sources from the dashboard UI.
+
 ## License
 
 MIT License
