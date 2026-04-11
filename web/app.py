@@ -22,6 +22,15 @@ from web.db import (
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
+
+@app.context_processor
+def inject_last_run():
+    try:
+        lr = get_last_run()
+    except Exception:
+        lr = None
+    return {"global_last_run": lr}
+
 # --- logging setup ---
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)

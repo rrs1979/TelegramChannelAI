@@ -76,9 +76,14 @@
                 <a href="/analytics" class="transition-colors duration-150 hover:text-white {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
                 <a href="/settings" class="transition-colors duration-150 hover:text-white {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/settings' %}aria-current="page"{% endif %}>Settings</a>
             </div>
-            <div class="ml-auto">
-                <span id="status-dot" class="inline-block w-2 h-2 rounded-full bg-green-500 status-pulse"></span>
-                <span class="text-xs text-gray-500 ml-1">online</span>
+            <div class="ml-auto flex items-center gap-4">
+                {% if global_last_run %}
+                <span class="text-xs text-gray-500" id="nav-last-run" data-ts="{{ global_last_run.started_at }}"></span>
+                {% endif %}
+                <span class="flex items-center">
+                    <span id="status-dot" class="inline-block w-2 h-2 rounded-full bg-green-500 status-pulse"></span>
+                    <span class="text-xs text-gray-500 ml-1">online</span>
+                </span>
             </div>
         </div>
     </nav>

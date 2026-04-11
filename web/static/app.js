@@ -150,6 +150,21 @@ async function rejectItem(id, btn) {
     }
 }
 
+// nav bar: show when pipeline last ran (visible on all pages)
+function updateNavLastRun() {
+    var el = document.getElementById('nav-last-run');
+    if (!el || !el.dataset.ts) return;
+    var diff = Math.floor((Date.now() - new Date(el.dataset.ts + 'Z').getTime()) / 1000);
+    var ago;
+    if (diff < 60) ago = 'just now';
+    else if (diff < 3600) ago = Math.floor(diff / 60) + 'm ago';
+    else if (diff < 86400) ago = Math.floor(diff / 3600) + 'h ago';
+    else ago = Math.floor(diff / 86400) + 'd ago';
+    el.textContent = 'Last run ' + ago;
+}
+updateNavLastRun();
+setInterval(updateNavLastRun, 60000);
+
 // show relative time for last pipeline run
 function updateLastRunAgo(ts) {
     var el = document.getElementById('last-run-ago');
