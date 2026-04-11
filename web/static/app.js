@@ -247,13 +247,24 @@ if (queueToggle) {
 // filter published posts
 var searchInput = document.getElementById('published-search');
 if (searchInput) {
-    searchInput.addEventListener('input', function () {
-        var q = this.value.toLowerCase();
-        document.querySelectorAll('.space-y-3 > details').forEach(function (el) {
-            var text = el.textContent.toLowerCase();
-            el.style.display = text.includes(q) ? '' : 'none';
+    var countEl = document.getElementById('published-count');
+    var allCards = document.querySelectorAll('.space-y-3 > details');
+    var total = allCards.length;
+
+    function updateSearchCount() {
+        if (!countEl) return;
+        var q = searchInput.value.toLowerCase();
+        var visible = 0;
+        allCards.forEach(function (el) {
+            var match = !q || el.textContent.toLowerCase().includes(q);
+            el.style.display = match ? '' : 'none';
+            if (match) visible++;
         });
-    });
+        countEl.textContent = q ? visible + ' of ' + total : total + ' posts';
+    }
+
+    searchInput.addEventListener('input', updateSearchCount);
+    updateSearchCount();
 }
 
 // auto-refresh stats on dashboard (every 30s)
