@@ -180,6 +180,10 @@ DEFAULT_SOURCES=truexanewsua,u_now,voynareal
 
 This overrides the built-in default list. You can also manage sources from the dashboard UI.
 
+**How does duplicate detection work?**
+
+The pipeline hashes each story's core text before publishing. If a hash already exists in the local store, the story is silently skipped. Hashes expire after 48 hours, so the same topic can be covered again if it stays relevant for several days. The hash file (`published_hashes.json`) is created automatically on first run — no setup needed.
+
 ## License
 
 MIT License
