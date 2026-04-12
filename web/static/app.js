@@ -11,6 +11,7 @@ async function api(url, method = 'GET', body = null) {
 async function runPipeline() {
     const btn = document.getElementById('btn-run');
     if (!btn) return;
+    if (!confirm('Run the pipeline now? New posts will be fetched and queued.')) return;
     btn.disabled = true;
     btn.textContent = 'Running...';
     btn.classList.add('opacity-50');
