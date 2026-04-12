@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.1] - 2026-04-12
+
+### Fixed
+- Mask secret values (API key, API hash) on settings page so they don't leak in HTML source
+
 ## [1.3.0] - 2026-04-06
 
 ### Added

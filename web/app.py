@@ -123,6 +123,17 @@ def analytics_page():
     return render_template("analytics.html", analytics=data)
 
 
+def _mask(value):
+    """Mask a secret so the raw value never reaches the browser."""
+    if not value or len(value) < 6:
+        return ""
+    return value[:3] + "\u2022" * min(len(value) - 6, 12) + value[-3:]
+
+
+# keys whose values should be masked in the settings form
+_SECRET_FIELDS = ("POLLINATIONS_API_KEY", "TELEGRAM_API_HASH")
+
+
 @app.route("/settings", methods=["GET", "POST"])
 def settings_page():
     if request.method == "POST":
@@ -140,6 +151,7 @@ def settings_page():
         if mode not in ("manual", "semi-auto", "auto"):
             mode = "semi-auto"
 
+        current = load_settings()
         fields = {
             "POLLINATIONS_API_KEY": request.form.get("pollinations_key", "").strip(),
             "TELEGRAM_API_ID": request.form.get("telegram_api_id", "").strip(),
@@ -148,11 +160,18 @@ def settings_page():
             "PIPELINE_INTERVAL": str(interval),
             "PIPELINE_MODE": mode,
         }
+        # if a masked value was submitted unchanged, keep the original
+        for key in _SECRET_FIELDS:
+            if "\u2022" in fields.get(key, ""):
+                fields[key] = current.get(key, "")
+
         save_settings(fields)
         logger.info("Settings updated")
         return redirect(url_for("settings_page"))
 
     settings = load_settings()
+    for key in _SECRET_FIELDS:
+        settings[key] = _mask(settings[key])
     return render_template("settings.html", settings=settings)
 
 
