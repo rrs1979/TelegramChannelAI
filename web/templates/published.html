@@ -40,7 +40,12 @@
             </div>
             <span class="text-xs text-gray-500">{{ post.text|length }} chars · {{ post.text.split()|length }} words</span>
             {% if post.telegram_msg_id %}
-            <div class="mt-2 text-xs text-gray-500">msg_id: {{ post.telegram_msg_id }}</div>
+            <div class="mt-2 text-xs text-gray-500">
+                msg_id: {{ post.telegram_msg_id }}
+                <button onclick="copyValue('{{ post.telegram_msg_id }}', this)"
+                    class="text-gray-600 hover:text-gray-300 ml-1 transition"
+                    title="Copy message ID">copy</button>
+            </div>
             {% endif %}
         </div>
     </details>
