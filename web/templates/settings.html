@@ -16,7 +16,7 @@
             value="{{ settings.POLLINATIONS_API_KEY }}"
             placeholder="pk_..."
             class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
-        <p class="text-xs text-gray-500 mt-1">Used for text and image generation. Leave blank if using free tier.</p>
+        <p class="hint">Used for text and image generation. Leave blank if using free tier.</p>
     </div>
 
     <!-- Telegram API -->
@@ -44,7 +44,7 @@
             value="{{ settings.CHANNEL_ID }}"
             placeholder="-1001234567890"
             class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
-        <p class="text-xs text-gray-500 mt-1">Numeric Telegram channel ID (starts with -100).</p>
+        <p class="hint">Numeric Telegram channel ID (starts with -100).</p>
     </div>
 
     <!-- Pipeline -->
@@ -55,7 +55,7 @@
                 value="{{ settings.PIPELINE_INTERVAL }}"
                 min="300" step="300"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
-            <p class="text-xs text-gray-500 mt-1">How often to auto-run. Default 3600 (1h).</p>
+            <p class="hint">How often to auto-run. Default 3600 (1h).</p>
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
@@ -64,7 +64,7 @@
                 <option value="auto" {% if settings.PIPELINE_MODE == 'auto' %}selected{% endif %}>Auto (publish immediately)</option>
                 <option value="semi-auto" {% if settings.PIPELINE_MODE == 'semi-auto' %}selected{% endif %}>Semi-auto (queue for review)</option>
             </select>
-            <p class="text-xs text-gray-500 mt-1">Semi-auto puts posts in Queue for approval first.</p>
+            <p class="hint">Semi-auto puts posts in Queue for approval first.</p>
         </div>
     </div>
 
