@@ -224,6 +224,7 @@ def seed_published():
 # --- stats ---
 
 def get_stats():
+    """Return dashboard counters: published posts, active sources, pending queue size, and last run info."""
     with db_conn() as conn:
         total_published = conn.execute("SELECT COUNT(*) FROM published").fetchone()[0]
         total_sources = conn.execute("SELECT COUNT(*) FROM sources WHERE is_active = 1").fetchone()[0]
