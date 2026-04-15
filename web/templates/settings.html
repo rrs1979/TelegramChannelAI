@@ -40,10 +40,17 @@
     <!-- Channel -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Channel ID</label>
-        <input type="text" name="channel_id"
-            value="{{ settings.CHANNEL_ID }}"
-            placeholder="-1001234567890"
-            class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+        <div class="flex gap-2">
+            <input type="text" name="channel_id"
+                value="{{ settings.CHANNEL_ID }}"
+                placeholder="-1001234567890"
+                class="flex-1 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+            {% if settings.CHANNEL_ID %}
+            <button type="button" onclick="copyValue('{{ settings.CHANNEL_ID }}', this)"
+                class="text-gray-500 hover:text-gray-200 text-xs px-2 border border-gray-700 rounded transition"
+                title="Copy channel ID">copy</button>
+            {% endif %}
+        </div>
         <p class="hint">Numeric Telegram channel ID (starts with -100).</p>
     </div>
 
