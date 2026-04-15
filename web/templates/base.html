@@ -48,6 +48,13 @@
             vertical-align: middle;
             margin-right: .35em;
         }
+        details[open] > :not(summary) {
+            animation: details-open .25s ease-out;
+        }
+        @keyframes details-open {
+            from { opacity: 0; transform: translateY(-4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
         .skip-link {
             position: absolute;
             left: -9999px;
