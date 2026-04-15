@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0] - 2026-04-15
+
+### Added
+- Copy button for channel ID on settings page
+- Copy button for telegram msg_id in published posts
+- Filter sources by username or title
+- Configurable dedup window via `DEDUP_HOURS` env var
+- FAQ entries about pipeline interval and duplicate detection
+- `.hint` utility class for form help text
+
+### Changed
+- Smooth fade-in animation for details/accordion panels
+
 ## [1.3.1] - 2026-04-12
 
 ### Fixed
