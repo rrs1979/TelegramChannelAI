@@ -193,7 +193,14 @@ You can also change this from the Settings page without restarting the app.
 
 **How does duplicate detection work?**
 
-The pipeline hashes each story's core text before publishing. If a hash already exists in the local store, the story is silently skipped. Hashes expire after 48 hours, so the same topic can be covered again if it stays relevant for several days. The hash file (`published_hashes.json`) is created automatically on first run — no setup needed.
+The pipeline hashes each story's core text before publishing. If a hash already exists in the local store, the story is silently skipped. Hashes expire after 48 hours by default, so the same topic can be covered again if it stays relevant for several days. You can change the window with:
+
+```env
+DEDUP_HOURS=24   # tighter — skip only last 24h
+DEDUP_HOURS=72   # wider  — skip reposts for 3 days
+```
+
+The hash file (`published_hashes.json`) is created automatically on first run — no setup needed.
 
 ## License
 
