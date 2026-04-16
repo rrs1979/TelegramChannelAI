@@ -67,6 +67,17 @@
             border-radius: 0 0 .375rem 0;
         }
         .skip-link:focus { left: 0; }
+
+        /* dark scrollbar so it doesn't flash white */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f1a; }
+        ::-webkit-scrollbar-thumb {
+            background: #333; border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        @supports (scrollbar-color: auto) {
+            * { scrollbar-color: #333 #0f0f1a; scrollbar-width: thin; }
+        }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
