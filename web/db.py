@@ -1,7 +1,6 @@
 """SQLite storage for the web dashboard."""
 
 import sqlite3
-import os
 from datetime import datetime, timezone
 from contextlib import contextmanager
 
