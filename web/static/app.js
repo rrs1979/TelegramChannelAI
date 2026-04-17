@@ -62,7 +62,7 @@ if (addForm) {
             if (data.ok) {
                 location.reload();
             } else {
-                alert(data.error || 'Failed to add');
+                alert(data.error || 'Could not add this source. Please try again.');
             }
         } catch (err) {
             alert('Could not reach the server. Check your connection and try again.');
