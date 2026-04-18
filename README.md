@@ -202,6 +202,16 @@ DEDUP_HOURS=72   # wider  — skip reposts for 3 days
 
 The hash file (`published_hashes.json`) is created automatically on first run — no setup needed.
 
+**Where are the logs?**
+
+The dashboard writes to `web/logs/app.log` (rotating, ~1 MB per file, 3 backups). Tail it while the pipeline runs to see what's happening:
+
+```bash
+tail -f web/logs/app.log
+```
+
+Set `LOG_LEVEL=DEBUG` in `.env` if you need more detail — useful when a post gets skipped and you're not sure why.
+
 ## License
 
 MIT License
