@@ -9,7 +9,8 @@ load_dotenv(ENV_PATH)
 
 # server
 PORT = int(os.getenv("PORT", 5000))
-DEBUG = os.getenv("FLASK_ENV", "development") == "development"
+# default to off — we don't want the Werkzeug debugger exposed if FLASK_ENV is missing
+DEBUG = os.getenv("FLASK_ENV", "production") == "development"
 SECRET_KEY = os.getenv("FLASK_SECRET") or secrets.token_hex(32)
 
 # database

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] - 2026-04-19
+
+### Fixed
+- Debug mode no longer defaults to on when `FLASK_ENV` is unset (prevents the Werkzeug debugger from being exposed in production if the env file is incomplete)
+
 ## [1.4.0] - 2026-04-15
 
 ### Added
