@@ -52,6 +52,9 @@
     {% endfor %}
 </div>
 {% else %}
-<p class="text-gray-500 text-sm">No posts published yet.</p>
+<div class="bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center">
+    <div class="text-gray-400 text-sm">Nothing published yet.</div>
+    <div class="text-gray-500 text-xs mt-2">Approve items in the queue and they'll land here once posted.</div>
+</div>
 {% endif %}
 {% endblock %}
