@@ -245,6 +245,30 @@ if (queueToggle) {
     });
 }
 
+// filter queue items
+var queueSearch = document.getElementById('queue-search');
+if (queueSearch) {
+    var queueCount = document.getElementById('queue-count');
+    var queueCards = document.querySelectorAll('.space-y-4 > [data-id]');
+    var queueTotal = queueCards.length;
+
+    function filterQueue() {
+        var q = queueSearch.value.toLowerCase();
+        var visible = 0;
+        queueCards.forEach(function (card) {
+            var match = !q || card.textContent.toLowerCase().includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        if (queueCount) {
+            queueCount.textContent = q ? visible + ' of ' + queueTotal : queueTotal + ' items';
+        }
+    }
+
+    queueSearch.addEventListener('input', filterQueue);
+    filterQueue();
+}
+
 // filter published posts
 var searchInput = document.getElementById('published-search');
 if (searchInput) {

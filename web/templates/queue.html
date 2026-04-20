@@ -5,6 +5,11 @@
 <div class="mb-6 flex items-center justify-between flex-wrap gap-3">
     <h1 class="text-2xl font-bold">Approval Queue</h1>
     <div class="flex items-center gap-4">
+        {% if items %}
+        <input type="text" id="queue-search" placeholder="Filter queue…"
+            class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
+        <span id="queue-count" class="text-xs text-gray-500"></span>
+        {% endif %}
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
             <input type="checkbox" id="queue-auto-refresh"
                 class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
