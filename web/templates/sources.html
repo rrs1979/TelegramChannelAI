@@ -36,6 +36,7 @@
 </div>
 
 <!-- table -->
+{% if sources %}
 <div class="overflow-x-auto">
     <table class="w-full text-sm" id="sources-table">
         <thead>
@@ -84,8 +85,10 @@
         </tbody>
     </table>
 </div>
-
-{% if not sources %}
-<p class="text-gray-500 text-sm mt-4">No sources added yet.</p>
+{% else %}
+<div class="text-center py-10 text-gray-500 text-sm">
+    <p>No sources yet.</p>
+    <p class="mt-1 text-xs text-gray-600">Add a Telegram channel above to start collecting posts.</p>
+</div>
 {% endif %}
 {% endblock %}
