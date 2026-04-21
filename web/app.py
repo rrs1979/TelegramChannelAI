@@ -127,6 +127,7 @@ def _mask(value):
     """Mask a secret so the raw value never reaches the browser."""
     if not value or len(value) < 6:
         return ""
+    # cap the bullets at 12 so the mask doesn't leak the secret's actual length
     return value[:3] + "\u2022" * min(len(value) - 6, 12) + value[-3:]
 
 
