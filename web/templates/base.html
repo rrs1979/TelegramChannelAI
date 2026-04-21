@@ -68,15 +68,15 @@
         }
         .skip-link:focus { left: 0; }
 
-        /* dark scrollbar so it doesn't flash white */
+        /* dark scrollbar so it doesn't flash white; tinted to match the purple-ish palette */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f0f1a; }
         ::-webkit-scrollbar-thumb {
-            background: #333; border-radius: 4px;
+            background: #2a2a45; border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a5e; }
         @supports (scrollbar-color: auto) {
-            * { scrollbar-color: #333 #0f0f1a; scrollbar-width: thin; }
+            * { scrollbar-color: #2a2a45 #0f0f1a; scrollbar-width: thin; }
         }
 
         /* nav gets cramped on phones — let the links scroll sideways */
