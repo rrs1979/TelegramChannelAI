@@ -217,6 +217,20 @@ document.addEventListener('keydown', function (e) {
             runPipeline();
         }
     }
+
+    // "/" — jump to the filter box on whichever list page we're on
+    if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var tag = (e.target.tagName || '').toLowerCase();
+        if (tag === 'input' || tag === 'textarea') return;
+        var box = document.getElementById('queue-search') ||
+                  document.getElementById('published-search') ||
+                  document.getElementById('sources-search');
+        if (box) {
+            e.preventDefault();
+            box.focus();
+            box.select();
+        }
+    }
 });
 
 // queue auto-refresh (reload page every 45s)
