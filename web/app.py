@@ -119,7 +119,11 @@ def published_page():
 
 @app.route("/analytics")
 def analytics_page():
-    data = get_analytics()
+    try:
+        data = get_analytics()
+    except Exception as e:
+        logger.error(f"Analytics load failed: {e}")
+        data = {"daily": [], "totals": {"completed": 0, "failed": 0, "running": 0}}
     return render_template("analytics.html", analytics=data)
 
 
