@@ -55,6 +55,13 @@
             from { opacity: 0; transform: translateY(-4px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+        /* queue cards fade out when approved/rejected instead of just popping away */
+        .leaving {
+            opacity: 0;
+            transform: translateX(-12px);
+            transition: opacity .25s ease, transform .25s ease;
+            pointer-events: none;
+        }
         .skip-link {
             position: absolute;
             left: -9999px;

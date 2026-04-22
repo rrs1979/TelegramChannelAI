@@ -107,6 +107,13 @@ function copyValue(text, btn) {
 }
 
 // queue
+function fadeOutCard(id) {
+    var el = document.querySelector(`div[data-id="${id}"]`);
+    if (!el) return;
+    el.classList.add('leaving');
+    setTimeout(function () { el.remove(); }, 260);
+}
+
 async function approveItem(id, btn) {
     if (!confirm('Publish this post to the channel?')) return;
     var wrap = btn.parentElement;
@@ -120,8 +127,7 @@ async function approveItem(id, btn) {
 
     try {
         await api(`/api/queue/${id}/approve`, 'POST');
-        var el = document.querySelector(`div[data-id="${id}"]`);
-        if (el) el.remove();
+        fadeOutCard(id);
     } catch (e) {
         alert('Could not approve this post. Please refresh the page and try again.');
         wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
@@ -142,8 +148,7 @@ async function rejectItem(id, btn) {
 
     try {
         await api(`/api/queue/${id}/reject`, 'POST');
-        var el = document.querySelector(`div[data-id="${id}"]`);
-        if (el) el.remove();
+        fadeOutCard(id);
     } catch (e) {
         alert('Could not reject this post. Please refresh the page and try again.');
         wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
