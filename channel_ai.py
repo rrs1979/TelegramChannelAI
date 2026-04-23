@@ -81,7 +81,7 @@ EXCLUSIONS = [
     "casualties with details", "prisoner lists",
 ]
 
-SCAN_HOURS = 2
+SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
 DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
 IMAGE_WIDTH = 768
 IMAGE_HEIGHT = 432
