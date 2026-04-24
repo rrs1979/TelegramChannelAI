@@ -167,6 +167,7 @@ def add_to_queue(source, original_text, rewritten_text=None, image_prompt=None, 
 
 
 def get_queue(status="pending"):
+    """Return queue rows filtered by status. Pass status='all' to skip the filter."""
     with db_conn() as conn:
         if status == "all":
             return [dict(r) for r in conn.execute(
