@@ -13,7 +13,11 @@ async function runPipeline() {
     if (!btn) return;
     if (!confirm('Run the pipeline now? New posts will be fetched and queued.')) return;
     btn.disabled = true;
-    btn.textContent = 'Running...';
+    btn.textContent = '';
+    var dot = document.createElement('span');
+    dot.className = 'spinner';
+    btn.appendChild(dot);
+    btn.appendChild(document.createTextNode('Running…'));
     btn.classList.add('opacity-50');
 
     try {
