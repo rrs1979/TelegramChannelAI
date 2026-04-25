@@ -191,6 +191,17 @@ PIPELINE_INTERVAL=7200   # every 2 hours
 
 You can also change this from the Settings page without restarting the app.
 
+**How far back does the scanner look for new posts?**
+
+Two hours by default. Each run pulls posts from the last `SCAN_HOURS` hours across all source channels and flags stories that appear in 3+ channels as trending. Adjust if your run schedule is unusual:
+
+```env
+SCAN_HOURS=4   # wider window — useful if pipeline runs are spaced out
+SCAN_HOURS=1   # tighter — only the freshest stories
+```
+
+Rule of thumb: keep this at least as long as the gap between pipeline runs, otherwise stories that landed in between slip through unscanned.
+
 **How does duplicate detection work?**
 
 The pipeline hashes each story's core text before publishing. If a hash already exists in the local store, the story is silently skipped. Hashes expire after 48 hours by default, so the same topic can be covered again if it stays relevant for several days. You can change the window with:
