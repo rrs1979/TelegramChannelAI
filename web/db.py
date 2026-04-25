@@ -10,6 +10,8 @@ from web.config import DB_PATH
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
+    # WAL so the dashboard can keep reading while the pipeline writes —
+    # otherwise long publish runs lock the UI for seconds at a time.
     conn.execute("PRAGMA journal_mode=WAL")
     return conn
 
