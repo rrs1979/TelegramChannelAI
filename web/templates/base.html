@@ -97,6 +97,9 @@
             }
             .nav-links::-webkit-scrollbar { display: none; }
             main { padding-left: .75rem; padding-right: .75rem; }
+            /* "Last run 5m ago" eats nav width on phones and squeezes the
+               links into a tight horizontal scroll — drop it, dot stays */
+            #nav-last-run { display: none; }
         }
     </style>
 </head>
