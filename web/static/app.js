@@ -319,25 +319,32 @@ if (searchInput) {
 var srcSearch = document.getElementById('sources-search');
 if (srcSearch) {
     var srcCount = document.getElementById('sources-count');
+    var srcActiveOnly = document.getElementById('sources-active-only');
     var srcRows = document.querySelectorAll('#sources-table tbody tr');
     var srcTotal = srcRows.length;
 
     function filterSources() {
         var q = srcSearch.value.toLowerCase();
+        var onlyActive = srcActiveOnly && srcActiveOnly.checked;
         var visible = 0;
         srcRows.forEach(function (row) {
             var text = row.children[0].textContent.toLowerCase() +
                        ' ' + row.children[1].textContent.toLowerCase();
-            var match = !q || text.includes(q);
+            var match = (!q || text.includes(q)) &&
+                        (!onlyActive || row.dataset.active === '1');
             row.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (srcCount) {
-            srcCount.textContent = q ? visible + ' of ' + srcTotal : srcTotal + ' sources';
+            var label = onlyActive ? ' active' : ' sources';
+            srcCount.textContent = (q || onlyActive)
+                ? visible + ' of ' + srcTotal
+                : srcTotal + label;
         }
     }
 
     srcSearch.addEventListener('input', filterSources);
+    if (srcActiveOnly) srcActiveOnly.addEventListener('change', filterSources);
     filterSources();
 }
 
