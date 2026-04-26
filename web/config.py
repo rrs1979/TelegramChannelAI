@@ -70,3 +70,9 @@ def save_settings(fields):
     with open(ENV_PATH, "w") as f:
         for key, val in existing.items():
             f.write(f"{key}={val}\n")
+
+    # owner-only — without this the file inherits umask and can end up world-readable on the server
+    try:
+        os.chmod(ENV_PATH, 0o600)
+    except OSError:
+        pass

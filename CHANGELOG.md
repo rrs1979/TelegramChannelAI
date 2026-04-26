@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.2] - 2026-04-26
+
+### Fixed
+- Settings save now restricts `.env` to owner read/write (0600) so secrets don't inherit a world-readable umask on the server
+
 ## [1.4.1] - 2026-04-19
 
 ### Fixed
