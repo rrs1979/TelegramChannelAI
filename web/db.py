@@ -93,6 +93,7 @@ def get_sources():
 
 
 def add_source(username, title="", subscribers=0):
+    """Insert a source and return the cleaned username (no leading @), or None if empty or already exists."""
     username = username.lstrip("@").strip()
     if not username:
         return None
