@@ -83,8 +83,8 @@ EXCLUSIONS = [
 
 SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
 DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
-IMAGE_WIDTH = 768
-IMAGE_HEIGHT = 432
+IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
+IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 
 # ═══════════════════════════════════════════
 # AI CALLS (via Pollinations.ai)
