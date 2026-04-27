@@ -15,7 +15,7 @@ from web.config import SECRET_KEY, PORT, DEBUG, load_settings, save_settings
 from web.db import (
     init_db, get_stats, get_sources, add_source, remove_source,
     toggle_source, get_queue, update_queue_status, get_last_run,
-    get_runs, start_run, finish_run, add_to_queue, get_published,
+    get_runs, start_run, finish_run, get_published,
     get_analytics,
 )
 
