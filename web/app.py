@@ -285,4 +285,4 @@ def form_delete_source(source_id):
 # ---------- run ----------
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT, debug=DEBUG)
+    app.run(host=os.getenv("HOST", "0.0.0.0"), port=PORT, debug=DEBUG)
