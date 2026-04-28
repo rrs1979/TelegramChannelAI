@@ -75,6 +75,14 @@
         }
         .skip-link:focus { left: 0; }
 
+        /* tells the browser to render native controls (number spinners, dropdowns,
+           scrollbar corner) in dark mode — without it the /settings number input
+           shows white spinner buttons against the dark card */
+        html { color-scheme: dark; }
+
+        /* default text-selection blue clashes with the purple palette */
+        ::selection { background: #3a3a5e; color: #fff; }
+
         /* dark scrollbar so it doesn't flash white; tinted to match the purple-ish palette */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f0f1a; }
