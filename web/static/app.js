@@ -296,22 +296,28 @@ if (queueSearch) {
 var searchInput = document.getElementById('published-search');
 if (searchInput) {
     var countEl = document.getElementById('published-count');
+    var sourceSel = document.getElementById('published-source');
     var allCards = document.querySelectorAll('.space-y-3 > details');
     var total = allCards.length;
 
     function updateSearchCount() {
-        if (!countEl) return;
         var q = searchInput.value.toLowerCase();
+        var src = sourceSel ? sourceSel.value : '';
         var visible = 0;
         allCards.forEach(function (el) {
-            var match = !q || el.textContent.toLowerCase().includes(q);
+            var textMatch = !q || el.textContent.toLowerCase().includes(q);
+            var srcMatch = !src || el.dataset.source === src;
+            var match = textMatch && srcMatch;
             el.style.display = match ? '' : 'none';
             if (match) visible++;
         });
-        countEl.textContent = q ? visible + ' of ' + total : total + ' posts';
+        if (countEl) {
+            countEl.textContent = (q || src) ? visible + ' of ' + total : total + ' posts';
+        }
     }
 
     searchInput.addEventListener('input', updateSearchCount);
+    if (sourceSel) sourceSel.addEventListener('change', updateSearchCount);
     updateSearchCount();
 }
 
