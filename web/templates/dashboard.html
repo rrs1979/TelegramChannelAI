@@ -115,6 +115,10 @@
     </table>
 </div>
 {% else %}
-<p class="text-gray-500 text-sm">No pipeline runs yet. Hit "Run Pipeline" to start.</p>
+<h2 class="text-lg font-semibold mb-3">Recent Runs</h2>
+<div class="bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center">
+    <div class="text-gray-400 text-sm">No pipeline runs yet.</div>
+    <div class="text-gray-500 text-xs mt-2">Hit "Run Pipeline" above, or wait for the next scheduled scan.</div>
+</div>
 {% endif %}
 {% endblock %}
