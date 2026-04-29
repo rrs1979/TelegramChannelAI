@@ -213,6 +213,17 @@ DEDUP_HOURS=72   # wider  — skip reposts for 3 days
 
 The hash file (`published_hashes.json`) is created automatically on first run — no setup needed.
 
+**Can I change the size of generated images?**
+
+Yes. Default is 768x432 (16:9, fits Telegram's preview without cropping). Override with:
+
+```env
+IMAGE_WIDTH=1024
+IMAGE_HEIGHT=1024   # square thumbs
+```
+
+Pollinations caps each side at 2048. Larger sizes take longer to generate and cost a bit more — 768x432 is a good balance for a news channel. If your channel uses cards or square previews, 1024x1024 looks cleaner.
+
 **Where are the logs?**
 
 The dashboard writes to `web/logs/app.log` (rotating, ~1 MB per file, 3 backups). Tail it while the pipeline runs to see what's happening:
