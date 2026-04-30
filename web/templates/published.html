@@ -57,6 +57,11 @@
                 <button onclick="copyValue('{{ post.telegram_msg_id }}', this)"
                     class="text-gray-600 hover:text-gray-300 ml-1 transition"
                     title="Copy message ID">copy</button>
+                {% if post.source %}
+                <button onclick="copyValue('https://t.me/{{ post.source }}/{{ post.telegram_msg_id }}', this)"
+                    class="text-gray-600 hover:text-gray-300 ml-3 transition"
+                    title="Copy link to this post on Telegram">copy link</button>
+                {% endif %}
             </div>
             {% endif %}
         </div>
