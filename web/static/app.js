@@ -78,18 +78,39 @@ if (addForm) {
     });
 }
 
-async function deleteSource(id) {
+async function deleteSource(id, btn) {
     if (!confirm('Remove this source?')) return;
-    await api(`/api/sources/${id}`, 'DELETE');
-    const row = document.querySelector(`tr[data-id="${id}"]`);
-    if (row) row.remove();
+    var prev = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'removing…';
+    btn.classList.add('opacity-50');
+    try {
+        await api(`/api/sources/${id}`, 'DELETE');
+        const row = document.querySelector(`tr[data-id="${id}"]`);
+        if (row) row.remove();
+    } catch (e) {
+        alert('Could not remove this source. Please try again.');
+        btn.disabled = false;
+        btn.textContent = prev;
+        btn.classList.remove('opacity-50');
+    }
 }
 
-async function toggleSource(id, isActive) {
+async function toggleSource(id, isActive, btn) {
     const action = isActive ? 'Pause this source?' : 'Resume this source?';
     if (!confirm(action)) return;
-    await api(`/api/sources/${id}/toggle`, 'POST');
-    location.reload();
+    btn.disabled = true;
+    btn.textContent = 'saving…';
+    btn.classList.add('opacity-50');
+    try {
+        await api(`/api/sources/${id}/toggle`, 'POST');
+        location.reload();
+    } catch (e) {
+        alert('Could not update this source. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'toggle';
+        btn.classList.remove('opacity-50');
+    }
 }
 
 // copy text to clipboard
