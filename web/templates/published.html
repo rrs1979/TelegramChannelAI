@@ -18,6 +18,11 @@
             <option value="{{ src }}">@{{ src }}</option>
             {% endfor %}
         </select>
+        <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
+            <input type="checkbox" id="published-auto-refresh"
+                class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
+            Auto-refresh
+        </label>
         <span id="published-count" class="text-xs text-gray-500"></span>
     </div>
     {% endif %}
