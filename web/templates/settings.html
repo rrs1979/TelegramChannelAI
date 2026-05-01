@@ -27,6 +27,8 @@
                 <input type="text" name="telegram_api_id" id="telegram_api_id"
                     value="{{ settings.TELEGRAM_API_ID }}"
                     placeholder="12345678"
+                    pattern="[0-9]+" inputmode="numeric"
+                    title="Telegram API ID is a positive integer (digits only)"
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 {% if settings.TELEGRAM_API_ID %}
                 <button type="button" onclick="copyValue('{{ settings.TELEGRAM_API_ID }}', this)"
@@ -41,6 +43,8 @@
                 <input type="password" name="telegram_api_hash" id="telegram_api_hash"
                     value="{{ settings.TELEGRAM_API_HASH }}"
                     placeholder="0123456789abcdef..."
+                    pattern="[a-f0-9]{32}"
+                    title="Telegram API hash is 32 lowercase hex characters"
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 {% if settings.TELEGRAM_API_HASH %}
                 <button type="button" onclick="copyValue('{{ settings.TELEGRAM_API_HASH }}', this)"
@@ -58,6 +62,8 @@
             <input type="text" name="channel_id" id="channel_id"
                 value="{{ settings.CHANNEL_ID }}"
                 placeholder="-1001234567890"
+                pattern="-100[0-9]+" inputmode="numeric"
+                title="Channel ID starts with -100 followed by digits"
                 class="flex-1 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.CHANNEL_ID %}
             <button type="button" onclick="copyValue('{{ settings.CHANNEL_ID }}', this)"
