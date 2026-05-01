@@ -11,8 +11,8 @@
 
     <!-- Pollinations -->
     <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1">Pollinations API Key</label>
-        <input type="password" name="pollinations_key"
+        <label for="pollinations_key" class="block text-sm font-medium text-gray-300 mb-1">Pollinations API Key</label>
+        <input type="password" name="pollinations_key" id="pollinations_key"
             value="{{ settings.POLLINATIONS_API_KEY }}"
             placeholder="pk_..."
             class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
@@ -22,9 +22,9 @@
     <!-- Telegram API -->
     <div class="grid grid-cols-2 gap-4">
         <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Telegram API ID</label>
+            <label for="telegram_api_id" class="block text-sm font-medium text-gray-300 mb-1">Telegram API ID</label>
             <div class="flex gap-2">
-                <input type="text" name="telegram_api_id"
+                <input type="text" name="telegram_api_id" id="telegram_api_id"
                     value="{{ settings.TELEGRAM_API_ID }}"
                     placeholder="12345678"
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
@@ -36,9 +36,9 @@
             </div>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Telegram API Hash</label>
+            <label for="telegram_api_hash" class="block text-sm font-medium text-gray-300 mb-1">Telegram API Hash</label>
             <div class="flex gap-2">
-                <input type="password" name="telegram_api_hash"
+                <input type="password" name="telegram_api_hash" id="telegram_api_hash"
                     value="{{ settings.TELEGRAM_API_HASH }}"
                     placeholder="0123456789abcdef..."
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
@@ -53,9 +53,9 @@
 
     <!-- Channel -->
     <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1">Channel ID</label>
+        <label for="channel_id" class="block text-sm font-medium text-gray-300 mb-1">Channel ID</label>
         <div class="flex gap-2">
-            <input type="text" name="channel_id"
+            <input type="text" name="channel_id" id="channel_id"
                 value="{{ settings.CHANNEL_ID }}"
                 placeholder="-1001234567890"
                 class="flex-1 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
@@ -71,16 +71,16 @@
     <!-- Pipeline -->
     <div class="grid grid-cols-2 gap-4">
         <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Pipeline Interval (sec)</label>
-            <input type="number" name="pipeline_interval"
+            <label for="pipeline_interval" class="block text-sm font-medium text-gray-300 mb-1">Pipeline Interval (sec)</label>
+            <input type="number" name="pipeline_interval" id="pipeline_interval"
                 value="{{ settings.PIPELINE_INTERVAL }}"
                 min="300" step="300"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             <p class="hint">How often to auto-run. Default 3600 (1h).</p>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
-            <select name="pipeline_mode"
+            <label for="pipeline_mode" class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
+            <select name="pipeline_mode" id="pipeline_mode"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 <option value="auto" {% if settings.PIPELINE_MODE == 'auto' %}selected{% endif %}>Auto (publish immediately)</option>
                 <option value="semi-auto" {% if settings.PIPELINE_MODE == 'semi-auto' %}selected{% endif %}>Semi-auto (queue for review)</option>
