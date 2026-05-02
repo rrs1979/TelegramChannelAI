@@ -62,6 +62,12 @@
             <span class="text-gray-500">Started:</span>
             <span>{{ stats.last_run.started_at[:19] }}</span>
         </div>
+        {% if stats.last_run.finished_at %}
+        <div>
+            <span class="text-gray-500">Finished:</span>
+            <span>{{ stats.last_run.finished_at[:19] }}</span>
+        </div>
+        {% endif %}
         <div>
             <span class="text-gray-500">Posts:</span>
             <span>{{ stats.last_run.posts_published }} published</span>
