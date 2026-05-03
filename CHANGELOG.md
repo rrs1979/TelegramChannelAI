@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.3] - 2026-05-03
+
+### Fixed
+- Settings save creates `.env` with 0600 from the start (via `os.open` with explicit mode) instead of relying on a post-write `chmod`, closing the race window where a freshly-created file briefly sat at the default-umask perms
+
 ## [1.4.2] - 2026-04-26
 
 ### Fixed

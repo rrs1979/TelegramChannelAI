@@ -67,11 +67,15 @@ def save_settings(fields):
             existing[key] = clean
             os.environ[key] = clean  # update runtime too
 
-    with open(ENV_PATH, "w") as f:
+    # create with 0600 from the start — plain open() respects umask, so on a default-umask server
+    # the .env briefly sits world-readable between open() and the chmod() below
+    fd = os.open(ENV_PATH, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w") as f:
         for key, val in existing.items():
             f.write(f"{key}={val}\n")
 
-    # owner-only — without this the file inherits umask and can end up world-readable on the server
+    # the mode arg above is ignored when the file already exists, so tighten any pre-existing
+    # loose perms left over from before this fix landed
     try:
         os.chmod(ENV_PATH, 0o600)
     except OSError:
