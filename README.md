@@ -21,16 +21,6 @@ Scans news sources, rewrites content with AI, generates images, and publishes to
 - **Analytics** — pipeline performance charts (runs, costs, success rate)
 - **Settings UI** — configure API keys and pipeline mode from the browser
 
-## Screenshots
-
-| Dashboard | Analytics |
-|-----------|-----------|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Analytics](docs/screenshots/analytics.png) |
-
-| Queue | Settings |
-|-------|----------|
-| ![Queue](docs/screenshots/queue.png) | ![Settings](docs/screenshots/settings.png) |
-
 ## Architecture
 
 ```

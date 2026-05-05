@@ -1,0 +1,39 @@
+[project]
+name = "telegram-channel-ai"
+version = "0.3.0"
+description = "Automated Telegram channel management powered by Pollinations.ai"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [{name = "Roman Rebrov"}]
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.9.0",
+    "aiohttp-socks>=0.8.0",
+    "telethon>=1.42.0",
+    "python-dotenv>=1.0.0",
+    "flask>=3.0.0",
+    "gunicorn>=22.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/rrs1979/TelegramChannelAI"
+Issues = "https://github.com/rrs1979/TelegramChannelAI/issues"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E501", "F401"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
