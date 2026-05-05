@@ -2,12 +2,12 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="mb-6 flex items-center justify-between">
+<div class="mb-6 flex items-center justify-between flex-wrap gap-3">
     <div>
         <h1 class="text-2xl font-bold">Dashboard</h1>
         <p class="muted mt-1" id="last-updated"></p>
     </div>
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 flex-wrap">
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
             <input type="checkbox" id="auto-refresh-toggle" checked
                 class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
