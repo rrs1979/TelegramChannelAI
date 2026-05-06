@@ -7,7 +7,8 @@
     <p class="text-gray-500 text-sm mt-1">Pipeline and API configuration. Saved to <code class="text-gray-400">.env</code>.</p>
 </div>
 
-<form method="POST" action="/settings" class="max-w-xl space-y-6">
+<form method="POST" action="/settings" class="max-w-xl space-y-6"
+    onsubmit="return confirmModeSwitch(this)">
 
     <!-- Pollinations -->
     <div>
@@ -87,6 +88,7 @@
         <div>
             <label for="pipeline_mode" class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
             <select name="pipeline_mode" id="pipeline_mode"
+                data-initial="{{ settings.PIPELINE_MODE }}"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 <option value="auto" {% if settings.PIPELINE_MODE == 'auto' %}selected{% endif %}>Auto (publish immediately)</option>
                 <option value="semi-auto" {% if settings.PIPELINE_MODE == 'semi-auto' %}selected{% endif %}>Semi-auto (queue for review)</option>
@@ -113,5 +115,15 @@ document.querySelectorAll('input[type="password"]').forEach(input => {
         input.type = input.type === 'password' ? 'text' : 'password';
     });
 });
+
+// flipping to auto skips the review queue, so make sure it's intentional
+function confirmModeSwitch(form) {
+    const sel = form.querySelector('#pipeline_mode');
+    if (!sel) return true;
+    if (sel.value === 'auto' && sel.dataset.initial !== 'auto') {
+        return confirm('Switch to Auto mode? Posts will publish to the channel without going through the review queue.');
+    }
+    return true;
+}
 </script>
 {% endblock %}
