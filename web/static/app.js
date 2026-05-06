@@ -350,6 +350,7 @@ if (searchInput) {
     var countEl = document.getElementById('published-count');
     var sourceSel = document.getElementById('published-source');
     var allCards = document.querySelectorAll('.space-y-3 > details');
+    var noMatch = document.getElementById('published-no-match');
     var total = allCards.length;
 
     function updateSearchCount() {
@@ -365,6 +366,9 @@ if (searchInput) {
         });
         if (countEl) {
             countEl.textContent = (q || src) ? visible + ' of ' + total : total + ' posts';
+        }
+        if (noMatch) {
+            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src));
         }
     }
 
