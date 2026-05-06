@@ -87,7 +87,10 @@ async function deleteSource(id, btn) {
     try {
         await api(`/api/sources/${id}`, 'DELETE');
         const row = document.querySelector(`tr[data-id="${id}"]`);
-        if (row) row.remove();
+        if (row) {
+            row.classList.add('leaving');
+            setTimeout(function () { row.remove(); }, 260);
+        }
     } catch (e) {
         alert('Could not remove this source. Please try again.');
         btn.disabled = false;
