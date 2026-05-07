@@ -36,8 +36,9 @@ LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
 _log_max_bytes = int(os.getenv("LOG_MAX_BYTES", 1_000_000))
+_log_backup_count = int(os.getenv("LOG_BACKUP_COUNT", 3))
 log_handler = RotatingFileHandler(
-    os.path.join(LOG_DIR, "app.log"), maxBytes=_log_max_bytes, backupCount=3
+    os.path.join(LOG_DIR, "app.log"), maxBytes=_log_max_bytes, backupCount=_log_backup_count
 )
 log_handler.setFormatter(logging.Formatter(
     "%(asctime)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
