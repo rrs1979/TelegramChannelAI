@@ -36,6 +36,8 @@
         }
         .muted { @apply text-xs text-gray-500; }
         .hint { @apply text-xs text-gray-500 mt-1; }
+        /* keep numeric columns aligned when row digits vary in width */
+        .tabular { font-variant-numeric: tabular-nums; }
         .status-pulse { animation: pulse-dot 2s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner {
