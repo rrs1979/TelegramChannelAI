@@ -349,6 +349,7 @@ var searchInput = document.getElementById('published-search');
 if (searchInput) {
     var countEl = document.getElementById('published-count');
     var sourceSel = document.getElementById('published-source');
+    var rangeSel = document.getElementById('published-range');
     var allCards = document.querySelectorAll('.space-y-3 > details');
     var noMatch = document.getElementById('published-no-match');
     var total = allCards.length;
@@ -356,24 +357,33 @@ if (searchInput) {
     function updateSearchCount() {
         var q = searchInput.value.toLowerCase();
         var src = sourceSel ? sourceSel.value : '';
+        var range = rangeSel ? rangeSel.value : '';
+        var minDate = '';
+        if (range) {
+            var d = new Date();
+            d.setDate(d.getDate() - parseInt(range, 10));
+            minDate = d.toISOString().slice(0, 10);
+        }
         var visible = 0;
         allCards.forEach(function (el) {
             var textMatch = !q || el.textContent.toLowerCase().includes(q);
             var srcMatch = !src || el.dataset.source === src;
-            var match = textMatch && srcMatch;
+            var dateMatch = !minDate || (el.dataset.date && el.dataset.date >= minDate);
+            var match = textMatch && srcMatch && dateMatch;
             el.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (countEl) {
-            countEl.textContent = (q || src) ? visible + ' of ' + total : total + ' posts';
+            countEl.textContent = (q || src || range) ? visible + ' of ' + total : total + ' posts';
         }
         if (noMatch) {
-            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src));
+            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range));
         }
     }
 
     searchInput.addEventListener('input', updateSearchCount);
     if (sourceSel) sourceSel.addEventListener('change', updateSearchCount);
+    if (rangeSel) rangeSel.addEventListener('change', updateSearchCount);
     updateSearchCount();
 }
 

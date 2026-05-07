@@ -18,6 +18,13 @@
             <option value="{{ src }}">@{{ src }}</option>
             {% endfor %}
         </select>
+        <select id="published-range"
+            class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
+            <option value="">All time</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="90">Last 90 days</option>
+        </select>
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
             <input type="checkbox" id="published-auto-refresh"
                 class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
@@ -31,7 +38,7 @@
 {% if posts %}
 <div class="space-y-3">
     {% for post in posts %}
-    <details class="bg-dark-800 rounded-lg border border-gray-700/30 group" data-source="{{ post.source or '' }}">
+    <details class="bg-dark-800 rounded-lg border border-gray-700/30 group" data-source="{{ post.source or '' }}" data-date="{{ post.published_at[:10] if post.published_at else '' }}">
         <summary class="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-dark-700/30 rounded-lg transition">
             <div class="flex items-center gap-3 min-w-0">
                 <span class="text-gray-500 text-xs shrink-0">{{ post.published_at[:10] if post.published_at else '—' }}</span>
