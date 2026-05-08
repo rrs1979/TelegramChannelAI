@@ -81,9 +81,10 @@
             <label for="pipeline_interval" class="block text-sm font-medium text-gray-300 mb-1">Pipeline Interval (sec)</label>
             <input type="number" name="pipeline_interval" id="pipeline_interval"
                 value="{{ settings.PIPELINE_INTERVAL }}"
-                min="300" step="300"
+                min="300" max="86400" step="300"
+                title="Between 300 and 86400 seconds (5 min – 24 h)"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
-            <p class="hint">How often to auto-run. Default 3600 (1h).</p>
+            <p class="hint">How often to auto-run. Default 3600 (1h), max 86400 (24h).</p>
         </div>
         <div>
             <label for="pipeline_mode" class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
