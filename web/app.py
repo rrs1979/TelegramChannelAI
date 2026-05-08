@@ -109,7 +109,11 @@ def queue_page():
     status = request.args.get("status", "pending")
     if status not in ("pending", "approved", "rejected", "published"):
         status = "pending"
-    items = get_queue(status)
+    try:
+        items = get_queue(status)
+    except Exception as e:
+        logger.error(f"Queue load failed: {e}")
+        items = []
     return render_template("queue.html", items=items, current_status=status)
 
 
