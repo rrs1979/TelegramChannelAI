@@ -209,7 +209,8 @@ def api_add_source():
     if not isinstance(subscribers, int) or subscribers < 0:
         subscribers = 0
 
-    result = add_source(username, data.get("title", ""), subscribers)
+    title = (data.get("title") or "").strip()[:128]
+    result = add_source(username, title, subscribers)
     if result is None:
         return jsonify({"error": "This channel is already in your sources list"}), 409
     logger.info(f"Source added: @{result}")
