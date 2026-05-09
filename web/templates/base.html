@@ -88,6 +88,10 @@
         /* default text-selection blue clashes with the purple palette */
         ::selection { background: #3a3a5e; color: #fff; }
 
+        /* search and form fields snapped from gray to blue instantly on focus,
+           looked jumpy next to the .15s transitions everywhere else */
+        input, select, textarea { transition: border-color .15s ease; }
+
         /* dark scrollbar so it doesn't flash white; tinted to match the purple-ish palette */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f0f1a; }
