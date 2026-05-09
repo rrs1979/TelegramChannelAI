@@ -298,23 +298,28 @@ if (queueToggle) {
 var queueSearch = document.getElementById('queue-search');
 if (queueSearch) {
     var queueCount = document.getElementById('queue-count');
+    var queueSource = document.getElementById('queue-source');
     var queueCards = document.querySelectorAll('.space-y-4 > [data-id]');
     var queueTotal = queueCards.length;
 
     function filterQueue() {
         var q = queueSearch.value.toLowerCase();
+        var src = queueSource ? queueSource.value : '';
         var visible = 0;
         queueCards.forEach(function (card) {
-            var match = !q || card.textContent.toLowerCase().includes(q);
+            var textMatch = !q || card.textContent.toLowerCase().includes(q);
+            var srcMatch = !src || card.dataset.source === src;
+            var match = textMatch && srcMatch;
             card.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (queueCount) {
-            queueCount.textContent = q ? visible + ' of ' + queueTotal : queueTotal + ' items';
+            queueCount.textContent = (q || src) ? visible + ' of ' + queueTotal : queueTotal + ' items';
         }
     }
 
     queueSearch.addEventListener('input', filterQueue);
+    if (queueSource) queueSource.addEventListener('change', filterQueue);
     filterQueue();
 }
 

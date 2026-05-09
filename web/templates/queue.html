@@ -8,6 +8,13 @@
         {% if items %}
         <input type="text" id="queue-search" placeholder="Filter queue…"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
+        <select id="queue-source"
+            class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
+            <option value="">All sources</option>
+            {% for src in items|map(attribute='source')|select|unique|sort %}
+            <option value="{{ src }}">{{ src }}</option>
+            {% endfor %}
+        </select>
         <span id="queue-count" class="text-xs text-gray-500"></span>
         {% endif %}
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
@@ -39,7 +46,7 @@
 {% if items %}
 <div class="space-y-4">
     {% for item in items %}
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30" data-id="{{ item.id }}">
+    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30" data-id="{{ item.id }}" data-source="{{ item.source or '' }}">
         <div class="flex items-start justify-between gap-4 mb-3">
             <div class="flex items-center gap-2">
                 <span class="text-gray-500 text-xs">#{{ item.id }}</span>
