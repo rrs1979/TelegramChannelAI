@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.4] - 2026-05-10
+
+### Fixed
+- Drop the `CERT_NONE` SSL context on the aiohttp session that talks to Pollinations — TLS verification was disabled, so the API key in the Authorization header and every model response were riding an unverified channel
+
 ## [1.4.3] - 2026-05-03
 
 ### Fixed

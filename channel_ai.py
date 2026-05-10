@@ -14,7 +14,6 @@ import json
 import os
 import re
 import random
-import ssl
 import tempfile
 import time
 import urllib.parse
@@ -94,13 +93,6 @@ HEADERS = {
     "Authorization": f"Bearer {POLLINATIONS_KEY}",
     "Content-Type": "application/json",
 }
-
-
-def _ssl_ctx():
-    ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE
-    return ctx
 
 
 async def ai_call(session, model, system, user, max_tokens=1200):
@@ -438,7 +430,7 @@ async def run_cycle(channel_key="default", max_posts=3):
         return
 
     results = []
-    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=_ssl_ctx())) as session:
+    async with aiohttp.ClientSession() as session:
         for i, post in enumerate(selected):
             print(f"  [{i+1}/{len(selected)}] Processing: {post['text'][:50]}...")
             t1 = time.time()
