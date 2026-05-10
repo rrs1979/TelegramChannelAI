@@ -28,7 +28,10 @@
                 class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
         </div>
         <div>
-            <label class="block text-xs text-gray-400 mb-1">Title (optional)</label>
+            <div class="flex items-baseline justify-between gap-2 mb-1">
+                <label for="input-title" class="text-xs text-gray-400">Title (optional)</label>
+                <span id="input-title-count" class="text-xs text-gray-500 tabular-nums"></span>
+            </div>
             <input type="text" name="title" id="input-title" placeholder="Channel Title"
                 maxlength="128"
                 class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-48">

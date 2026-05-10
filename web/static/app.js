@@ -40,6 +40,19 @@ async function runPipeline() {
 }
 
 // sources
+const titleInput = document.getElementById('input-title');
+const titleCount = document.getElementById('input-title-count');
+if (titleInput && titleCount) {
+    const cap = titleInput.maxLength;
+    const update = () => {
+        const n = titleInput.value.length;
+        titleCount.textContent = n ? `${n}/${cap}` : '';
+        titleCount.classList.toggle('text-yellow-500', n > cap - 16);
+    };
+    titleInput.addEventListener('input', update);
+    update();
+}
+
 const addForm = document.getElementById('add-source-form');
 if (addForm) {
     addForm.addEventListener('submit', async (e) => {
