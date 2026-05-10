@@ -48,7 +48,7 @@ if (addForm) {
         const title = document.getElementById('input-title').value.trim();
         if (!username) return;
         if (!/^[A-Za-z][A-Za-z0-9_]{3,30}$/.test(username)) {
-            alert('Username must start with a letter and be 4-31 characters (letters, digits, underscores)');
+            alert("That's not a valid Telegram handle. Use 4-31 letters, digits, or underscores, starting with a letter.");
             return;
         }
 

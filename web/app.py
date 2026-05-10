@@ -203,7 +203,7 @@ def api_add_source():
     data = request.get_json() or {}
     username = data.get("username", "").strip().lstrip("@")
     if not username or not re.match(r'^[A-Za-z][A-Za-z0-9_]{3,30}$', username):
-        return jsonify({"error": "Username must start with a letter and be 4-31 characters (letters, digits, underscores)"}), 400
+        return jsonify({"error": "That's not a valid Telegram handle. Use 4-31 letters, digits, or underscores, starting with a letter."}), 400
 
     subscribers = data.get("subscribers", 0)
     if not isinstance(subscribers, int) or subscribers < 0:
