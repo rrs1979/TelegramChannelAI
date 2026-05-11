@@ -258,8 +258,7 @@ def get_analytics():
                 SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) as failed,
                 SUM(COALESCE(posts_generated, posts_scanned)) as generated,
                 SUM(posts_published) as published,
-                ROUND(SUM(COALESCE(cost_usd, 0)), 2) as cost,
-                AVG(COALESCE(duration_ms, 0)) as avg_duration
+                ROUND(SUM(COALESCE(cost_usd, 0)), 2) as cost
             FROM pipeline_runs
             WHERE started_at IS NOT NULL
             GROUP BY date(started_at)
