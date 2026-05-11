@@ -36,6 +36,10 @@
         }
         .muted { @apply text-xs text-gray-500; }
         .hint { @apply text-xs text-gray-500 mt-1; }
+        /* tiny inline 'copy' buttons next to ids/usernames/msg_ids — same
+           text-gray-600 hover:text-gray-300 text-xs transition was inlined
+           on every one of them across templates */
+        .copy-btn { @apply text-xs text-gray-600 hover:text-gray-300 transition; }
         /* keep numeric columns aligned when row digits vary in width */
         .tabular { font-variant-numeric: tabular-nums; }
         /* long URLs / unbroken hashes in queue and published bodies stretched
