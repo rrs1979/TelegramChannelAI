@@ -246,7 +246,7 @@ def api_run_pipeline():
     """Trigger pipeline run (async, returns immediately)."""
     last = get_last_run()
     if last and last.get("status") == "running":
-        return jsonify({"error": "Pipeline is already running, please wait for it to finish"}), 409
+        return jsonify({"error": "A pipeline run is already in progress. Refresh the page to see its status."}), 409
 
     run_id = start_run()
 
