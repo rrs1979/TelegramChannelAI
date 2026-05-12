@@ -420,6 +420,8 @@ async def run_cycle(channel_key="default", max_posts=3):
         await client.disconnect()
         return
 
+    # is_duplicate also stashes the hash on first sight — anything sliced off
+    # by max_posts below still gets marked seen and won't resurface next cycle
     unique = [p for p in posts if not is_duplicate(p["text"])]
     selected = unique[:max_posts]
     print(f"  Selected {len(selected)} (filtered {len(posts)-len(unique)} duplicates)")
