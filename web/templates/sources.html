@@ -83,10 +83,10 @@
                 <td class="py-2 flex gap-2">
                     <button onclick="toggleSource({{ s.id }}, {{ s.is_active | tojson }}, this)"
                         title="Pause or resume this source"
-                        class="text-yellow-400 hover:text-yellow-300 text-xs disabled:cursor-wait">toggle</button>
+                        class="text-yellow-400 hover:text-yellow-300 text-xs transition disabled:cursor-wait">toggle</button>
                     <button onclick="deleteSource({{ s.id }}, this)"
                         title="Remove this source channel"
-                        class="text-red-400 hover:text-red-300 text-xs disabled:cursor-wait">remove</button>
+                        class="text-red-400 hover:text-red-300 text-xs transition disabled:cursor-wait">remove</button>
                 </td>
             </tr>
             {% endfor %}
