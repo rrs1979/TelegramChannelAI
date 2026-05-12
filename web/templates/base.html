@@ -121,6 +121,15 @@
             /* "Last run 5m ago" eats nav width on phones and squeezes the
                links into a tight horizontal scroll — drop it, dot stays */
             #nav-last-run { display: none; }
+            /* page-header on /queue, /published, /sources puts the search
+               input + select(s) + count + auto-refresh + status pills all
+               in one no-wrap flex row — the OUTER header wraps fine (title
+               vs controls) but this inner row pushed past the right edge
+               on phones; :has() flips it from here so I don't have to
+               touch all three templates */
+            div:has(> #queue-search),
+            div:has(> #published-search),
+            div:has(> #sources-search) { flex-wrap: wrap; }
         }
     </style>
 </head>
