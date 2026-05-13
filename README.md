@@ -214,6 +214,16 @@ IMAGE_HEIGHT=1024   # square thumbs
 
 Pollinations caps each side at 2048. Larger sizes take longer to generate and cost a bit more — 768x432 is a good balance for a news channel. If your channel uses cards or square previews, 1024x1024 looks cleaner.
 
+**Dashboard port is taken — can I change it?**
+
+Yeah, set `PORT` in `.env`:
+
+```env
+PORT=5050
+```
+
+Default 5000 clashes with AirPlay Receiver on macOS — the giveaway is `curl localhost:5000` returning a 403 you didn't write. If you're running behind nginx (or just don't want the dashboard reachable from the network), also set `HOST=127.0.0.1` so it binds to localhost only instead of `0.0.0.0`.
+
 **Where are the logs?**
 
 The dashboard writes to `web/logs/app.log` (rotating, ~1 MB per file, 3 backups). Tail it while the pipeline runs to see what's happening:
