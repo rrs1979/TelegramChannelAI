@@ -97,8 +97,10 @@
         {% if item.status == 'pending' %}
         <div class="flex gap-2">
             <button onclick="approveItem({{ item.id }}, this)"
+                title="Mark approved — card moves out of pending"
                 class="bg-green-700 hover:bg-green-600 px-3 py-1 rounded text-sm transition">Approve</button>
             <button onclick="rejectItem({{ item.id }}, this)"
+                title="Mark rejected — card moves out of pending"
                 class="bg-red-800 hover:bg-red-700 px-3 py-1 rounded text-sm transition">Reject</button>
         </div>
         {% endif %}
