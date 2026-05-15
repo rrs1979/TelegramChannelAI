@@ -48,7 +48,7 @@
     {% for item in items %}
     <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30" data-id="{{ item.id }}" data-source="{{ item.source or '' }}">
         <div class="flex items-start justify-between gap-4 mb-3">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap min-w-0">
                 <span class="text-gray-500 text-xs">#{{ item.id }}</span>
                 {% if item.source %}
                 <a href="https://t.me/{{ item.source.lstrip('@') }}" target="_blank"
