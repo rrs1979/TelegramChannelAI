@@ -40,6 +40,12 @@
            text-gray-600 hover:text-gray-300 text-xs transition was inlined
            on every one of them across templates */
         .copy-btn { @apply text-xs text-gray-600 hover:text-gray-300 transition; }
+        /* bigger 'Copy' buttons pinned to the top-right of the text bodies
+           on /queue (original + rewritten previews) and /published — same
+           long string everywhere, only bg differed (dark-800 over the inner
+           dark-900 box on queue, dark-700 over the dark-800 card on published)
+           so the bg stays inline */
+        .copy-overlay { @apply absolute top-2 right-2 text-xs text-gray-500 hover:text-gray-200 px-2 py-0.5 rounded transition; }
         /* keep numeric columns aligned when row digits vary in width */
         .tabular { font-variant-numeric: tabular-nums; }
         /* long URLs / unbroken hashes in queue and published bodies stretched
