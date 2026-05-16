@@ -13,10 +13,17 @@
     <!-- Pollinations -->
     <div>
         <label for="pollinations_key" class="block text-sm font-medium text-gray-300 mb-1">Pollinations API Key</label>
-        <input type="password" name="pollinations_key" id="pollinations_key"
-            value="{{ settings.POLLINATIONS_API_KEY }}"
-            placeholder="pk_..."
-            class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+        <div class="flex gap-2">
+            <input type="password" name="pollinations_key" id="pollinations_key"
+                value="{{ settings.POLLINATIONS_API_KEY }}"
+                placeholder="pk_..."
+                class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
+            {% if settings.POLLINATIONS_API_KEY %}
+            <button type="button" onclick="copyValue('{{ settings.POLLINATIONS_API_KEY }}', this)"
+                class="text-gray-500 hover:text-gray-200 text-xs px-2 border border-gray-700 rounded transition"
+                title="Copy API key">copy</button>
+            {% endif %}
+        </div>
         <p class="hint">Used for text and image generation. Leave blank if using free tier.</p>
     </div>
 
