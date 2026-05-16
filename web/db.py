@@ -151,7 +151,7 @@ def get_last_run():
         return dict(row) if row else None
 
 
-def get_runs(limit=20):
+def get_runs(limit: int = 20):
     with db_conn() as conn:
         return [dict(r) for r in conn.execute(
             "SELECT * FROM pipeline_runs ORDER BY id DESC LIMIT ?", (limit,)
