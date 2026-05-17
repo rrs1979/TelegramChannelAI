@@ -61,7 +61,7 @@
             {% for s in sources %}
             <tr class="border-b border-gray-800/50" data-id="{{ s.id }}" data-active="{{ 1 if s.is_active else 0 }}">
                 <td class="py-2 pr-4">
-                    <a href="https://t.me/{{ s.username }}" target="_blank"
+                    <a href="https://t.me/{{ s.username }}" target="_blank" rel="noopener noreferrer"
                         title="Open @{{ s.username }} in Telegram"
                         class="text-blue-400 hover:underline">
                         @{{ s.username }}

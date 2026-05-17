@@ -51,7 +51,7 @@
             <div class="flex items-center gap-2 flex-wrap min-w-0">
                 <span class="text-gray-500 text-xs">#{{ item.id }}</span>
                 {% if item.source %}
-                <a href="https://t.me/{{ item.source.lstrip('@') }}" target="_blank"
+                <a href="https://t.me/{{ item.source.lstrip('@') }}" target="_blank" rel="noopener noreferrer"
                     title="Open {{ item.source }} in Telegram"
                     class="text-blue-400 text-sm hover:underline">{{ item.source }}</a>
                 <button onclick="copyValue('{{ item.source }}', this)"

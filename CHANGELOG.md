@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.5] - 2026-05-17
+
+### Fixed
+- Add `rel="noopener noreferrer"` to the `target="_blank"` t.me links on /queue (source on each card) and /sources (`@username` cell) — modern browsers imply `noopener` on `_blank` but older ones (Chrome <88, Safari <12.1) hand `window.opener` to the new tab, letting the destination redirect the dashboard via `window.opener.location`
+
 ## [1.4.4] - 2026-05-10
 
 ### Fixed
