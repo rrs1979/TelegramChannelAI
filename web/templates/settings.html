@@ -8,7 +8,7 @@
 </div>
 
 <form method="POST" action="/settings" class="max-w-xl space-y-6"
-    onsubmit="return confirmModeSwitch(this)">
+    onsubmit="return confirmSettingsSave(this)">
 
     <!-- Pollinations -->
     <div>
@@ -69,6 +69,7 @@
         <div class="flex gap-2">
             <input type="text" name="channel_id" id="channel_id"
                 value="{{ settings.CHANNEL_ID }}"
+                data-initial="{{ settings.CHANNEL_ID }}"
                 placeholder="-1001234567890"
                 pattern="-100[0-9]+" inputmode="numeric"
                 title="Channel ID starts with -100 followed by digits"
@@ -124,12 +125,15 @@ document.querySelectorAll('input[type="password"]').forEach(input => {
     });
 });
 
-// flipping to auto skips the review queue, so make sure it's intentional
-function confirmModeSwitch(form) {
+// guard the two destructive saves: flipping to auto, or blanking channel_id
+function confirmSettingsSave(form) {
     const sel = form.querySelector('#pipeline_mode');
-    if (!sel) return true;
-    if (sel.value === 'auto' && sel.dataset.initial !== 'auto') {
-        return confirm('Switch to Auto mode? Posts will publish to the channel without going through the review queue.');
+    if (sel && sel.value === 'auto' && sel.dataset.initial !== 'auto') {
+        if (!confirm('Switch to Auto mode? Posts will publish to the channel without going through the review queue.')) return false;
+    }
+    const ch = form.querySelector('#channel_id');
+    if (ch && ch.dataset.initial && !ch.value.trim()) {
+        if (!confirm("Clear the Channel ID? The pipeline won't have anywhere to publish.")) return false;
     }
     return true;
 }
