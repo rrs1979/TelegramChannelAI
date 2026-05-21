@@ -16,9 +16,6 @@ SECRET_KEY = os.getenv("FLASK_SECRET") or secrets.token_hex(32)
 # database
 DB_PATH = os.getenv("DB_PATH", os.path.join(os.path.dirname(__file__), "data.db"))
 
-# pipeline
-PIPELINE_INTERVAL = int(os.getenv("PIPELINE_INTERVAL", 3600))  # seconds between auto-runs
-
 
 # --- settings helpers (read/write .env) ---
 
