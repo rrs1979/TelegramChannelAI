@@ -434,6 +434,33 @@ if (searchInput) {
     updateSearchCount();
 }
 
+// sources auto-refresh (every 90s — subscriber counts only tick when the
+// pipeline scans channels, which is slower than queue/published activity)
+var sourcesToggle = document.getElementById('sources-auto-refresh');
+if (sourcesToggle) {
+    var sourcesTimer = null;
+
+    function startSourcesRefresh() {
+        sourcesTimer = setInterval(function () { location.reload(); }, 90000);
+    }
+
+    if (localStorage.getItem('sourcesAutoRefresh') === 'on') {
+        sourcesToggle.checked = true;
+        startSourcesRefresh();
+    }
+
+    sourcesToggle.addEventListener('change', function () {
+        if (this.checked) {
+            localStorage.setItem('sourcesAutoRefresh', 'on');
+            startSourcesRefresh();
+        } else {
+            localStorage.setItem('sourcesAutoRefresh', 'off');
+            clearInterval(sourcesTimer);
+            sourcesTimer = null;
+        }
+    });
+}
+
 // filter sources table
 var srcSearch = document.getElementById('sources-search');
 if (srcSearch) {
