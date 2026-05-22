@@ -26,7 +26,10 @@
 <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30 mb-6">
     <form id="add-source-form" class="flex gap-3 items-end flex-wrap">
         <div>
-            <label class="block text-xs text-gray-400 mb-1">Channel username</label>
+            <div class="flex items-baseline justify-between gap-2 mb-1">
+                <label for="input-username" class="text-xs text-gray-400">Channel username</label>
+                <span id="input-username-count" class="text-xs text-gray-500 tabular-nums"></span>
+            </div>
             <input type="text" name="username" id="input-username" placeholder="@channel_name"
                 required minlength="5" maxlength="33" pattern="@?[a-zA-Z][a-zA-Z0-9_]{3,31}"
                 title="Telegram username: letters, digits, underscores (5-32 chars)"

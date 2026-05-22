@@ -53,6 +53,20 @@ if (titleInput && titleCount) {
     update();
 }
 
+const usernameInput = document.getElementById('input-username');
+const usernameCount = document.getElementById('input-username-count');
+if (usernameInput && usernameCount) {
+    const cap = usernameInput.maxLength;
+    const min = usernameInput.minLength;
+    const update = () => {
+        const n = usernameInput.value.length;
+        usernameCount.textContent = n ? `${n}/${cap}` : '';
+        usernameCount.classList.toggle('text-yellow-500', n > 0 && n < min);
+    };
+    usernameInput.addEventListener('input', update);
+    update();
+}
+
 const addForm = document.getElementById('add-source-form');
 if (addForm) {
     addForm.addEventListener('submit', async (e) => {
