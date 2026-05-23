@@ -46,11 +46,15 @@
             </div>
         </div>
         <div>
-            <label for="telegram_api_hash" class="block text-sm font-medium text-gray-300 mb-1">Telegram API Hash</label>
+            <div class="flex items-baseline justify-between gap-2 mb-1">
+                <label for="telegram_api_hash" class="block text-sm font-medium text-gray-300">Telegram API Hash</label>
+                <span id="telegram_api_hash-count" class="text-xs text-gray-500 tabular-nums"></span>
+            </div>
             <div class="flex gap-2">
                 <input type="password" name="telegram_api_hash" id="telegram_api_hash"
                     value="{{ settings.TELEGRAM_API_HASH }}"
                     placeholder="0123456789abcdef..."
+                    maxlength="32"
                     pattern="[a-f0-9]{32}"
                     title="Telegram API hash is 32 lowercase hex characters"
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
@@ -124,6 +128,20 @@ document.querySelectorAll('input[type="password"]').forEach(input => {
         input.type = input.type === 'password' ? 'text' : 'password';
     });
 });
+
+// hash needs exactly 32 hex chars, password mask hides the length
+const hashInput = document.getElementById('telegram_api_hash');
+const hashCount = document.getElementById('telegram_api_hash-count');
+if (hashInput && hashCount) {
+    const cap = hashInput.maxLength;
+    const update = () => {
+        const n = hashInput.value.length;
+        hashCount.textContent = n ? `${n}/${cap}` : '';
+        hashCount.classList.toggle('text-yellow-500', n > 0 && n < cap);
+    };
+    hashInput.addEventListener('input', update);
+    update();
+}
 
 // guard the two destructive saves: flipping to auto, or blanking channel_id
 function confirmSettingsSave(form) {
