@@ -250,6 +250,9 @@ def get_stats():
 def get_analytics():
     """Return daily pipeline stats for charts."""
     with db_conn() as conn:
+        # posts_generated landed in a later schema migration (see init_db) — older
+        # rows have NULL there but a real posts_scanned, so COALESCE keeps the
+        # pre-migration days from showing as flat zeros on the generated chart
         rows = conn.execute("""
             SELECT
                 date(started_at) as day,
