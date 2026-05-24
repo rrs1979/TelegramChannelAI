@@ -92,7 +92,7 @@ def get_sources():
         ).fetchall()]
 
 
-def add_source(username, title="", subscribers=0):
+def add_source(username: str, title: str = "", subscribers: int = 0):
     """Insert a source and return the cleaned username (no leading @), or None if empty or already exists."""
     username = username.lstrip("@").strip()
     if not username:
