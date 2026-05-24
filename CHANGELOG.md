@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.7] - 2026-05-24
+
+### Fixed
+- Drop a non-numeric `telegram_api_id` on settings save and keep the previous value instead — the form's `pattern="[0-9]+"` only fires in the browser, so a curl/devtools POST with `telegram_api_id=abc` used to write straight to `.env` and then crash Telethon at the next pipeline login
+
 ## [1.4.6] - 2026-05-24
 
 ### Fixed

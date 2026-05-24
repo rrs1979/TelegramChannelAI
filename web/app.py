@@ -175,6 +175,10 @@ def settings_page():
         for key in _SECRET_FIELDS:
             if "\u2022" in fields.get(key, ""):
                 fields[key] = current.get(key, "")
+        # api_id pattern is enforced on the form but a curl/devtools POST can still write
+        # a non-numeric value to .env that Telethon then chokes on at the next login
+        if fields["TELEGRAM_API_ID"] and not fields["TELEGRAM_API_ID"].isdigit():
+            fields["TELEGRAM_API_ID"] = current.get("TELEGRAM_API_ID", "")
 
         save_settings(fields)
         logger.info("Settings updated")
