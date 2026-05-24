@@ -200,7 +200,12 @@ def api_sources():
 
 @app.route("/api/sources", methods=["POST"])
 def api_add_source():
-    data = request.get_json() or {}
+    # get_json() returns whatever the body parses to (list/str/number/null), not always an object,
+    # so `or {}` only catches the falsy cases — a non-empty list/string body slips past and the
+    # data.get() call below would raise AttributeError, swallowed into a misleading 500
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        data = {}
     username = data.get("username", "").strip().lstrip("@")
     if not username or not re.match(r'^[A-Za-z][A-Za-z0-9_]{3,30}$', username):
         return jsonify({"error": "That's not a valid Telegram handle. Use 4-31 letters, digits, or underscores, starting with a letter."}), 400

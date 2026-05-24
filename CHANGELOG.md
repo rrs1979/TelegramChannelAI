@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.6] - 2026-05-24
+
+### Fixed
+- Reject non-object JSON bodies in the `POST /api/sources` endpoint — `request.get_json() or {}` only fell back to `{}` for the falsy parse results (None/empty list/empty string), so a posted body of `[1,2,3]` or `"foo"` or `42` slipped past the fallback and the next `data.get("username", ...)` raised `AttributeError`, which the 500 handler swallowed into a generic "internal server error" instead of a proper 400 about invalid input
+
 ## [1.4.5] - 2026-05-17
 
 ### Fixed
