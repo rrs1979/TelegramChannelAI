@@ -34,6 +34,7 @@
             <div class="flex gap-2">
                 <input type="text" name="telegram_api_id" id="telegram_api_id"
                     value="{{ settings.TELEGRAM_API_ID }}"
+                    data-initial="{{ settings.TELEGRAM_API_ID }}"
                     placeholder="12345678"
                     pattern="[0-9]+" inputmode="numeric"
                     title="Telegram API ID is a positive integer (digits only)"
@@ -143,7 +144,7 @@ if (hashInput && hashCount) {
     update();
 }
 
-// guard the two destructive saves: flipping to auto, or blanking channel_id
+// guard destructive saves: flipping to auto, or blanking channel_id / telegram_api_id
 function confirmSettingsSave(form) {
     const sel = form.querySelector('#pipeline_mode');
     if (sel && sel.value === 'auto' && sel.dataset.initial !== 'auto') {
@@ -152,6 +153,10 @@ function confirmSettingsSave(form) {
     const ch = form.querySelector('#channel_id');
     if (ch && ch.dataset.initial && !ch.value.trim()) {
         if (!confirm("Clear the Channel ID? The pipeline won't have anywhere to publish.")) return false;
+    }
+    const apiId = form.querySelector('#telegram_api_id');
+    if (apiId && apiId.dataset.initial && !apiId.value.trim()) {
+        if (!confirm("Clear the Telegram API ID? Telethon can't log in without it and the pipeline will bail at the next run.")) return false;
     }
     return true;
 }
