@@ -234,6 +234,15 @@ tail -f web/logs/app.log
 
 Set `LOG_LEVEL=DEBUG` in `.env` if you need more detail — useful when a post gets skipped and you're not sure why.
 
+If you only glance at the logs every few days, the default rotation (1 MB × 3 backups, so ~3 MB total) can roll over before you get there. Bump it:
+
+```env
+LOG_MAX_BYTES=5000000   # 5 MB per file
+LOG_BACKUP_COUNT=5      # keep 5 rotations
+```
+
+That keeps roughly the last 25 MB around — plenty of headroom even on an hourly pipeline.
+
 ## License
 
 MIT License
