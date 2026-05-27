@@ -193,7 +193,7 @@ def update_queue_status(queue_id: int, status):
 
 # --- published ---
 
-def get_published(limit=100):
+def get_published(limit: int = 100):
     with db_conn() as conn:
         return [dict(r) for r in conn.execute(
             "SELECT * FROM published ORDER BY published_at DESC LIMIT ?", (limit,)
