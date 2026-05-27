@@ -100,7 +100,11 @@ def dashboard():
 
 @app.route("/sources")
 def sources_page():
-    sources = get_sources()
+    try:
+        sources = get_sources()
+    except Exception as e:
+        logger.error(f"Sources load failed: {e}")
+        sources = []
     return render_template("sources.html", sources=sources)
 
 
