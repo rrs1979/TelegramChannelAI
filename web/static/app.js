@@ -303,7 +303,7 @@ if (queueToggle) {
     var queueTimer = null;
 
     function startQueueRefresh() {
-        queueTimer = setInterval(function () { location.reload(); }, 45000);
+        queueTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 45000);
     }
 
     if (localStorage.getItem('queueAutoRefresh') === 'on') {
@@ -358,7 +358,7 @@ if (pubToggle) {
     var pubTimer = null;
 
     function startPubRefresh() {
-        pubTimer = setInterval(function () { location.reload(); }, 60000);
+        pubTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 60000);
     }
 
     if (localStorage.getItem('publishedAutoRefresh') === 'on') {
@@ -385,7 +385,7 @@ if (analyticsToggle) {
     var analyticsTimer = null;
 
     function startAnalyticsRefresh() {
-        analyticsTimer = setInterval(function () { location.reload(); }, 120000);
+        analyticsTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 120000);
     }
 
     if (localStorage.getItem('analyticsAutoRefresh') === 'on') {
@@ -455,7 +455,7 @@ if (sourcesToggle) {
     var sourcesTimer = null;
 
     function startSourcesRefresh() {
-        sourcesTimer = setInterval(function () { location.reload(); }, 90000);
+        sourcesTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 90000);
     }
 
     if (localStorage.getItem('sourcesAutoRefresh') === 'on') {
@@ -518,6 +518,7 @@ if (document.getElementById('stat-published')) {
 
     function refreshStats() {
         refreshTimer = setInterval(async () => {
+            if (document.hidden) return;
             try {
                 const s = await api('/api/stats');
                 document.getElementById('stat-published').textContent = s.total_published;
