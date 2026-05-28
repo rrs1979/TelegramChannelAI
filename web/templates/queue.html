@@ -3,7 +3,12 @@
 
 {% block content %}
 <div class="mb-6 flex items-center justify-between flex-wrap gap-3">
-    <h1 class="text-2xl font-bold">Approval Queue</h1>
+    <div>
+        <h1 class="text-2xl font-bold">Approval Queue</h1>
+        {% if global_last_run %}
+        <p class="muted mt-1" id="queue-last-scanned" data-ts="{{ global_last_run.started_at }}"></p>
+        {% endif %}
+    </div>
     <div class="flex items-center gap-4">
         {% if items %}
         <input type="text" id="queue-search" placeholder="Filter queue…" aria-label="Filter queue"
@@ -129,4 +134,26 @@
     </div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var el = document.getElementById('queue-last-scanned');
+    if (!el || !el.dataset.ts) return;
+    var d = new Date(el.dataset.ts + 'Z');
+    function tick() {
+        var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+        var ago;
+        if (diff < 60) ago = 'just now';
+        else if (diff < 3600) ago = Math.floor(diff / 60) + 'm ago';
+        else if (diff < 86400) ago = Math.floor(diff / 3600) + 'h ago';
+        else ago = Math.floor(diff / 86400) + 'd ago';
+        el.textContent = 'Last scanned ' + ago;
+        el.title = d.toLocaleString();
+    }
+    tick();
+    setInterval(tick, 60000);
+})();
+</script>
 {% endblock %}
