@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0] - 2026-05-29
+
+### Added
+- Last-scanned timestamp under the /queue heading — the nav's "Last run" readout is hidden on phones, so there was no way to gauge how fresh the queued items were without flipping back to the dashboard
+
+### Changed
+- Auto-refresh timers (queue, published, sources, analytics, dashboard stats poll) now skip their tick while the tab is hidden instead of reloading background tabs for nothing; the timer keeps ticking so the next visible tick picks up the latest state
+
+### Fixed
+- Stop iOS Safari from zooming in when you tap a search/input field on mobile
+- Wrap the `/published` list route in try/except — it was the last list route still able to surface a raw 500 instead of a friendly error
+- `aria-hidden` on the published-page accordion chevron so screen readers don't announce the decorative open/close graphic as noise
+
 ## [1.4.7] - 2026-05-24
 
 ### Fixed
