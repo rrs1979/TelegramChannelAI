@@ -135,6 +135,12 @@
             div:has(> #queue-search),
             div:has(> #published-search),
             div:has(> #sources-search) { flex-wrap: wrap; }
+            /* iOS Safari zooms the whole page in when you focus an input
+               whose font is under 16px — every search/settings field is
+               text-sm (14px), so tapping one yanks the viewport. 16px on
+               phones stops the jump; desktop keeps text-sm (this is inside
+               the 640px query) */
+            input, select, textarea { font-size: 16px; }
         }
     </style>
 </head>
