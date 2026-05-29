@@ -123,7 +123,11 @@ def queue_page():
 
 @app.route("/published")
 def published_page():
-    posts = get_published()
+    try:
+        posts = get_published()
+    except Exception as e:
+        logger.error(f"Published load failed: {e}")
+        posts = []
     return render_template("published.html", posts=posts)
 
 
