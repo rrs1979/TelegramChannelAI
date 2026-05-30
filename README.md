@@ -160,6 +160,23 @@ EXCLUSIONS = [
 
 Change the mode in Settings or set `PIPELINE_MODE=auto` / `PIPELINE_MODE=semi-auto` in `.env`.
 
+**How do I get the `TELEGRAM_SESSION` string?**
+
+It's a Telethon StringSession — you generate it once by logging in interactively, then paste the result into `.env`. Run this from a Python shell after `pip install telethon`:
+
+```python
+from telethon.sync import TelegramClient
+from telethon.sessions import StringSession
+
+api_id = 12345          # from my.telegram.org
+api_hash = "your_hash"  # from my.telegram.org
+
+with TelegramClient(StringSession(), api_id, api_hash) as client:
+    print(client.session.save())
+```
+
+It'll ask for your phone number and the login code Telegram sends you. The long string it prints at the end is your `TELEGRAM_SESSION`. Keep it secret — anyone with it has full access to your account. Generate it on a trusted machine, not in a shared/CI environment.
+
 **Can I use my own list of source channels?**
 
 Yes. Set `DEFAULT_SOURCES` in `.env` with a comma-separated list of Telegram channel usernames (without the `@`):
