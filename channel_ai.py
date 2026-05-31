@@ -408,7 +408,9 @@ async def run_cycle(channel_key="default", max_posts=3):
     await client.connect()
 
     if not await client.is_user_authorized():
-        print("ERROR: Telegram session expired")
+        print("ERROR: Telegram session expired or revoked. Generate a fresh "
+              "TELEGRAM_SESSION string and update your .env "
+              "(see the FAQ in README.md).")
         return
 
     print(f"  Scanning {len(sources)} channels...")
