@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.1] - 2026-05-31
+
+### Added
+- Optional HTTP Basic Auth for the dashboard via `DASHBOARD_USER`/`DASHBOARD_PASSWORD` — leave the password unset to keep it open on localhost, set it to lock down deployments bound to `0.0.0.0` where the settings page and pipeline trigger were otherwise reachable by anyone on the network (`/health` stays unauthenticated for uptime probes)
+
 ## [1.5.0] - 2026-05-29
 
 ### Added

@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import hmac
 import logging
 import threading
 from logging.handlers import RotatingFileHandler
@@ -21,6 +22,33 @@ from web.db import (
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
+
+# --- optional HTTP Basic Auth ---
+# Set DASHBOARD_PASSWORD to lock the dashboard down. Left unset it stays open like
+# before so existing localhost deploys don't suddenly break, but anything bound to
+# 0.0.0.0 or exposed past nginx really wants this on — the settings page and the
+# pipeline trigger are otherwise wide open to whoever can reach the port.
+_AUTH_USER = os.getenv("DASHBOARD_USER", "admin")
+_AUTH_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")
+
+
+@app.before_request
+def require_auth():
+    if not _AUTH_PASSWORD:
+        return  # auth disabled
+    if request.path == "/health":
+        return  # keep uptime/load-balancer probes unauthenticated
+    auth = request.authorization
+    # compare_digest on both fields so a wrong username can't be timed apart from a wrong password
+    if (auth and auth.type == "basic"
+            and hmac.compare_digest(auth.username or "", _AUTH_USER)
+            and hmac.compare_digest(auth.password or "", _AUTH_PASSWORD)):
+        return
+    return Response(
+        "Authentication required", 401,
+        {"WWW-Authenticate": 'Basic realm="TelegramChannelAI dashboard"'},
+    )
 
 
 @app.context_processor
