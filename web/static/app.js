@@ -266,8 +266,15 @@ document.addEventListener('keydown', function (e) {
         }
     }
 
-    // Escape — collapse open details panels (queue page)
+    // Escape — clear the focused search box first, else collapse open details panels
     if (e.key === 'Escape') {
+        var active = document.activeElement;
+        var searchBoxes = ['queue-search', 'published-search', 'sources-search'];
+        if (active && searchBoxes.indexOf(active.id) !== -1 && active.value) {
+            active.value = '';
+            active.dispatchEvent(new Event('input'));
+            return;
+        }
         document.querySelectorAll('details[open]').forEach(function (d) {
             d.removeAttribute('open');
         });
