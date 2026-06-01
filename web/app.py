@@ -215,6 +215,9 @@ def settings_page():
         # a non-numeric value to .env that Telethon then chokes on at the next login
         if fields["TELEGRAM_API_ID"] and not fields["TELEGRAM_API_ID"].isdigit():
             fields["TELEGRAM_API_ID"] = current.get("TELEGRAM_API_ID", "")
+        # same story for channel_id — must be -100 followed by digits, or publishing breaks
+        if fields["CHANNEL_ID"] and not re.fullmatch(r"-100[0-9]+", fields["CHANNEL_ID"]):
+            fields["CHANNEL_ID"] = current.get("CHANNEL_ID", "")
 
         save_settings(fields)
         logger.info("Settings updated")
