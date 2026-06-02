@@ -149,6 +149,7 @@ function copyText(btn) {
     if (!block) return;
     navigator.clipboard.writeText(block.textContent.trim()).then(() => {
         btn.textContent = 'Copied!';
+        popButton(btn);
         setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
     });
 }
@@ -157,8 +158,16 @@ function copyValue(text, btn) {
     navigator.clipboard.writeText(text).then(() => {
         var prev = btn.textContent;
         btn.textContent = 'Copied!';
+        popButton(btn);
         setTimeout(() => { btn.textContent = prev; }, 1200);
     });
+}
+
+// replay the copy-pop animation; the reflow lets it restart on a quick re-copy
+function popButton(btn) {
+    btn.classList.remove('copied');
+    void btn.offsetWidth;
+    btn.classList.add('copied');
 }
 
 // queue
