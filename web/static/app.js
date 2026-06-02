@@ -311,6 +311,17 @@ document.addEventListener('keydown', function (e) {
             box.select();
         }
     }
+
+    // "e" — expand every details panel at once (Escape already collapses them)
+    if (e.key === 'e' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var t = (e.target.tagName || '').toLowerCase();
+        if (t === 'input' || t === 'textarea') return;
+        var panels = document.querySelectorAll('details:not([open])');
+        if (panels.length) {
+            e.preventDefault();
+            panels.forEach(function (d) { d.setAttribute('open', ''); });
+        }
+    }
 });
 
 // queue auto-refresh (reload page every 45s)
