@@ -6,6 +6,9 @@
     <div>
         <h1 class="text-2xl font-bold">Analytics</h1>
         <p class="text-gray-500 text-sm mt-1">Pipeline performance over the last 30 days.</p>
+        {% if global_last_run %}
+        <p class="text-gray-600 text-xs mt-1" id="analytics-last-run" data-ts="{{ global_last_run.started_at }}"></p>
+        {% endif %}
     </div>
     <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
         <input type="checkbox" id="analytics-auto-refresh"
@@ -188,6 +191,14 @@
             cutout: '60%',
         }
     });
+})();
+</script>
+<script>
+(function () {
+    var el = document.getElementById('analytics-last-run');
+    if (!el || !el.dataset.ts) return;
+    var d = new Date(el.dataset.ts + 'Z');
+    el.textContent = 'Last run ' + d.toLocaleString();
 })();
 </script>
 {% endblock %}
