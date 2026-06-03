@@ -260,6 +260,24 @@ LOG_BACKUP_COUNT=5      # keep 5 rotations
 
 That keeps roughly the last 25 MB around — plenty of headroom even on an hourly pipeline.
 
+**How do I back up my data?**
+
+Everything lives in a single SQLite file — sources, review queue, published posts, analytics. By default it's `web/data.db` (or wherever you pointed `DB_PATH`). SQLite is happy to be copied while the app runs, so a plain `cp` works for an ad-hoc snapshot:
+
+```bash
+cp web/data.db web/data.db.bak
+```
+
+If you want a backup that's guaranteed consistent even mid-write, use SQLite's own command instead:
+
+```bash
+sqlite3 web/data.db ".backup web/data-$(date +%F).db"
+```
+
+On Docker the same `web/data.db` is bind-mounted into the container, so the host copy above already covers it — no need to reach inside the container.
+
+The `published_hashes.json` dedup file is regenerated on the fly, so it's not worth backing up — only `data.db` holds anything you can't recreate.
+
 ## License
 
 MIT License
