@@ -12,7 +12,10 @@
 
     <!-- Pollinations -->
     <div>
-        <label for="pollinations_key" class="block text-sm font-medium text-gray-300 mb-1">Pollinations API Key</label>
+        <div class="flex items-baseline justify-between gap-2 mb-1">
+            <label for="pollinations_key" class="block text-sm font-medium text-gray-300">Pollinations API Key</label>
+            <span id="pollinations_key-count" class="text-xs text-gray-500 tabular-nums"></span>
+        </div>
         <div class="flex gap-2">
             <input type="password" name="pollinations_key" id="pollinations_key"
                 value="{{ settings.POLLINATIONS_API_KEY }}"
@@ -141,6 +144,18 @@ if (hashInput && hashCount) {
         hashCount.classList.toggle('text-yellow-500', n > 0 && n < cap);
     };
     hashInput.addEventListener('input', update);
+    update();
+}
+
+// key is masked too, so show how many characters made it in — handy after a paste
+const keyInput = document.getElementById('pollinations_key');
+const keyCount = document.getElementById('pollinations_key-count');
+if (keyInput && keyCount) {
+    const update = () => {
+        const n = keyInput.value.length;
+        keyCount.textContent = n ? `${n} chars` : '';
+    };
+    keyInput.addEventListener('input', update);
     update();
 }
 
