@@ -356,6 +356,7 @@ if (queueSearch) {
     var queueCount = document.getElementById('queue-count');
     var queueSource = document.getElementById('queue-source');
     var queueCards = document.querySelectorAll('.space-y-4 > [data-id]');
+    var queueNoMatch = document.getElementById('queue-no-match');
     var queueTotal = queueCards.length;
 
     function filterQueue() {
@@ -371,6 +372,9 @@ if (queueSearch) {
         });
         if (queueCount) {
             queueCount.textContent = (q || src) ? visible + ' of ' + queueTotal : queueTotal + ' items';
+        }
+        if (queueNoMatch) {
+            queueNoMatch.classList.toggle('hidden', visible > 0 || (!q && !src));
         }
     }
 
