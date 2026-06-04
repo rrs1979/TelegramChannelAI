@@ -115,7 +115,7 @@
     </div>
 
     <div class="pt-2">
-        <button type="submit"
+        <button type="submit" id="settings-save"
             class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded text-sm font-medium transition">
             Save Settings
         </button>
@@ -172,6 +172,18 @@ function confirmSettingsSave(form) {
     const apiId = form.querySelector('#telegram_api_id');
     if (apiId && apiId.dataset.initial && !apiId.value.trim()) {
         if (!confirm("Clear the Telegram API ID? Telethon can't log in without it and the pipeline will bail at the next run.")) return false;
+    }
+
+    // confirmed — show a spinner while the POST round-trips so the click feels acknowledged
+    const save = document.getElementById('settings-save');
+    if (save) {
+        save.disabled = true;
+        save.textContent = '';
+        const dot = document.createElement('span');
+        dot.className = 'spinner';
+        save.appendChild(dot);
+        save.appendChild(document.createTextNode('Saving…'));
+        save.classList.add('opacity-50');
     }
     return true;
 }
