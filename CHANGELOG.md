@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.6.0] - 2026-06-04
+
+### Added
+- Press `e` on /queue to expand every preview panel at once — Escape already collapsed them all, this is the other half of the shortcut
+- Character count on the Pollinations key field, same as the API hash — both are masked, so without it there's no way to tell whether a pasted key came through whole or got truncated
+- Last-run timestamp on the /analytics page — the 30-day charts never said how fresh the data behind them was
+- FAQ note on backing up the SQLite database — it's a single file, but people kept missing where it lives
+- "No matching items" message on /queue when a filter hides everything — /published already showed one, the queue just left a blank gap that read like a load failure
+
+### Changed
+- Reject button now uses the same shade as Approve — red-800 sat noticeably darker than the green beside it
+- Copy buttons give a small pop when they flip to "Copied!" — the text swap alone was easy to miss
+- Escape now also clears the search box, not just the open details panels
+- `scope="col"` on the recent-runs table headers so screen readers tie each cell back to its column
+
+### Fixed
+- Expired-session error now links to the relevant FAQ entry instead of dead-ending you on an error with no next step
+- Validate `channel_id` on the backend too — the form's check only runs in the browser, so a direct POST could still write a bad value
+
 ## [1.5.1] - 2026-05-31
 
 ### Added
