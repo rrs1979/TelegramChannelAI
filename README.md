@@ -241,6 +241,17 @@ PORT=5050
 
 Default 5000 clashes with AirPlay Receiver on macOS — the giveaway is `curl localhost:5000` returning a 403 you didn't write. If you're running behind nginx (or just don't want the dashboard reachable from the network), also set `HOST=127.0.0.1` so it binds to localhost only instead of `0.0.0.0`.
 
+**The dashboard is exposed on the network — can I password-protect it?**
+
+Yes. Set `DASHBOARD_PASSWORD` in `.env` and the whole dashboard goes behind HTTP basic auth:
+
+```env
+DASHBOARD_USER=roman          # optional, defaults to "admin"
+DASHBOARD_PASSWORD=something-long
+```
+
+Left unset, the dashboard stays open (so existing localhost setups don't break), but anything bound to `0.0.0.0` or sitting behind nginx really wants this on — the Settings page and the pipeline trigger are otherwise reachable by anyone who can hit the port. The `/health` endpoint stays unauthenticated so uptime probes and load balancers keep working. Pair it with `HOST=127.0.0.1` (see above) if you also want to keep it off the network entirely.
+
 **Where are the logs?**
 
 The dashboard writes to `web/logs/app.log` (rotating, ~1 MB per file, 3 backups). Tail it while the pipeline runs to see what's happening:
