@@ -395,7 +395,8 @@ async def run_cycle(channel_key="default", max_posts=3):
 
     channel_cfg = CHANNEL_CONFIGS.get(channel_key)
     if not channel_cfg:
-        print(f"ERROR: unknown channel config '{channel_key}'")
+        known = ", ".join(sorted(CHANNEL_CONFIGS)) or "(none configured)"
+        print(f"ERROR: unknown channel '{channel_key}'. Available channels: {known}")
         return
 
     channel_id = channel_cfg.get("channel_id", 0)
