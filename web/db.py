@@ -18,6 +18,11 @@ def get_db():
 
 @contextmanager
 def db_conn():
+    """Open a connection, commit on clean exit, and always close.
+
+    If the body raises, we skip the commit (so a half-finished write rolls
+    back) but still close the connection in the finally.
+    """
     conn = get_db()
     try:
         yield conn
