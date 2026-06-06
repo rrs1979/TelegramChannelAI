@@ -57,6 +57,7 @@
             <div class="flex gap-2">
                 <input type="password" name="telegram_api_hash" id="telegram_api_hash"
                     value="{{ settings.TELEGRAM_API_HASH }}"
+                    data-initial="{{ settings.TELEGRAM_API_HASH }}"
                     placeholder="0123456789abcdef..."
                     maxlength="32"
                     pattern="[a-f0-9]{32}"
@@ -172,6 +173,10 @@ function confirmSettingsSave(form) {
     const apiId = form.querySelector('#telegram_api_id');
     if (apiId && apiId.dataset.initial && !apiId.value.trim()) {
         if (!confirm("Clear the Telegram API ID? Telethon can't log in without it and the pipeline will bail at the next run.")) return false;
+    }
+    const apiHash = form.querySelector('#telegram_api_hash');
+    if (apiHash && apiHash.dataset.initial && !apiHash.value.trim()) {
+        if (!confirm("Clear the Telegram API hash? Telethon can't log in without it and the pipeline will bail at the next run.")) return false;
     }
 
     // confirmed — show a spinner while the POST round-trips so the click feels acknowledged
