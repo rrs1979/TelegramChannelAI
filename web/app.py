@@ -90,7 +90,7 @@ logger.info("App started, db initialized")
 # ---------- error handlers ----------
 
 @app.errorhandler(404)
-def not_found(e):
+def not_found(_):
     return render_template("base.html"), 404
 
 
