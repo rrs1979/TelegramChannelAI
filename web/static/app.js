@@ -312,6 +312,17 @@ document.addEventListener('keydown', function (e) {
         }
     }
 
+    // "n" — jump to the add-source field on the sources page
+    if (e.key === 'n' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var tag2 = (e.target.tagName || '').toLowerCase();
+        if (tag2 === 'input' || tag2 === 'textarea') return;
+        var newSrc = document.getElementById('input-username');
+        if (newSrc) {
+            e.preventDefault();
+            newSrc.focus();
+        }
+    }
+
     // "e" — expand every details panel at once (Escape already collapses them)
     if (e.key === 'e' && !e.ctrlKey && !e.metaKey && !e.altKey) {
         var t = (e.target.tagName || '').toLowerCase();
