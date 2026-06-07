@@ -53,6 +53,11 @@
            click registered — a quick scale pop reads as feedback without a color */
         @keyframes copy-pop { 0% { transform: scale(1); } 35% { transform: scale(1.14); } 100% { transform: scale(1); } }
         .copied { display: inline-block; animation: copy-pop .3s ease-out; }
+        /* solid action buttons eased their bg on hover but a click had no give —
+           a 1px push down reads as a real press. the text-only copy buttons get
+           their own copy-pop on the label, so leave those out. transform already
+           transitions via tailwind's `transition` class that's on every button */
+        button:not(.copy-btn):not(.copy-overlay):active { transform: translateY(1px); }
         /* keep numeric columns aligned when row digits vary in width */
         .tabular { font-variant-numeric: tabular-nums; }
         /* long URLs / unbroken hashes in queue and published bodies stretched
