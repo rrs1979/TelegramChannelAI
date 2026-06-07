@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Security
+- Mark the dedup `md5` hash `usedforsecurity=False` — it's only a repost fingerprint, never a security check, so this states the intent and stops Bandit flagging it as weak crypto
+
 ## [1.6.0] - 2026-06-04
 
 ### Added

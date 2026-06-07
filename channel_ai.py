@@ -217,7 +217,9 @@ def save_hashes():
 def is_duplicate(text):
     # Only hash first 100 chars — headlines are enough to catch reposts,
     # and body text often varies between sources covering the same story.
-    h = hashlib.md5(text[:100].lower().encode()).hexdigest()
+    # md5 is fine here: it's a dedup fingerprint, not a security check, so flag
+    # usedforsecurity=False to say so (and keep Bandit from flagging weak crypto).
+    h = hashlib.md5(text[:100].lower().encode(), usedforsecurity=False).hexdigest()
     if h in _published_hashes:
         return True
     _published_hashes.add(h)
