@@ -218,6 +218,10 @@ def settings_page():
         # same story for channel_id — must be -100 followed by digits, or publishing breaks
         if fields["CHANNEL_ID"] and not re.fullmatch(r"-100[0-9]+", fields["CHANNEL_ID"]):
             fields["CHANNEL_ID"] = current.get("CHANNEL_ID", "")
+        # and the hash — 32 hex chars; the form pattern catches it but a raw POST doesn't,
+        # and a junk hash just makes Telethon fail to log in
+        if fields["TELEGRAM_API_HASH"] and not re.fullmatch(r"[a-f0-9]{32}", fields["TELEGRAM_API_HASH"]):
+            fields["TELEGRAM_API_HASH"] = current.get("TELEGRAM_API_HASH", "")
 
         save_settings(fields)
         logger.info("Settings updated")
