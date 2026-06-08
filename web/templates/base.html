@@ -154,6 +154,11 @@
                phones stops the jump; desktop keeps text-sm (this is inside
                the 640px query) */
             input, select, textarea { font-size: 16px; }
+            /* the inline copy buttons are bare text-xs glyphs with no padding —
+               easy to hit with a mouse but a fiddly tap target on a phone.
+               pad out the hit area and pull it back with negative margin so the
+               layout around them doesn't shift */
+            .copy-btn { padding: .35rem .45rem; margin: -.35rem -.45rem; }
         }
     </style>
 </head>
