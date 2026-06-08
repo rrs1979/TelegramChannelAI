@@ -329,6 +329,8 @@ async def publish_post(client, channel_entity, result):
 
     # Send post
     if img_path and os.path.exists(img_path):
+        # Telegram caps media captions at 1024 chars — longer posts won't fit, so
+        # send the image on its own and follow it with the full text as a separate message.
         if len(text) <= 1024:
             msg = await client.send_file(channel_entity, img_path, caption=text, parse_mode="html")
         else:
