@@ -109,7 +109,11 @@ async function deleteSource(id, btn) {
     if (!confirm('Remove this source?')) return;
     var prev = btn.textContent;
     btn.disabled = true;
-    btn.textContent = 'removing…';
+    btn.textContent = '';
+    var dot = document.createElement('span');
+    dot.className = 'spinner';
+    btn.appendChild(dot);
+    btn.appendChild(document.createTextNode('removing…'));
     btn.classList.add('opacity-50');
     try {
         await api(`/api/sources/${id}`, 'DELETE');
@@ -130,7 +134,11 @@ async function toggleSource(id, isActive, btn) {
     const action = isActive ? 'Pause this source?' : 'Resume this source?';
     if (!confirm(action)) return;
     btn.disabled = true;
-    btn.textContent = 'saving…';
+    btn.textContent = '';
+    var dot = document.createElement('span');
+    dot.className = 'spinner';
+    btn.appendChild(dot);
+    btn.appendChild(document.createTextNode('saving…'));
     btn.classList.add('opacity-50');
     try {
         await api(`/api/sources/${id}/toggle`, 'POST');
