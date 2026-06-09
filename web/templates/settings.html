@@ -74,7 +74,10 @@
 
     <!-- Channel -->
     <div>
-        <label for="channel_id" class="block text-sm font-medium text-gray-300 mb-1">Channel ID</label>
+        <div class="flex items-baseline justify-between gap-2 mb-1">
+            <label for="channel_id" class="block text-sm font-medium text-gray-300">Channel ID</label>
+            <span id="channel_id-count" class="text-xs text-gray-500 tabular-nums"></span>
+        </div>
         <div class="flex gap-2">
             <input type="text" name="channel_id" id="channel_id"
                 value="{{ settings.CHANNEL_ID }}"
@@ -157,6 +160,18 @@ if (keyInput && keyCount) {
         keyCount.textContent = n ? `${n} chars` : '';
     };
     keyInput.addEventListener('input', update);
+    update();
+}
+
+// a valid id is -100 plus ~10 digits — show the length so a truncated paste stands out
+const chanInput = document.getElementById('channel_id');
+const chanCount = document.getElementById('channel_id-count');
+if (chanInput && chanCount) {
+    const update = () => {
+        const n = chanInput.value.length;
+        chanCount.textContent = n ? `${n} chars` : '';
+    };
+    chanInput.addEventListener('input', update);
     update();
 }
 
