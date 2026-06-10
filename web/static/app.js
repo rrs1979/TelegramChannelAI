@@ -343,31 +343,36 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
-// queue auto-refresh (reload page every 45s)
-var queueToggle = document.getElementById('queue-auto-refresh');
-if (queueToggle) {
-    var queueTimer = null;
+// queue/published/analytics/sources all wire a checkbox to a full-page reload
+// timer the same way — only the storage key and cadence differ
+function wireReloadRefresh(toggleId, storageKey, intervalMs) {
+    var toggle = document.getElementById(toggleId);
+    if (!toggle) return;
+    var timer = null;
 
-    function startQueueRefresh() {
-        queueTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 45000);
+    function start() {
+        timer = setInterval(function () { if (!document.hidden) location.reload(); }, intervalMs);
     }
 
-    if (localStorage.getItem('queueAutoRefresh') === 'on') {
-        queueToggle.checked = true;
-        startQueueRefresh();
+    if (localStorage.getItem(storageKey) === 'on') {
+        toggle.checked = true;
+        start();
     }
 
-    queueToggle.addEventListener('change', function () {
+    toggle.addEventListener('change', function () {
         if (this.checked) {
-            localStorage.setItem('queueAutoRefresh', 'on');
-            startQueueRefresh();
+            localStorage.setItem(storageKey, 'on');
+            start();
         } else {
-            localStorage.setItem('queueAutoRefresh', 'off');
-            clearInterval(queueTimer);
-            queueTimer = null;
+            localStorage.setItem(storageKey, 'off');
+            clearInterval(timer);
+            timer = null;
         }
     });
 }
+
+// queue reloads every 45s
+wireReloadRefresh('queue-auto-refresh', 'queueAutoRefresh', 45000);
 
 // filter queue items
 var queueSearch = document.getElementById('queue-search');
@@ -402,58 +407,12 @@ if (queueSearch) {
     filterQueue();
 }
 
-// published auto-refresh (every 60s — slower than queue, archive moves less)
-var pubToggle = document.getElementById('published-auto-refresh');
-if (pubToggle) {
-    var pubTimer = null;
+// published every 60s — slower than queue, archive moves less
+wireReloadRefresh('published-auto-refresh', 'publishedAutoRefresh', 60000);
 
-    function startPubRefresh() {
-        pubTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 60000);
-    }
-
-    if (localStorage.getItem('publishedAutoRefresh') === 'on') {
-        pubToggle.checked = true;
-        startPubRefresh();
-    }
-
-    pubToggle.addEventListener('change', function () {
-        if (this.checked) {
-            localStorage.setItem('publishedAutoRefresh', 'on');
-            startPubRefresh();
-        } else {
-            localStorage.setItem('publishedAutoRefresh', 'off');
-            clearInterval(pubTimer);
-            pubTimer = null;
-        }
-    });
-}
-
-// analytics auto-refresh (every 120s — daily rollup only ticks when a run completes,
-// no point reloading as often as queue/published)
-var analyticsToggle = document.getElementById('analytics-auto-refresh');
-if (analyticsToggle) {
-    var analyticsTimer = null;
-
-    function startAnalyticsRefresh() {
-        analyticsTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 120000);
-    }
-
-    if (localStorage.getItem('analyticsAutoRefresh') === 'on') {
-        analyticsToggle.checked = true;
-        startAnalyticsRefresh();
-    }
-
-    analyticsToggle.addEventListener('change', function () {
-        if (this.checked) {
-            localStorage.setItem('analyticsAutoRefresh', 'on');
-            startAnalyticsRefresh();
-        } else {
-            localStorage.setItem('analyticsAutoRefresh', 'off');
-            clearInterval(analyticsTimer);
-            analyticsTimer = null;
-        }
-    });
-}
+// analytics every 120s — daily rollup only ticks when a run completes,
+// no point reloading as often as queue/published
+wireReloadRefresh('analytics-auto-refresh', 'analyticsAutoRefresh', 120000);
 
 // filter published posts
 var searchInput = document.getElementById('published-search');
@@ -498,32 +457,9 @@ if (searchInput) {
     updateSearchCount();
 }
 
-// sources auto-refresh (every 90s — subscriber counts only tick when the
-// pipeline scans channels, which is slower than queue/published activity)
-var sourcesToggle = document.getElementById('sources-auto-refresh');
-if (sourcesToggle) {
-    var sourcesTimer = null;
-
-    function startSourcesRefresh() {
-        sourcesTimer = setInterval(function () { if (!document.hidden) location.reload(); }, 90000);
-    }
-
-    if (localStorage.getItem('sourcesAutoRefresh') === 'on') {
-        sourcesToggle.checked = true;
-        startSourcesRefresh();
-    }
-
-    sourcesToggle.addEventListener('change', function () {
-        if (this.checked) {
-            localStorage.setItem('sourcesAutoRefresh', 'on');
-            startSourcesRefresh();
-        } else {
-            localStorage.setItem('sourcesAutoRefresh', 'off');
-            clearInterval(sourcesTimer);
-            sourcesTimer = null;
-        }
-    });
-}
+// sources every 90s — subscriber counts only tick when the pipeline scans
+// channels, which is slower than queue/published activity
+wireReloadRefresh('sources-auto-refresh', 'sourcesAutoRefresh', 90000);
 
 // filter sources table
 var srcSearch = document.getElementById('sources-search');
