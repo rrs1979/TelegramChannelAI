@@ -390,11 +390,18 @@ async def run_cycle(channel_key="default", max_posts=3):
     from telethon.tl.types import PeerChannel
 
     if not POLLINATIONS_KEY:
-        print("ERROR: POLLINATIONS_API_KEY not set")
+        print("ERROR: POLLINATIONS_API_KEY not set. Add it to your .env "
+              "before running (see README.md for setup).")
         return
 
-    if not TELEGRAM_API_ID or not TELEGRAM_API_HASH or not TELEGRAM_SESSION:
-        print("ERROR: Telegram credentials not set")
+    missing = [name for name, val in (
+        ("TELEGRAM_API_ID", TELEGRAM_API_ID),
+        ("TELEGRAM_API_HASH", TELEGRAM_API_HASH),
+        ("TELEGRAM_SESSION", TELEGRAM_SESSION),
+    ) if not val]
+    if missing:
+        print(f"ERROR: missing Telegram credentials: {', '.join(missing)}. "
+              "Add them to your .env (see README.md for setup).")
         return
 
     channel_cfg = CHANNEL_CONFIGS.get(channel_key)
