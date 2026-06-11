@@ -103,7 +103,7 @@
         </thead>
         <tbody>
             {% for run in runs %}
-            <tr class="border-b border-gray-800/50">
+            <tr class="border-b border-gray-800/50 hover:bg-dark-700/30 transition-colors">
                 <td class="py-2 pr-4 text-gray-500">{{ run.id }}</td>
                 <td class="py-2 pr-4">{{ run.started_at[:19] }}</td>
                 <td class="py-2 pr-4 text-gray-500">{{ run.finished_at[:19] if run.finished_at else '—' }}</td>
