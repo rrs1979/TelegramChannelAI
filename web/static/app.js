@@ -467,6 +467,7 @@ if (srcSearch) {
     var srcCount = document.getElementById('sources-count');
     var srcActiveOnly = document.getElementById('sources-active-only');
     var srcRows = document.querySelectorAll('#sources-table tbody tr');
+    var srcNoMatch = document.getElementById('sources-no-match');
     var srcTotal = srcRows.length;
 
     function filterSources() {
@@ -486,6 +487,9 @@ if (srcSearch) {
             srcCount.textContent = (q || onlyActive)
                 ? visible + ' of ' + srcTotal
                 : srcTotal + label;
+        }
+        if (srcNoMatch) {
+            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !onlyActive));
         }
     }
 
