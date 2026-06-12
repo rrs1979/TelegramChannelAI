@@ -232,6 +232,8 @@ async function rejectItem(id, btn) {
 function updateNavLastRun() {
     var el = document.getElementById('nav-last-run');
     if (!el || !el.dataset.ts) return;
+    // server timestamps come over naive (no tz) — tack on 'Z' so the browser
+    // reads them as UTC instead of assuming the viewer's local zone
     var d = new Date(el.dataset.ts + 'Z');
     var diff = Math.floor((Date.now() - d.getTime()) / 1000);
     var ago;
