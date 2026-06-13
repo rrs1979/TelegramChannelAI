@@ -214,7 +214,7 @@ def save_hashes():
     HASH_FILE.write_text(json.dumps(data))
 
 
-def is_duplicate(text):
+def is_duplicate(text: str):
     # Only hash first 100 chars — headlines are enough to catch reposts,
     # and body text often varies between sources covering the same story.
     # md5 is fine here: it's a dedup fingerprint, not a security check, so flag
