@@ -97,7 +97,7 @@ def not_found(_):
 @app.errorhandler(500)
 def server_error(e):
     logger.error(f"500 error: {e}")
-    return jsonify({"error": "internal server error"}), 500
+    return jsonify({"error": "Something went wrong on our side. Try again in a moment, and if it keeps happening check the server logs."}), 500
 
 
 # ---------- health check ----------
