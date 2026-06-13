@@ -84,6 +84,7 @@ SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
 DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
 IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
 IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
+IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
 
 # ═══════════════════════════════════════════
 # AI CALLS (via Pollinations.ai)
@@ -128,7 +129,7 @@ async def generate_image(prompt, vpn_proxy=None):
     seed = random.randint(1, 999999)
     url = (
         f"https://gen.pollinations.ai/image/{encoded}"
-        f"?model=flux&width={IMAGE_WIDTH}&height={IMAGE_HEIGHT}"
+        f"?model={IMAGE_MODEL}&width={IMAGE_WIDTH}&height={IMAGE_HEIGHT}"
         f"&seed={seed}&nologo=true"
     )
     path = Path(tempfile.gettempdir()) / f"channel_ai_{seed}.jpg"
