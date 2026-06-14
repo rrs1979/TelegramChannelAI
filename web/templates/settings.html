@@ -33,7 +33,10 @@
     <!-- Telegram API -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-            <label for="telegram_api_id" class="block text-sm font-medium text-gray-300 mb-1">Telegram API ID</label>
+            <div class="flex items-baseline justify-between gap-2 mb-1">
+                <label for="telegram_api_id" class="block text-sm font-medium text-gray-300">Telegram API ID</label>
+                <span id="telegram_api_id-count" class="text-xs text-gray-500 tabular-nums"></span>
+            </div>
             <div class="flex gap-2">
                 <input type="text" name="telegram_api_id" id="telegram_api_id"
                     value="{{ settings.TELEGRAM_API_ID }}"
@@ -172,6 +175,18 @@ if (chanInput && chanCount) {
         chanCount.textContent = n ? `${n} chars` : '';
     };
     chanInput.addEventListener('input', update);
+    update();
+}
+
+// api id is just a short integer — show the length so a stray space or truncated paste is easy to spot
+const apiIdInput = document.getElementById('telegram_api_id');
+const apiIdCount = document.getElementById('telegram_api_id-count');
+if (apiIdInput && apiIdCount) {
+    const update = () => {
+        const n = apiIdInput.value.length;
+        apiIdCount.textContent = n ? `${n} chars` : '';
+    };
+    apiIdInput.addEventListener('input', update);
     update();
 }
 
