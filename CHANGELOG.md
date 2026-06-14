@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Security
+- Send `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer` on every response — the dashboard never needs framing, so this blocks clickjacking the settings form and run-pipeline button, and keeps the dashboard URL out of the Referer sent to the tailwind CDN
 - Mark the dedup `md5` hash `usedforsecurity=False` — it's only a repost fingerprint, never a security check, so this states the intent and stops Bandit flagging it as weak crypto
 
 ## [1.6.0] - 2026-06-04

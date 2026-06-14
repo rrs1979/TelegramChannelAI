@@ -51,6 +51,18 @@ def require_auth():
     )
 
 
+@app.after_request
+def set_security_headers(resp):
+    # the dashboard has no reason to ever be framed — DENY shuts the door on
+    # clickjacking the settings form or the run-pipeline button. nosniff stops
+    # the browser second-guessing our content types, and we don't want the
+    # dashboard URL leaking to the tailwind CDN (or anywhere) in the Referer.
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("Referrer-Policy", "no-referrer")
+    return resp
+
+
 @app.context_processor
 def inject_last_run():
     try:
