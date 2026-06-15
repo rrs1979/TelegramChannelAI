@@ -29,18 +29,22 @@
         </label>
         <div class="flex gap-2 text-sm" role="group" aria-label="Filter by status">
         <a href="/queue?status=pending" {% if current_status == 'pending' %}aria-current="page"{% endif %}
+            title="Show posts waiting for review"
             class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'pending' else 'bg-dark-800 text-gray-400' }}">
             Pending
         </a>
         <a href="/queue?status=approved" {% if current_status == 'approved' %}aria-current="page"{% endif %}
+            title="Show approved posts"
             class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'approved' else 'bg-dark-800 text-gray-400' }}">
             Approved
         </a>
         <a href="/queue?status=rejected" {% if current_status == 'rejected' %}aria-current="page"{% endif %}
+            title="Show rejected posts"
             class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'rejected' else 'bg-dark-800 text-gray-400' }}">
             Rejected
         </a>
         <a href="/queue?status=all" {% if current_status == 'all' %}aria-current="page"{% endif %}
+            title="Show posts of every status"
             class="px-3 py-1 rounded {{ 'bg-blue-600' if current_status == 'all' else 'bg-dark-800 text-gray-400' }}">
             All
         </a>
