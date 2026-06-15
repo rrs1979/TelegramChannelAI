@@ -511,6 +511,9 @@ if (document.getElementById('stat-published')) {
     function refreshStats() {
         refreshTimer = setInterval(async () => {
             if (document.hidden) return;
+            var stamp = document.getElementById('last-updated');
+            var prev = stamp ? stamp.textContent : '';
+            if (stamp) stamp.textContent = 'Updating…';
             try {
                 const s = await api('/api/stats');
                 document.getElementById('stat-published').textContent = s.total_published;
@@ -520,7 +523,10 @@ if (document.getElementById('stat-published')) {
                 showUpdatedTime();
                 var lr = s.last_run;
                 updateLastRunAgo(lr ? lr.started_at : null);
-            } catch (e) {}
+            } catch (e) {
+                // poll failed — drop the "Updating…" hint so it doesn't get stuck
+                if (stamp) stamp.textContent = prev;
+            }
         }, 30000);
     }
 
