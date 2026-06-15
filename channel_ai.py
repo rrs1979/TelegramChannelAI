@@ -85,6 +85,7 @@ DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
 IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
 IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
+AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", 30))
 
 # ═══════════════════════════════════════════
 # AI CALLS (via Pollinations.ai)
@@ -110,7 +111,7 @@ async def ai_call(session, model, system, user, max_tokens=1200):
                 ],
                 "max_tokens": max_tokens,
             },
-            timeout=aiohttp.ClientTimeout(total=30),
+            timeout=aiohttp.ClientTimeout(total=AI_TIMEOUT),
         ) as resp:
             if resp.status == 200:
                 data = await resp.json()
