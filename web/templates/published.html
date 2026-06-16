@@ -6,6 +6,9 @@
     <div>
         <h1 class="text-2xl font-bold">Published Posts</h1>
         <p class="text-gray-500 text-sm mt-1">Archive of everything that went live.</p>
+        {% if global_last_run %}
+        <p class="muted mt-1" id="published-last-run" data-ts="{{ global_last_run.started_at }}"></p>
+        {% endif %}
     </div>
     {% if posts %}
     <div class="flex items-center gap-3">
@@ -86,4 +89,26 @@
     <div class="text-gray-500 text-xs mt-2">Approve items in the queue and they'll land here once posted.</div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var el = document.getElementById('published-last-run');
+    if (!el || !el.dataset.ts) return;
+    var d = new Date(el.dataset.ts + 'Z');
+    function tick() {
+        var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+        var ago;
+        if (diff < 60) ago = 'just now';
+        else if (diff < 3600) ago = Math.floor(diff / 60) + 'm ago';
+        else if (diff < 86400) ago = Math.floor(diff / 3600) + 'h ago';
+        else ago = Math.floor(diff / 86400) + 'd ago';
+        el.textContent = 'Last run ' + ago;
+        el.title = d.toLocaleString();
+    }
+    tick();
+    setInterval(tick, 60000);
+})();
+</script>
 {% endblock %}
