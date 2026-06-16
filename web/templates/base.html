@@ -85,6 +85,13 @@
             from { opacity: 0; transform: translateY(-4px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+        /* page content just snapped in on each nav click — a quick fade + rise
+           takes the edge off jumping between Dashboard/Queue/etc */
+        @keyframes page-in {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        main { animation: page-in .2s ease-out; }
         /* queue cards fade out when approved/rejected instead of just popping away */
         .leaving {
             opacity: 0;
