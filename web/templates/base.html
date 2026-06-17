@@ -39,6 +39,10 @@
         }
         .muted { @apply text-xs text-gray-500; }
         .hint { @apply text-xs text-gray-500 mt-1; }
+        /* the smaller grey line under the "No items"/"Queue is empty" headings on
+           every empty-state card — same text-gray-500 text-xs mt-2 was pasted on
+           all of them. (mt-2 here, not mt-1 like .hint, so it gets its own class) */
+        .empty-hint { @apply text-gray-500 text-xs mt-2; }
         /* the little caps label above each big number in the stat cards on
            /dashboard — same four classes were copied onto all four of them */
         .stat-label { @apply text-gray-400 text-xs uppercase tracking-wide; }
