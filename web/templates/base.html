@@ -42,6 +42,9 @@
         /* the little caps label above each big number in the stat cards on
            /dashboard — same four classes were copied onto all four of them */
         .stat-label { @apply text-gray-400 text-xs uppercase tracking-wide; }
+        /* the big number under each .stat-label — same three classes were on
+           all four dashboard cards (and the analytics ones use them too) */
+        .stat-value { @apply text-2xl font-bold mt-1; }
         /* tiny inline 'copy' buttons next to ids/usernames/msg_ids — same
            text-gray-600 hover:text-gray-300 text-xs transition was inlined
            on every one of them across templates */
