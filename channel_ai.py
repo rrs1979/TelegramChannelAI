@@ -279,6 +279,8 @@ async def process_post(session, post, prompt_config):
     # 5. Extract URLs from factcheck
     if factcheck:
         urls = re.findall(r"https?://[^\s\)\"<>]+", factcheck)
+        # Keep only links that point at an actual article, not a bare homepage.
+        # "https://site.com" splits into 3 parts; anything with a path has 4+.
         real_urls = [u for u in urls if len(u.split("/")) > 3]
         if real_urls and not any(u in rewritten for u in real_urls[:2]):
             rewritten += "\n\n" + "\n".join(f"🔗 {u}" for u in real_urls[:3])
