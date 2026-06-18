@@ -381,6 +381,7 @@ var queueSearch = document.getElementById('queue-search');
 if (queueSearch) {
     var queueCount = document.getElementById('queue-count');
     var queueSource = document.getElementById('queue-source');
+    var queueRange = document.getElementById('queue-range');
     var queueCards = document.querySelectorAll('.space-y-4 > [data-id]');
     var queueNoMatch = document.getElementById('queue-no-match');
     var queueTotal = queueCards.length;
@@ -388,24 +389,33 @@ if (queueSearch) {
     function filterQueue() {
         var q = queueSearch.value.toLowerCase();
         var src = queueSource ? queueSource.value : '';
+        var range = queueRange ? queueRange.value : '';
+        var minDate = '';
+        if (range) {
+            var d = new Date();
+            d.setDate(d.getDate() - parseInt(range, 10));
+            minDate = d.toISOString().slice(0, 10);
+        }
         var visible = 0;
         queueCards.forEach(function (card) {
             var textMatch = !q || card.textContent.toLowerCase().includes(q);
             var srcMatch = !src || card.dataset.source === src;
-            var match = textMatch && srcMatch;
+            var dateMatch = !minDate || (card.dataset.date && card.dataset.date >= minDate);
+            var match = textMatch && srcMatch && dateMatch;
             card.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (queueCount) {
-            queueCount.textContent = (q || src) ? visible + ' of ' + queueTotal : queueTotal + ' items';
+            queueCount.textContent = (q || src || range) ? visible + ' of ' + queueTotal : queueTotal + ' items';
         }
         if (queueNoMatch) {
-            queueNoMatch.classList.toggle('hidden', visible > 0 || (!q && !src));
+            queueNoMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range));
         }
     }
 
     queueSearch.addEventListener('input', filterQueue);
     if (queueSource) queueSource.addEventListener('change', filterQueue);
+    if (queueRange) queueRange.addEventListener('change', filterQueue);
     filterQueue();
 }
 
