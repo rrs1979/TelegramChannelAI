@@ -1,6 +1,5 @@
 """Tests for duplicate detection logic."""
 import os
-import tempfile
 
 os.environ.setdefault("TELEGRAM_API_ID", "0")
 os.environ.setdefault("TELEGRAM_API_HASH", "test")
@@ -12,8 +11,7 @@ from channel_ai import is_duplicate
 class TestDeduplication:
     def setup_method(self):
         import channel_ai
-        channel_ai._seen_hashes = set()
-        channel_ai._hash_file = tempfile.mktemp(suffix=".json")
+        channel_ai._published_hashes = set()
 
     def test_first_message_not_duplicate(self):
         assert is_duplicate("Breaking: new policy announced") is False
