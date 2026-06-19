@@ -86,6 +86,7 @@ IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
 IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
 AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", 30))
+IMAGE_TIMEOUT = int(os.getenv("IMAGE_TIMEOUT", 120))
 
 # ═══════════════════════════════════════════
 # AI CALLS (via Pollinations.ai)
@@ -148,7 +149,7 @@ async def generate_image(prompt, vpn_proxy=None):
             async with s.get(
                 url,
                 headers={"Authorization": f"Bearer {POLLINATIONS_KEY}"},
-                timeout=aiohttp.ClientTimeout(total=120),
+                timeout=aiohttp.ClientTimeout(total=IMAGE_TIMEOUT),
             ) as r:
                 if r.status == 200 and "image" in r.headers.get("content-type", ""):
                     data = await r.read()
