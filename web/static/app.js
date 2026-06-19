@@ -505,8 +505,34 @@ if (srcSearch) {
         }
     }
 
+    var srcSort = document.getElementById('sources-sort');
+    function sortSources() {
+        var mode = srcSort ? srcSort.value : '';
+        var tbody = document.querySelector('#sources-table tbody');
+        if (!tbody) return;
+        var rows = Array.prototype.slice.call(srcRows);
+        if (mode === 'subs') {
+            rows.sort(function (a, b) {
+                return (parseInt(b.children[2].textContent, 10) || 0) -
+                       (parseInt(a.children[2].textContent, 10) || 0);
+            });
+        } else if (mode === 'name') {
+            rows.sort(function (a, b) {
+                return a.querySelector('a').textContent.trim()
+                    .localeCompare(b.querySelector('a').textContent.trim());
+            });
+        } else if (mode === 'added') {
+            rows.sort(function (a, b) {
+                return b.children[3].textContent.localeCompare(a.children[3].textContent);
+            });
+        }
+        // empty mode falls through and re-appends in the original srcRows order
+        rows.forEach(function (r) { tbody.appendChild(r); });
+    }
+
     srcSearch.addEventListener('input', filterSources);
     if (srcActiveOnly) srcActiveOnly.addEventListener('change', filterSources);
+    if (srcSort) srcSort.addEventListener('change', sortSources);
     filterSources();
 }
 

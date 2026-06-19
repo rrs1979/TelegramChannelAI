@@ -13,6 +13,13 @@
     <div class="flex items-center gap-3">
         <input type="text" id="sources-search" placeholder="Filter sources…" aria-label="Filter sources"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
+        <select id="sources-sort" aria-label="Sort sources"
+            class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
+            <option value="">Default order</option>
+            <option value="subs">Most subscribers</option>
+            <option value="name">Name A–Z</option>
+            <option value="added">Recently added</option>
+        </select>
         <label class="text-xs text-gray-400 flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="sources-active-only" class="accent-blue-500">
             Active only
