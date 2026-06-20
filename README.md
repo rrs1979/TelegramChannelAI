@@ -231,6 +231,16 @@ IMAGE_HEIGHT=1024   # square thumbs
 
 Pollinations caps each side at 2048. Larger sizes take longer to generate and cost a bit more — 768x432 is a good balance for a news channel. If your channel uses cards or square previews, 1024x1024 looks cleaner.
 
+**Image generation is slow — can I speed it up?**
+
+Switch the model. The default `flux` is the nicest-looking but also the slowest. `turbo` is noticeably faster (and a touch cheaper) at the cost of some detail:
+
+```env
+IMAGE_MODEL=turbo
+```
+
+For a fast-moving news channel where images are just thumbnails, `turbo` is usually fine and keeps the pipeline snappy. Keep `flux` if the image is the main event. Either way, if you're still hitting timeouts on bigger sizes, bump `IMAGE_TIMEOUT` rather than dropping quality.
+
 **Dashboard port is taken — can I change it?**
 
 Yeah, set `PORT` in `.env`:
