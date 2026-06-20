@@ -274,6 +274,32 @@ function showUpdatedTime() {
     el.textContent = 'Updated at ' + hh + ':' + mm + ':' + ss;
 }
 
+// a little "?" cheatsheet so the shortcuts below are actually discoverable
+function toggleShortcuts() {
+    var open = document.getElementById('shortcuts-overlay');
+    if (open) { open.remove(); return; }
+    var rows = [
+        ['?', 'show this help'],
+        ['/', 'jump to the filter box'],
+        ['n', 'new source (sources page)'],
+        ['e', 'expand every panel'],
+        ['Esc', 'clear filter / collapse panels'],
+        ['Ctrl+R', 'run the pipeline (dashboard)'],
+        ['Ctrl+S', 'save settings'],
+    ].map(function (r) {
+        return '<div class="flex justify-between gap-6 py-1">' +
+            '<kbd class="px-1.5 py-0.5 rounded bg-dark-700 text-gray-200 text-xs">' + r[0] + '</kbd>' +
+            '<span class="text-gray-400 text-sm">' + r[1] + '</span></div>';
+    }).join('');
+    var box = document.createElement('div');
+    box.id = 'shortcuts-overlay';
+    box.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+    box.innerHTML = '<div class="card max-w-xs w-full mx-4">' +
+        '<div class="font-semibold mb-2 text-white">Keyboard shortcuts</div>' + rows + '</div>';
+    box.addEventListener('click', function () { box.remove(); });
+    document.body.appendChild(box);
+}
+
 // keyboard shortcuts
 document.addEventListener('keydown', function (e) {
     // Ctrl+S on settings page — submit the form
@@ -285,8 +311,10 @@ document.addEventListener('keydown', function (e) {
         }
     }
 
-    // Escape — clear the focused search box first, else collapse open details panels
+    // Escape — close the shortcuts overlay first, then search box, then panels
     if (e.key === 'Escape') {
+        var overlay = document.getElementById('shortcuts-overlay');
+        if (overlay) { overlay.remove(); return; }
         var active = document.activeElement;
         var searchBoxes = ['queue-search', 'published-search', 'sources-search'];
         if (active && searchBoxes.indexOf(active.id) !== -1 && active.value) {
@@ -306,6 +334,14 @@ document.addEventListener('keydown', function (e) {
             e.preventDefault();
             runPipeline();
         }
+    }
+
+    // "?" — toggle the keyboard shortcuts cheatsheet
+    if (e.key === '?') {
+        var qt = (e.target.tagName || '').toLowerCase();
+        if (qt === 'input' || qt === 'textarea') return;
+        e.preventDefault();
+        toggleShortcuts();
     }
 
     // "/" — jump to the filter box on whichever list page we're on
