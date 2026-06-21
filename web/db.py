@@ -119,6 +119,7 @@ def remove_source(source_id: int):
 
 
 def toggle_source(source_id: int):
+    """Flip a source between active and paused (no-op if the id doesn't exist)."""
     with db_conn() as conn:
         conn.execute(
             "UPDATE sources SET is_active = NOT is_active WHERE id = ?",
