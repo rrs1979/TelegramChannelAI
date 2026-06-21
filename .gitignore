@@ -1,4 +1,8 @@
 .env
+# Telethon writes account auth into a *.session file if you ever use the default
+# file-session constructor instead of StringSession — keep it out of git
+*.session
+*.session-journal
 __pycache__/
 *.pyc
 published_hashes.json
