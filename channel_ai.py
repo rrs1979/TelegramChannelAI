@@ -206,6 +206,9 @@ def load_hashes():
         try:
             data = json.loads(HASH_FILE.read_text())
             cutoff = (datetime.now(timezone.utc) - timedelta(hours=DEDUP_HOURS)).isoformat()
+            # ts > cutoff is a plain string compare, which is fine because ISO 8601
+            # timestamps sort the same lexically as they do chronologically — so this
+            # drops any hash older than DEDUP_HOURS without parsing the dates back.
             _published_hashes = {h for h, ts in data.items() if ts > cutoff}
         except Exception:
             _published_hashes = set()
