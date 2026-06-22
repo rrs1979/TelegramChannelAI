@@ -585,7 +585,14 @@ if (document.getElementById('stat-published')) {
             if (document.hidden) return;
             var stamp = document.getElementById('last-updated');
             var prev = stamp ? stamp.textContent : '';
-            if (stamp) stamp.textContent = 'Updating…';
+            if (stamp) {
+                // same spinner dot the buttons use, so the poll matches the rest of the UI
+                stamp.textContent = '';
+                var dot = document.createElement('span');
+                dot.className = 'spinner';
+                stamp.appendChild(dot);
+                stamp.appendChild(document.createTextNode('Updating…'));
+            }
             try {
                 const s = await api('/api/stats');
                 document.getElementById('stat-published').textContent = s.total_published;
