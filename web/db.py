@@ -130,6 +130,7 @@ def toggle_source(source_id: int):
 # --- pipeline runs ---
 
 def start_run():
+    """Open a new pipeline run and return its id to hand back to finish_run."""
     now = datetime.now(timezone.utc).isoformat()
     with db_conn() as conn:
         cur = conn.execute(
