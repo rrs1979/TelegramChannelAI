@@ -2,11 +2,20 @@
 {% block title %}Settings{% endblock %}
 
 {% block content %}
-<div class="mb-6">
-    <h1 class="text-2xl font-bold">Settings</h1>
-    <p class="text-gray-500 text-sm mt-1">Pipeline and API configuration. Saved to <code class="text-gray-400">.env</code>.</p>
+<div class="mb-6 flex items-start justify-between flex-wrap gap-3">
+    <div>
+        <h1 class="text-2xl font-bold">Settings</h1>
+        <p class="text-gray-500 text-sm mt-1">Pipeline and API configuration. Saved to <code class="text-gray-400">.env</code>.</p>
+        {% if global_last_run %}
+        <p class="muted mt-1" id="settings-last-run" data-ts="{{ global_last_run.started_at }}"></p>
+        {% endif %}
+    </div>
     {% if global_last_run %}
-    <p class="muted mt-1" id="settings-last-run" data-ts="{{ global_last_run.started_at }}"></p>
+    <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
+        <input type="checkbox" id="settings-auto-refresh"
+            class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
+        Auto-refresh
+    </label>
     {% endif %}
 </div>
 
@@ -153,6 +162,39 @@
     }
     tick();
     setInterval(tick, 60000);
+
+    // reloading the whole page would throw away anything typed into the form,
+    // so this just polls the last-run time and swaps it in if a run finished
+    var toggle = document.getElementById('settings-auto-refresh');
+    if (!toggle) return;
+    var poll = null;
+    async function check() {
+        try {
+            var s = await api('/api/stats');
+            var ts = s.last_run && s.last_run.started_at;
+            if (ts && ts !== el.dataset.ts) {
+                el.dataset.ts = ts;
+                d = new Date(ts + 'Z');
+                tick();
+            }
+        } catch (e) {
+            // keep the old time on screen if the poll fails
+        }
+    }
+    if (localStorage.getItem('settingsAutoRefresh') === 'on') {
+        toggle.checked = true;
+        poll = setInterval(check, 60000);
+    }
+    toggle.addEventListener('change', function () {
+        if (this.checked) {
+            localStorage.setItem('settingsAutoRefresh', 'on');
+            poll = setInterval(check, 60000);
+        } else {
+            localStorage.setItem('settingsAutoRefresh', 'off');
+            clearInterval(poll);
+            poll = null;
+        }
+    });
 })();
 
 // toggle password visibility on click
