@@ -280,6 +280,7 @@ function toggleShortcuts() {
     if (open) { open.remove(); return; }
     var rows = [
         ['?', 'show this help'],
+        ['1–6', 'jump to a nav section'],
         ['/', 'jump to the filter box'],
         ['n', 'new source (sources page)'],
         ['e', 'expand every panel'],
@@ -377,6 +378,18 @@ document.addEventListener('keydown', function (e) {
         if (panels.length) {
             e.preventDefault();
             panels.forEach(function (d) { d.setAttribute('open', ''); });
+        }
+    }
+
+    // "1"–"6" — jump to the matching nav link (in the order they appear)
+    if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var nt = (e.target.tagName || '').toLowerCase();
+        if (nt === 'input' || nt === 'textarea') return;
+        var links = document.querySelectorAll('.nav-links a');
+        var link = links[parseInt(e.key, 10) - 1];
+        if (link) {
+            e.preventDefault();
+            window.location.href = link.getAttribute('href');
         }
     }
 });
