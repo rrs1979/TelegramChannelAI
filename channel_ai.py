@@ -120,6 +120,9 @@ async def ai_call(session, model, system, user, max_tokens=1200):
                     return data["choices"][0]["message"]["content"]
                 except (KeyError, IndexError):
                     return None
+    except asyncio.TimeoutError:
+        # str() on a TimeoutError is empty, so spell out what actually happened
+        print(f"  AI error ({model}): request timed out after {AI_TIMEOUT}s")
     except Exception as e:
         print(f"  AI error ({model}): {e}")
     return None
