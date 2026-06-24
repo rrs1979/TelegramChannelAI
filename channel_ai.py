@@ -87,6 +87,7 @@ IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
 AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", 30))
 IMAGE_TIMEOUT = int(os.getenv("IMAGE_TIMEOUT", 120))
+IMAGE_PROXY = os.getenv("IMAGE_PROXY", "")
 
 # ═══════════════════════════════════════════
 # AI CALLS (via Pollinations.ai)
@@ -336,7 +337,7 @@ async def publish_post(client, channel_entity, result):
     # Generate image if prompt exists
     img_path = None
     if result.get("image_prompt"):
-        img_path = await generate_image(result["image_prompt"])
+        img_path = await generate_image(result["image_prompt"], IMAGE_PROXY or None)
 
     # Send post
     if img_path and os.path.exists(img_path):
