@@ -89,6 +89,8 @@ IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
 AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", 30))
 IMAGE_TIMEOUT = int(os.getenv("IMAGE_TIMEOUT", 120))
 IMAGE_PROXY = os.getenv("IMAGE_PROXY", "")
+# Base URL for the Pollinations API. Override to point at a mirror or local proxy.
+POLLINATIONS_BASE_URL = os.getenv("POLLINATIONS_BASE_URL", "https://gen.pollinations.ai").rstrip("/")
 
 # ═══════════════════════════════════════════
 # AI CALLS (via Pollinations.ai)
@@ -104,7 +106,7 @@ async def ai_call(session, model, system, user, max_tokens=1200):
     """Call any AI model via Pollinations OpenAI-compatible API."""
     try:
         async with session.post(
-            "https://gen.pollinations.ai/v1/chat/completions",
+            f"{POLLINATIONS_BASE_URL}/v1/chat/completions",
             headers=HEADERS,
             json={
                 "model": model,
@@ -135,7 +137,7 @@ async def generate_image(prompt, vpn_proxy=None):
     encoded = urllib.parse.quote(prompt[:500])
     seed = random.randint(1, 999999)
     url = (
-        f"https://gen.pollinations.ai/image/{encoded}"
+        f"{POLLINATIONS_BASE_URL}/image/{encoded}"
         f"?model={IMAGE_MODEL}&width={IMAGE_WIDTH}&height={IMAGE_HEIGHT}"
         f"&seed={seed}&nologo=true"
     )
