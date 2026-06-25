@@ -82,6 +82,7 @@ EXCLUSIONS = [
 
 SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
 DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
+NEAR_DUP_THRESHOLD = float(os.getenv("NEAR_DUP_THRESHOLD", "0.7"))  # Jaccard для near-dup заголовков (0 = выкл)
 IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
 IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
@@ -201,11 +202,32 @@ async def scan_sources(client, channels, hours=SCAN_HOURS):
 # ═══════════════════════════════════════════
 
 _published_hashes = set()
+_hash_tokens: dict = {}  # md5 → frozenset токенов заголовка, для fuzzy near-dup
 HASH_FILE = Path("published_hashes.json")
+
+_TOKEN_RE = re.compile(r"[0-9a-zа-яё]+", re.IGNORECASE)
+
+
+def _norm_tokens(text: str) -> frozenset:
+    """Набор нормализованных токенов заголовка (первые 100 симв, слова >=3 симв).
+
+    Основа fuzzy near-dup: ловит ту же новость, переписанную/переставленную другим
+    каналом, которую точный md5-хэш пропускает.
+    """
+    words = _TOKEN_RE.findall((text or "")[:100].lower())
+    return frozenset(w for w in words if len(w) >= 3)
+
+
+def _jaccard(a: frozenset, b: frozenset) -> float:
+    if not a or not b:
+        return 0.0
+    return len(a & b) / len(a | b)
 
 
 def load_hashes():
-    global _published_hashes
+    global _published_hashes, _hash_tokens
+    _published_hashes = set()
+    _hash_tokens = {}
     if HASH_FILE.exists():
         try:
             data = json.loads(HASH_FILE.read_text())
@@ -213,26 +235,42 @@ def load_hashes():
             # ts > cutoff is a plain string compare, which is fine because ISO 8601
             # timestamps sort the same lexically as they do chronologically — so this
             # drops any hash older than DEDUP_HOURS without parsing the dates back.
-            _published_hashes = {h for h, ts in data.items() if ts > cutoff}
+            # Формат обратно-совместим: старый {md5: ts}, новый {md5: {ts, tokens}}.
+            for h, v in data.items():
+                ts = v if isinstance(v, str) else (v or {}).get("ts", "")
+                if ts <= cutoff:
+                    continue
+                _published_hashes.add(h)
+                toks = None if isinstance(v, str) else (v or {}).get("tokens")
+                if toks:
+                    _hash_tokens[h] = frozenset(toks)
         except Exception:
             _published_hashes = set()
+            _hash_tokens = {}
 
 
 def save_hashes():
     now = datetime.now(timezone.utc).isoformat()
-    data = {h: now for h in _published_hashes}
+    data = {h: {"ts": now, "tokens": sorted(_hash_tokens.get(h, ()))} for h in _published_hashes}
     HASH_FILE.write_text(json.dumps(data))
 
 
 def is_duplicate(text: str):
-    # Only hash first 100 chars — headlines are enough to catch reposts,
-    # and body text often varies between sources covering the same story.
-    # md5 is fine here: it's a dedup fingerprint, not a security check, so flag
-    # usedforsecurity=False to say so (and keep Bandit from flagging weak crypto).
+    # Exact fingerprint: md5 первых 100 симв заголовка — быстрый точный путь.
+    # md5 is a dedup fingerprint, not a security check → usedforsecurity=False (Bandit).
     h = hashlib.md5(text[:100].lower().encode(), usedforsecurity=False).hexdigest()
     if h in _published_hashes:
         return True
+    # Fuzzy near-dup: другой канал пишет ту же новость другими словами → точный хэш
+    # её не ловит. Сравниваем набор токенов заголовка (Jaccard) с недавними.
+    toks = _norm_tokens(text)
+    if NEAR_DUP_THRESHOLD > 0 and toks:
+        for prev in _hash_tokens.values():
+            if _jaccard(toks, prev) >= NEAR_DUP_THRESHOLD:
+                return True
     _published_hashes.add(h)
+    if toks:
+        _hash_tokens[h] = toks
     return False
 
 

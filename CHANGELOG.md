@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Fuzzy near-duplicate detection — the same story reworded or reordered by another source slipped past the exact md5 headline fingerprint and got republished; headlines are now also compared by Jaccard token overlap (`NEAR_DUP_THRESHOLD`, default 0.7), so reworded reposts are caught too. Backward-compatible with the existing `published_hashes.json` (old `{md5: ts}` format still loads); set `NEAR_DUP_THRESHOLD=0` to fall back to exact matching only.
+
 ### Changed
 - Pollinations image model is now set via `IMAGE_MODEL` instead of being hardcoded to `flux` — lets you switch models without touching the code
 - Dashboard stats poll now shows a brief "Updating…" hint while it fetches — the 30s refresh was silent, so nothing told you the numbers were live
