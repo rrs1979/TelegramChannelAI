@@ -86,6 +86,7 @@ NEAR_DUP_THRESHOLD = float(os.getenv("NEAR_DUP_THRESHOLD", "0.7"))  # Jaccard д
 IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
 IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
+TEXT_MODEL = os.getenv("TEXT_MODEL", "claude")  # model used for the main rewrite step
 AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", 30))
 IMAGE_TIMEOUT = int(os.getenv("IMAGE_TIMEOUT", 120))
 IMAGE_PROXY = os.getenv("IMAGE_PROXY", "")
@@ -300,7 +301,7 @@ async def process_post(session, post, prompt_config):
 
     # 3. Rewrite in channel style
     rewritten = await ai_call(
-        session, "claude",
+        session, TEXT_MODEL,
         prompt_config["system_prompt"],
         f"Rewrite:\n{post['text']}\n\nSource: {source_link}\n\nFact-check:\n{factcheck or 'none'}",
         1500,
