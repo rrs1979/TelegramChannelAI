@@ -44,7 +44,7 @@ def load_settings():
     }
 
 
-def save_settings(fields):
+def save_settings(fields: dict[str, str]):
     """Merge fields into .env file, preserving unknown keys."""
     existing = {}
     if os.path.exists(ENV_PATH):
