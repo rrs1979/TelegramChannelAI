@@ -89,7 +89,7 @@
 
         <!-- original -->
         <details class="mb-3">
-            <summary class="text-xs text-gray-500 cursor-pointer hover:text-gray-300 transition">Original text · {{ item.original_text.split()|length }} words</summary>
+            <summary class="text-xs text-gray-500 cursor-pointer hover:text-gray-300 transition">Original text · {{ item.original_text|length }} chars · {{ item.original_text.split()|length }} words</summary>
             <div class="relative mt-2">
                 <button onclick="copyText(this)"
                     class="copy-overlay bg-dark-800"
