@@ -172,6 +172,8 @@ def get_runs(limit: int = 20):
 # --- queue ---
 
 def add_to_queue(source, original_text, rewritten_text=None, image_prompt=None, poll_data=None):
+    """Stash a post for manual review. Only source and original_text are required;
+    the rewrite, image prompt and poll come in once the pipeline has processed it."""
     with db_conn() as conn:
         conn.execute(
             """INSERT INTO queue (source, original_text, rewritten_text, image_prompt, poll_data)
@@ -194,6 +196,7 @@ def get_queue(status="pending"):
 
 
 def update_queue_status(queue_id: int, status: str):
+    """Set a queue item's status (e.g. approved/rejected) and stamp reviewed_at to now."""
     now = datetime.now(timezone.utc).isoformat()
     with db_conn() as conn:
         conn.execute(
