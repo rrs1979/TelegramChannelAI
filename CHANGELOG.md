@@ -4,10 +4,18 @@
 
 ### Added
 - Fuzzy near-duplicate detection — the same story reworded or reordered by another source slipped past the exact md5 headline fingerprint and got republished; headlines are now also compared by Jaccard token overlap (`NEAR_DUP_THRESHOLD`, default 0.7), so reworded reposts are caught too. Backward-compatible with the existing `published_hashes.json` (old `{md5: ts}` format still loads); set `NEAR_DUP_THRESHOLD=0` to fall back to exact matching only.
+- Number-key shortcuts (1–5) jump straight to each nav section — keyboard users had to tab through the whole bar to reach analytics or sources
+- Character count on the queue card's original-text summary, matching the masked key fields — lets you see at a glance how much a source post got trimmed before rewriting
 
 ### Changed
 - Pollinations image model is now set via `IMAGE_MODEL` instead of being hardcoded to `flux` — lets you switch models without touching the code
+- Rewrite model is now configurable via `TEXT_MODEL` instead of the hardcoded default — same idea as `IMAGE_MODEL`, so you can swap the text model from the env
+- `POLLINATIONS_BASE_URL` can override the API host — handy for pointing at a self-hosted or proxied endpoint instead of the public one
 - Dashboard stats poll now shows a brief "Updating…" hint while it fetches — the 30s refresh was silent, so nothing told you the numbers were live
+
+### Accessibility
+- `<caption>` on the recent-runs and sources tables so screen readers announce what each table holds before reading the rows
+- `title` on the save-settings button so its purpose is exposed on hover and to assistive tech
 
 ### Security
 - Ignore `*.session` / `*.session-journal` files in git — we connect with Telethon's `StringSession` from the env, but the default file-session constructor drops a `.session` holding the full account auth into the working dir, and one stray commit would leak the whole Telegram login
