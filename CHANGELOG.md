@@ -21,6 +21,7 @@
 - Ignore `*.session` / `*.session-journal` files in git — we connect with Telethon's `StringSession` from the env, but the default file-session constructor drops a `.session` holding the full account auth into the working dir, and one stray commit would leak the whole Telegram login
 - Send `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer` on every response — the dashboard never needs framing, so this blocks clickjacking the settings form and run-pipeline button, and keeps the dashboard URL out of the Referer sent to the tailwind CDN
 - Mark the dedup `md5` hash `usedforsecurity=False` — it's only a repost fingerprint, never a security check, so this states the intent and stops Bandit flagging it as weak crypto
+- Write generated images to a `mkstemp` file instead of a predictable `channel_ai_<seed>.jpg` name in the shared temp dir — the old name was guessable, so on a multi-user host someone could pre-plant a symlink there and redirect our write; `mkstemp` hands us an exclusive `0600` file with an unguessable name (and we now clean it up when generation comes back empty)
 
 ## [1.6.0] - 2026-06-04
 

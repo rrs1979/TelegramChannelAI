@@ -142,7 +142,12 @@ async def generate_image(prompt, vpn_proxy=None):
         f"?model={IMAGE_MODEL}&width={IMAGE_WIDTH}&height={IMAGE_HEIGHT}"
         f"&seed={seed}&nologo=true"
     )
-    path = Path(tempfile.gettempdir()) / f"channel_ai_{seed}.jpg"
+    # mkstemp gives us an O_EXCL, 0600 file with an unguessable name. A predictable
+    # name in the shared temp dir let a local user pre-plant a symlink there and have
+    # our write land on whatever it pointed at.
+    fd, tmp_name = tempfile.mkstemp(prefix="channel_ai_", suffix=".jpg")
+    os.close(fd)
+    path = Path(tmp_name)
 
     connector = None
     if vpn_proxy:
@@ -168,6 +173,11 @@ async def generate_image(prompt, vpn_proxy=None):
                         return str(path)
     except Exception as e:
         print(f"  Image error: {e}")
+    # nothing usable came back — drop the empty placeholder we reserved above
+    try:
+        path.unlink()
+    except OSError:
+        pass
     return None
 
 
