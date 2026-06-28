@@ -24,6 +24,16 @@
 </div>
 {% else %}
 
+{% set runs = analytics.totals.completed + analytics.totals.failed + analytics.totals.running %}
+{% set rated = analytics.totals.completed + analytics.totals.failed %}
+{% set rate = '%d' % ((analytics.totals.completed / rated * 100) if rated > 0 else 0) %}
+{% set spent = '%.2f' % (analytics.daily | sum(attribute='cost')) %}
+{% set pub = analytics.daily | sum(attribute='published') %}
+<div class="flex justify-end mb-2">
+    <button onclick="copyValue('Runs: {{ runs }} · Success: {{ rate }}% · Cost: ${{ spent }} · Published: {{ pub }} (last 30 days)', this)"
+        class="copy-btn" title="Copy these figures as text">Copy summary</button>
+</div>
+
 <!-- summary cards -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
