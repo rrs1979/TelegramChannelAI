@@ -44,6 +44,8 @@ def test_channel_configs_from_env():
     assert "test_ch" in channel_ai.CHANNEL_CONFIGS
     assert channel_ai.CHANNEL_CONFIGS["test_ch"]["channel_id"] == 123
     assert "sources" in channel_ai.CHANNEL_CONFIGS["test_ch"]
+    # reload with the env var gone so the injected "test_ch" config doesn't stick
+    # around in channel_ai's module-level state and bleed into the other tests
     del os.environ["CHANNEL_CONFIGS"]
     importlib.reload(channel_ai)
 
