@@ -40,7 +40,7 @@
         <div>
             <div class="flex items-baseline justify-between gap-2 mb-1">
                 <label for="input-username" class="text-xs text-gray-400">Channel username</label>
-                <span id="input-username-count" class="text-xs text-gray-500 tabular-nums"></span>
+                <span id="input-username-count" class="text-xs text-gray-500 tabular-nums transition-colors"></span>
             </div>
             <input type="text" name="username" id="input-username" placeholder="@channel_name"
                 required minlength="5" maxlength="33" pattern="@?[a-zA-Z][a-zA-Z0-9_]{3,31}"
@@ -50,7 +50,7 @@
         <div>
             <div class="flex items-baseline justify-between gap-2 mb-1">
                 <label for="input-title" class="text-xs text-gray-400">Title (optional)</label>
-                <span id="input-title-count" class="text-xs text-gray-500 tabular-nums"></span>
+                <span id="input-title-count" class="text-xs text-gray-500 tabular-nums transition-colors"></span>
             </div>
             <input type="text" name="title" id="input-title" placeholder="Channel Title"
                 maxlength="128"
