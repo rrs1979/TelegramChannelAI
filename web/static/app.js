@@ -401,8 +401,17 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
     if (!toggle) return;
     var timer = null;
 
+    // don't yank the page out from under someone who's mid-typing in the
+    // filter box (or has a select open) — a full reload would lose their input
+    function busyTyping() {
+        var a = document.activeElement;
+        return a && (a.tagName === 'INPUT' && a.type !== 'checkbox' || a.tagName === 'SELECT');
+    }
+
     function start() {
-        timer = setInterval(function () { if (!document.hidden) location.reload(); }, intervalMs);
+        timer = setInterval(function () {
+            if (!document.hidden && !busyTyping()) location.reload();
+        }, intervalMs);
     }
 
     if (localStorage.getItem(storageKey) === 'on') {
