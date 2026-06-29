@@ -155,6 +155,7 @@ def finish_run(run_id, posts_scanned=0, posts_published=0, status="completed", e
 
 
 def get_last_run():
+    """Return the most recent pipeline run, or None if nothing has run yet."""
     with db_conn() as conn:
         row = conn.execute(
             "SELECT * FROM pipeline_runs ORDER BY id DESC LIMIT 1"
@@ -163,6 +164,7 @@ def get_last_run():
 
 
 def get_runs(limit: int = 20):
+    """Return the latest pipeline runs, newest first (up to limit of them)."""
     with db_conn() as conn:
         return [dict(r) for r in conn.execute(
             "SELECT * FROM pipeline_runs ORDER BY id DESC LIMIT ?", (limit,)
