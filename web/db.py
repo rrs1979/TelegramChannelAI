@@ -139,7 +139,7 @@ def start_run():
         return cur.lastrowid
 
 
-def finish_run(run_id, posts_scanned=0, posts_published=0, status="completed", errors=""):
+def finish_run(run_id: int, posts_scanned=0, posts_published=0, status="completed", errors=""):
     """Mark a pipeline run as done, stamping finished_at and the final counts.
 
     Pass status='failed' with an errors string when the run didn't complete.
