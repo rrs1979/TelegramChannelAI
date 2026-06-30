@@ -50,9 +50,12 @@
                 {% endif %}
                 <span class="text-sm truncate">{{ post.text[:120] }}</span>
             </div>
-            <svg aria-hidden="true" class="w-4 h-4 text-gray-500 shrink-0 ml-2 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+            <div class="flex items-center gap-2 shrink-0 ml-2">
+                <span class="text-xs text-gray-500 tabular-nums">{{ post.text|length }} chars · {{ post.text.split()|length }} words</span>
+                <svg aria-hidden="true" class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </div>
         </summary>
         <div class="px-4 pb-4 pt-2 border-t border-gray-700/20">
             <div class="relative">
@@ -61,7 +64,6 @@
                     title="Copy post text">Copy</button>
                 <div class="post-text text-sm text-gray-300 whitespace-pre-wrap leading-relaxed pr-14">{{ post.text }}</div>
             </div>
-            <span class="text-xs text-gray-500">{{ post.text|length }} chars · {{ post.text.split()|length }} words</span>
             {% if post.telegram_msg_id %}
             <div class="mt-2 text-xs text-gray-500">
                 msg_id: {{ post.telegram_msg_id }}
