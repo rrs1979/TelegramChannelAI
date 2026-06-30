@@ -521,9 +521,34 @@ if (searchInput) {
         }
     }
 
+    var sortSel = document.getElementById('published-sort');
+    var postList = document.querySelector('.space-y-3');
+    function cardLen(el) {
+        var s = el.querySelector('.tabular-nums');
+        return s ? (parseInt(s.textContent, 10) || 0) : 0;
+    }
+    function sortPosts() {
+        if (!postList || !sortSel) return;
+        var mode = sortSel.value;
+        var cards = Array.prototype.slice.call(allCards);
+        if (mode === 'oldest') {
+            // allCards is already newest-first, so a flip gives oldest-first
+            cards.reverse();
+        } else if (mode === 'longest' || mode === 'shortest') {
+            cards.sort(function (a, b) {
+                return mode === 'longest'
+                    ? cardLen(b) - cardLen(a)
+                    : cardLen(a) - cardLen(b);
+            });
+        }
+        // empty mode keeps the original newest-first order
+        cards.forEach(function (c) { postList.appendChild(c); });
+    }
+
     searchInput.addEventListener('input', updateSearchCount);
     if (sourceSel) sourceSel.addEventListener('change', updateSearchCount);
     if (rangeSel) rangeSel.addEventListener('change', updateSearchCount);
+    if (sortSel) sortSel.addEventListener('change', sortPosts);
     updateSearchCount();
 }
 
