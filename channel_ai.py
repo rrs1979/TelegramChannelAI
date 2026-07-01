@@ -416,6 +416,8 @@ async def publish_post(client, channel_entity, result):
     if result.get("poll_data"):
         try:
             raw = result["poll_data"].strip()
+            # the model often wraps its JSON in a ```json ... ``` fence — drop the
+            # opening fence line and the trailing ``` so json.loads gets clean text
             if raw.startswith("```"):
                 raw = raw.split("\n", 1)[1].rsplit("```", 1)[0]
             pd = json.loads(raw)
