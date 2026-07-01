@@ -401,6 +401,12 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
     if (!toggle) return;
     var timer = null;
 
+    // hint how often this page reloads — each one runs on its own cadence
+    var secs = Math.round(intervalMs / 1000);
+    var every = secs % 60 === 0 ? (secs / 60) + 'm' : secs + 's';
+    var label = toggle.closest('label');
+    if (label) label.title = 'Reloads every ' + every;
+
     // don't yank the page out from under someone who's mid-typing in the
     // filter box (or has a select open) — a full reload would lose their input
     function busyTyping() {
