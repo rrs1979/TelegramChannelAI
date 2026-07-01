@@ -511,16 +511,18 @@ if (searchInput) {
             minDate = d.toISOString().slice(0, 10);
         }
         var visible = 0;
+        var words = 0;
         allCards.forEach(function (el) {
             var textMatch = !q || el.textContent.toLowerCase().includes(q);
             var srcMatch = !src || el.dataset.source === src;
             var dateMatch = !minDate || (el.dataset.date && el.dataset.date >= minDate);
             var match = textMatch && srcMatch && dateMatch;
             el.style.display = match ? '' : 'none';
-            if (match) visible++;
+            if (match) { visible++; words += cardWords(el); }
         });
         if (countEl) {
-            countEl.textContent = (q || src || range) ? visible + ' of ' + total : total + ' posts';
+            var base = (q || src || range) ? visible + ' of ' + total : total + ' posts';
+            countEl.textContent = words ? base + ' · ' + words.toLocaleString() + ' words' : base;
         }
         if (noMatch) {
             noMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range));
@@ -532,6 +534,11 @@ if (searchInput) {
     function cardLen(el) {
         var s = el.querySelector('.tabular-nums');
         return s ? (parseInt(s.textContent, 10) || 0) : 0;
+    }
+    // the summary reads "245 chars · 38 words" — grab the number after the dot
+    function cardWords(el) {
+        var s = el.querySelector('.tabular-nums');
+        return s ? (parseInt(s.textContent.split('·')[1], 10) || 0) : 0;
     }
     function sortPosts() {
         if (!postList || !sortSel) return;
