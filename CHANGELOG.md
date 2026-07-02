@@ -6,12 +6,20 @@
 - Fuzzy near-duplicate detection — the same story reworded or reordered by another source slipped past the exact md5 headline fingerprint and got republished; headlines are now also compared by Jaccard token overlap (`NEAR_DUP_THRESHOLD`, default 0.7), so reworded reposts are caught too. Backward-compatible with the existing `published_hashes.json` (old `{md5: ts}` format still loads); set `NEAR_DUP_THRESHOLD=0` to fall back to exact matching only.
 - Number-key shortcuts (1–5) jump straight to each nav section — keyboard users had to tab through the whole bar to reach analytics or sources
 - Character count on the queue card's original-text summary, matching the masked key fields — lets you see at a glance how much a source post got trimmed before rewriting
+- Sort published posts by date or length — the list was fixed newest-first, so there was no way to line up the longest posts to review at a glance
+- Total word count of the posts currently in view, alongside the existing chars/words on each summary — a running tally of how much you're looking at
+- Character and word count on the published-post summary, matching the queue cards
 
 ### Changed
 - Pollinations image model is now set via `IMAGE_MODEL` instead of being hardcoded to `flux` — lets you switch models without touching the code
 - Rewrite model is now configurable via `TEXT_MODEL` instead of the hardcoded default — same idea as `IMAGE_MODEL`, so you can swap the text model from the env
 - `POLLINATIONS_BASE_URL` can override the API host — handy for pointing at a self-hosted or proxied endpoint instead of the public one
 - Dashboard stats poll now shows a brief "Updating…" hint while it fetches — the 30s refresh was silent, so nothing told you the numbers were live
+- Auto-refresh toggle tooltip now spells out how often each page reloads, so you know what turning it off actually skips
+- Auto-refresh holds off on reloading while you're typing in a filter box — a mid-search reload used to wipe what you'd typed
+
+### Fixed
+- The 404 page now has a real heading instead of just the body text — screen readers and quick scans had nothing to anchor on
 
 ### Accessibility
 - `<caption>` on the recent-runs and sources tables so screen readers announce what each table holds before reading the rows
