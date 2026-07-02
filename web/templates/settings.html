@@ -170,16 +170,24 @@
     if (!toggle) return;
     var poll = null;
     async function check() {
+        // same spinner dot the dashboard poll shows, so the check is visible
+        var prev = el.textContent;
+        el.textContent = '';
+        var dot = document.createElement('span');
+        dot.className = 'spinner';
+        el.appendChild(dot);
+        el.appendChild(document.createTextNode('Checking…'));
         try {
             var s = await api('/api/stats');
             var ts = s.last_run && s.last_run.started_at;
             if (ts && ts !== el.dataset.ts) {
                 el.dataset.ts = ts;
                 d = new Date(ts + 'Z');
-                tick();
             }
+            tick();
         } catch (e) {
             // keep the old time on screen if the poll fails
+            el.textContent = prev;
         }
     }
     if (localStorage.getItem('settingsAutoRefresh') === 'on') {
