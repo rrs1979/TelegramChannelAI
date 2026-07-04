@@ -32,6 +32,8 @@
             <input type="password" name="pollinations_key" id="pollinations_key"
                 value="{{ settings.POLLINATIONS_API_KEY }}"
                 placeholder="pk_..."
+                maxlength="128" pattern="\S+"
+                title="An API key is one unbroken string — no spaces or line breaks"
                 class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.POLLINATIONS_API_KEY %}
             <button type="button" onclick="copyValue('{{ settings.POLLINATIONS_API_KEY }}', this)"
