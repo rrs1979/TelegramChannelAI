@@ -114,6 +114,7 @@ def add_source(username: str, title: str = "", subscribers: int = 0):
 
 
 def remove_source(source_id: int):
+    """Delete a source for good — if you just want to pause it, toggle_source is the one."""
     with db_conn() as conn:
         conn.execute("DELETE FROM sources WHERE id = ?", (source_id,))
 
