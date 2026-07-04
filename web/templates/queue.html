@@ -62,7 +62,7 @@
 {% if items %}
 <div class="space-y-4">
     {% for item in items %}
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30" data-id="{{ item.id }}" data-source="{{ item.source or '' }}" data-date="{{ item.created_at[:10] if item.created_at else '' }}">
+    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30" data-id="{{ item.id }}" data-source="{{ item.source or '' }}" data-date="{{ item.created_at[:10] if item.created_at else '' }}" data-words="{{ item.rewritten_text.split()|length if item.rewritten_text else 0 }}">
         <div class="flex items-start justify-between gap-4 mb-3">
             <div class="flex items-center gap-2 flex-wrap min-w-0">
                 <span class="text-gray-500 text-xs">#{{ item.id }}</span>

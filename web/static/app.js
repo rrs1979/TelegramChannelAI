@@ -461,16 +461,18 @@ if (queueSearch) {
             minDate = d.toISOString().slice(0, 10);
         }
         var visible = 0;
+        var words = 0;
         queueCards.forEach(function (card) {
             var textMatch = !q || card.textContent.toLowerCase().includes(q);
             var srcMatch = !src || card.dataset.source === src;
             var dateMatch = !minDate || (card.dataset.date && card.dataset.date >= minDate);
             var match = textMatch && srcMatch && dateMatch;
             card.style.display = match ? '' : 'none';
-            if (match) visible++;
+            if (match) { visible++; words += parseInt(card.dataset.words, 10) || 0; }
         });
         if (queueCount) {
-            queueCount.textContent = (q || src || range) ? visible + ' of ' + queueTotal : queueTotal + ' items';
+            var base = (q || src || range) ? visible + ' of ' + queueTotal : queueTotal + ' items';
+            queueCount.textContent = words ? base + ' · ' + words.toLocaleString() + ' words' : base;
         }
         if (queueNoMatch) {
             queueNoMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range));
