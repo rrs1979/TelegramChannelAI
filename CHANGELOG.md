@@ -26,6 +26,7 @@
 - `title` on the save-settings button so its purpose is exposed on hover and to assistive tech
 
 ### Security
+- Bounce state-changing requests that arrive cross-site (CSRF) — the browser attaches the dashboard's basic auth to any request, even one a hostile page fires off, so a hidden form on another site could rewrite settings, delete sources, or trigger a pipeline run without knowing the password; POST/PUT/PATCH/DELETE now get a 403 unless `Sec-Fetch-Site`/`Origin` say same-origin (curl and scripts send neither header and carry no ambient credentials, so they're unaffected)
 - Ignore `*.session` / `*.session-journal` files in git — we connect with Telethon's `StringSession` from the env, but the default file-session constructor drops a `.session` holding the full account auth into the working dir, and one stray commit would leak the whole Telegram login
 - Send `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer` on every response — the dashboard never needs framing, so this blocks clickjacking the settings form and run-pipeline button, and keeps the dashboard URL out of the Referer sent to the tailwind CDN
 - Mark the dedup `md5` hash `usedforsecurity=False` — it's only a repost fingerprint, never a security check, so this states the intent and stops Bandit flagging it as weak crypto

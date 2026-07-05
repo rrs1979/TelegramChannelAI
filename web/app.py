@@ -6,6 +6,7 @@ import sys
 import hmac
 import logging
 import threading
+from urllib.parse import urlsplit
 from logging.handlers import RotatingFileHandler
 from flask import Flask, render_template, jsonify, request, redirect, url_for, Response
 
@@ -49,6 +50,25 @@ def require_auth():
         "Authentication required", 401,
         {"WWW-Authenticate": 'Basic realm="TelegramChannelAI dashboard"'},
     )
+
+
+@app.before_request
+def block_cross_site_writes():
+    # basic auth rides along on every request the browser makes, including ones a
+    # hostile page kicks off — a hidden <form> on some other site could rewrite the
+    # settings, delete sources, or fire a pipeline run without ever seeing the
+    # password. so anything state-changing has to look same-origin: browsers stamp
+    # requests with Sec-Fetch-Site and Origin, and we bounce the ones marked
+    # cross-site. curl and scripts send neither header, but they also carry no
+    # ambient credentials, so they pass through untouched.
+    if request.method not in ("POST", "PUT", "PATCH", "DELETE"):
+        return
+    fetch_site = request.headers.get("Sec-Fetch-Site", "")
+    if fetch_site and fetch_site not in ("same-origin", "none"):
+        return jsonify({"error": "Cross-site requests are not allowed"}), 403
+    origin = request.headers.get("Origin", "")
+    if origin and urlsplit(origin).netloc != request.host:
+        return jsonify({"error": "Cross-site requests are not allowed"}), 403
 
 
 @app.after_request
