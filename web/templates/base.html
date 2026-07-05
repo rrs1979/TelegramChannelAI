@@ -52,6 +52,10 @@
         /* the little heading above each chart card on /analytics — same four
            classes were on all four of them */
         .chart-title { @apply text-sm font-medium text-gray-400 mb-3; }
+        /* every link in the top nav repeated transition-colors duration-150
+           hover:text-white — only the active/idle color differs per page, so
+           that part stays inline in the template */
+        .nav-link { @apply transition-colors duration-150 hover:text-white; }
         /* tiny inline 'copy' buttons next to ids/usernames/msg_ids — same
            text-gray-600 hover:text-gray-300 text-xs transition was inlined
            on every one of them across templates */
@@ -195,12 +199,12 @@
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-6">
             <a href="/" class="text-lg font-bold text-white" title="Go to the dashboard">ChannelAI</a>
             <div class="nav-links flex gap-4 text-sm">
-                <a href="/" class="transition-colors duration-150 hover:text-white {% if request.path == '/' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/' %}aria-current="page"{% endif %}>Dashboard</a>
-                <a href="/sources" class="transition-colors duration-150 hover:text-white {% if request.path == '/sources' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/sources' %}aria-current="page"{% endif %}>Sources</a>
-                <a href="/queue" class="transition-colors duration-150 hover:text-white {% if '/queue' in request.path %}text-white{% else %}text-gray-400{% endif %}" {% if '/queue' in request.path %}aria-current="page"{% endif %}>Queue</a>
-                <a href="/published" class="transition-colors duration-150 hover:text-white {% if request.path == '/published' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/published' %}aria-current="page"{% endif %}>Published</a>
-                <a href="/analytics" class="transition-colors duration-150 hover:text-white {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
-                <a href="/settings" class="transition-colors duration-150 hover:text-white {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/settings' %}aria-current="page"{% endif %}>Settings</a>
+                <a href="/" class="nav-link {% if request.path == '/' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/' %}aria-current="page"{% endif %}>Dashboard</a>
+                <a href="/sources" class="nav-link {% if request.path == '/sources' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/sources' %}aria-current="page"{% endif %}>Sources</a>
+                <a href="/queue" class="nav-link {% if '/queue' in request.path %}text-white{% else %}text-gray-400{% endif %}" {% if '/queue' in request.path %}aria-current="page"{% endif %}>Queue</a>
+                <a href="/published" class="nav-link {% if request.path == '/published' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/published' %}aria-current="page"{% endif %}>Published</a>
+                <a href="/analytics" class="nav-link {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
+                <a href="/settings" class="nav-link {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/settings' %}aria-current="page"{% endif %}>Settings</a>
             </div>
             <div class="ml-auto flex items-center gap-4">
                 {% if global_last_run %}
