@@ -174,7 +174,8 @@ def get_runs(limit: int = 20):
 
 # --- queue ---
 
-def add_to_queue(source, original_text, rewritten_text=None, image_prompt=None, poll_data=None):
+def add_to_queue(source: str, original_text: str, rewritten_text: str | None = None,
+                 image_prompt: str | None = None, poll_data: str | None = None):
     """Stash a post for manual review. Only source and original_text are required;
     the rewrite, image prompt and poll come in once the pipeline has processed it."""
     with db_conn() as conn:
