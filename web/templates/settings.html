@@ -31,6 +31,7 @@
         <div class="flex gap-2">
             <input type="password" name="pollinations_key" id="pollinations_key"
                 value="{{ settings.POLLINATIONS_API_KEY }}"
+                data-initial="{{ settings.POLLINATIONS_API_KEY }}"
                 placeholder="pk_..."
                 maxlength="128" pattern="\S+"
                 title="An API key is one unbroken string — no spaces or line breaks"
@@ -286,6 +287,10 @@ function confirmSettingsSave(form) {
     const apiHash = form.querySelector('#telegram_api_hash');
     if (apiHash && apiHash.dataset.initial && !apiHash.value.trim()) {
         if (!confirm("Clear the Telegram API hash? Telethon can't log in without it and the pipeline will bail at the next run.")) return false;
+    }
+    const key = form.querySelector('#pollinations_key');
+    if (key && key.dataset.initial && !key.value.trim()) {
+        if (!confirm("Clear the Pollinations API key? Generation drops back to the free tier and the key itself is gone once saved.")) return false;
     }
 
     // confirmed — show a spinner while the POST round-trips so the click feels acknowledged
