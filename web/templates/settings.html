@@ -233,9 +233,13 @@ if (hashInput && hashCount) {
 const keyInput = document.getElementById('pollinations_key');
 const keyCount = document.getElementById('pollinations_key-count');
 if (keyInput && keyCount) {
+    const cap = keyInput.maxLength;
     const update = () => {
         const n = keyInput.value.length;
-        keyCount.textContent = n ? `${n} chars` : '';
+        // maxlength swallows the tail of a long paste without a peep,
+        // so at the cap switch to n/cap and go yellow
+        keyCount.textContent = n >= cap ? `${n}/${cap}` : n ? `${n} chars` : '';
+        keyCount.classList.toggle('text-yellow-500', n >= cap);
     };
     keyInput.addEventListener('input', update);
     update();
