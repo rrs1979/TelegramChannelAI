@@ -414,9 +414,15 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
         return a && (a.tagName === 'INPUT' && a.type !== 'checkbox' || a.tagName === 'SELECT');
     }
 
+    // same courtesy for reading — a reload snaps every <details> shut,
+    // so someone halfway through an expanded post would lose their place
+    function busyReading() {
+        return !!document.querySelector('details[open]');
+    }
+
     function start() {
         timer = setInterval(function () {
-            if (!document.hidden && !busyTyping()) location.reload();
+            if (!document.hidden && !busyTyping() && !busyReading()) location.reload();
         }, intervalMs);
     }
 
