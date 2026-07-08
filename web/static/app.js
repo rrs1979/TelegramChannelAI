@@ -576,6 +576,7 @@ var srcSearch = document.getElementById('sources-search');
 if (srcSearch) {
     var srcCount = document.getElementById('sources-count');
     var srcActiveOnly = document.getElementById('sources-active-only');
+    var srcMinSubs = document.getElementById('sources-min-subs');
     var srcRows = document.querySelectorAll('#sources-table tbody tr');
     var srcNoMatch = document.getElementById('sources-no-match');
     var srcTotal = srcRows.length;
@@ -583,23 +584,26 @@ if (srcSearch) {
     function filterSources() {
         var q = srcSearch.value.toLowerCase();
         var onlyActive = srcActiveOnly && srcActiveOnly.checked;
+        var minSubs = srcMinSubs ? parseInt(srcMinSubs.value, 10) || 0 : 0;
         var visible = 0;
         srcRows.forEach(function (row) {
             var text = row.children[0].textContent.toLowerCase() +
                        ' ' + row.children[1].textContent.toLowerCase();
+            var subs = parseInt(row.children[2].textContent, 10) || 0;
             var match = (!q || text.includes(q)) &&
-                        (!onlyActive || row.dataset.active === '1');
+                        (!onlyActive || row.dataset.active === '1') &&
+                        (!minSubs || subs >= minSubs);
             row.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (srcCount) {
             var label = onlyActive ? ' active' : ' sources';
-            srcCount.textContent = (q || onlyActive)
+            srcCount.textContent = (q || onlyActive || minSubs)
                 ? visible + ' of ' + srcTotal
                 : srcTotal + label;
         }
         if (srcNoMatch) {
-            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !onlyActive));
+            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !onlyActive && !minSubs));
         }
     }
 
@@ -630,6 +634,7 @@ if (srcSearch) {
 
     srcSearch.addEventListener('input', filterSources);
     if (srcActiveOnly) srcActiveOnly.addEventListener('change', filterSources);
+    if (srcMinSubs) srcMinSubs.addEventListener('change', filterSources);
     if (srcSort) srcSort.addEventListener('change', sortSources);
     filterSources();
 }

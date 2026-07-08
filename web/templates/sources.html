@@ -13,6 +13,13 @@
     <div class="flex items-center gap-3">
         <input type="text" id="sources-search" placeholder="Filter sources…" aria-label="Filter sources"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
+        <select id="sources-min-subs" aria-label="Filter by subscriber count"
+            class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
+            <option value="">Any size</option>
+            <option value="1000">1k+ subs</option>
+            <option value="10000">10k+ subs</option>
+            <option value="100000">100k+ subs</option>
+        </select>
         <select id="sources-sort" aria-label="Sort sources"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
             <option value="">Default order</option>
