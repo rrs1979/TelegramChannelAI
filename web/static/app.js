@@ -303,12 +303,14 @@ function toggleShortcuts() {
 
 // keyboard shortcuts
 document.addEventListener('keydown', function (e) {
-    // Ctrl+S on settings page — submit the form
+    // Ctrl+S on settings page — save the form; requestSubmit() rather than
+    // submit() so the confirm prompts for risky changes (auto mode, cleared
+    // keys) still get a say instead of being skipped over
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         var form = document.querySelector('form[action="/settings"]');
         if (form) {
             e.preventDefault();
-            form.submit();
+            form.requestSubmit();
         }
     }
 
