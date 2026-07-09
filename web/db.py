@@ -140,7 +140,8 @@ def start_run():
         return cur.lastrowid
 
 
-def finish_run(run_id: int, posts_scanned=0, posts_published=0, status="completed", errors=""):
+def finish_run(run_id: int, posts_scanned: int = 0, posts_published: int = 0,
+               status: str = "completed", errors: str = ""):
     """Mark a pipeline run as done, stamping finished_at and the final counts.
 
     Pass status='failed' with an errors string when the run didn't complete.
@@ -186,7 +187,7 @@ def add_to_queue(source: str, original_text: str, rewritten_text: str | None = N
         )
 
 
-def get_queue(status="pending"):
+def get_queue(status: str = "pending"):
     """Return queue rows filtered by status. Pass status='all' to skip the filter."""
     with db_conn() as conn:
         if status == "all":
