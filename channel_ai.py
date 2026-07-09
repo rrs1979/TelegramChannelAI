@@ -81,6 +81,7 @@ EXCLUSIONS = [
 ]
 
 SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
+SCAN_LIMIT = int(os.getenv("SCAN_LIMIT", 5))
 DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
 NEAR_DUP_THRESHOLD = float(os.getenv("NEAR_DUP_THRESHOLD", "0.7"))  # Jaccard для near-dup заголовков (0 = выкл)
 IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
@@ -193,7 +194,7 @@ async def scan_sources(client, channels, hours=SCAN_HOURS):
     for username in channels:
         try:
             entity = await client.get_entity(f"@{username}")
-            async for msg in client.iter_messages(entity, limit=5):
+            async for msg in client.iter_messages(entity, limit=SCAN_LIMIT):
                 if msg.text and len(msg.text) > 80 and msg.date and msg.date > since:
                     posts.append({
                         "text": msg.text[:500],
