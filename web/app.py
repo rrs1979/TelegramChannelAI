@@ -315,13 +315,21 @@ def api_toggle_source(source_id):
 
 @app.route("/api/queue/<int:item_id>/approve", methods=["POST"])
 def api_approve(item_id):
-    update_queue_status(item_id, "approved")
+    try:
+        update_queue_status(item_id, "approved")
+    except Exception as e:
+        logger.error(f"Approve failed for queue item {item_id}: {e}")
+        return jsonify({"error": "Couldn't update the item, try again in a moment"}), 500
     return jsonify({"ok": True})
 
 
 @app.route("/api/queue/<int:item_id>/reject", methods=["POST"])
 def api_reject(item_id):
-    update_queue_status(item_id, "rejected")
+    try:
+        update_queue_status(item_id, "rejected")
+    except Exception as e:
+        logger.error(f"Reject failed for queue item {item_id}: {e}")
+        return jsonify({"error": "Couldn't update the item, try again in a moment"}), 500
     return jsonify({"ok": True})
 
 
