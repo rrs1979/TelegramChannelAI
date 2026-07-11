@@ -82,6 +82,7 @@ EXCLUSIONS = [
 
 SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
 SCAN_LIMIT = int(os.getenv("SCAN_LIMIT", 5))
+MAX_POSTS = int(os.getenv("MAX_POSTS", 3))  # posts published per channel per cycle
 DEDUP_HOURS = int(os.getenv("DEDUP_HOURS", 48))
 NEAR_DUP_THRESHOLD = float(os.getenv("NEAR_DUP_THRESHOLD", "0.7"))  # Jaccard для near-dup заголовков (0 = выкл)
 IMAGE_WIDTH = int(os.getenv("IMAGE_WIDTH", 768))
@@ -449,7 +450,7 @@ async def publish_post(client, channel_entity, result):
 # MAIN
 # ═══════════════════════════════════════════
 
-async def run_cycle(channel_key="default", max_posts=3):
+async def run_cycle(channel_key="default", max_posts=MAX_POSTS):
     """Run one full pipeline cycle for a single channel config."""
     from telethon import TelegramClient
     from telethon.sessions import StringSession
@@ -536,7 +537,7 @@ async def run_cycle(channel_key="default", max_posts=3):
     return results
 
 
-async def run_all_channels(max_posts=3):
+async def run_all_channels(max_posts=MAX_POSTS):
     """Run the pipeline for every configured channel sequentially."""
     all_results = {}
     for key in CHANNEL_CONFIGS:
