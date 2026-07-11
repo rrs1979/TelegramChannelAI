@@ -27,7 +27,7 @@
             <option value="30">Last 30 days</option>
             <option value="90">Last 90 days</option>
         </select>
-        <span id="queue-count" class="text-xs text-gray-500"></span>
+        <span id="queue-count" aria-live="polite" class="text-xs text-gray-500"></span>
         {% endif %}
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
             <input type="checkbox" id="queue-auto-refresh"
