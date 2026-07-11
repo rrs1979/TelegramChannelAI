@@ -106,6 +106,13 @@
             to   { opacity: 1; transform: translateY(0); }
         }
         main { animation: page-in .2s ease-out; }
+        /* the "nothing matches" card on queue/published/sources blinks in the
+           instant a filter empties the list — same fade as the page itself.
+           (an animation replays when display:none comes off, so the hidden
+           toggle in app.js retriggers it for free) */
+        #queue-no-match, #published-no-match, #sources-no-match {
+            animation: page-in .2s ease-out;
+        }
         /* queue cards fade out when approved/rejected instead of just popping away */
         .leaving {
             opacity: 0;
