@@ -26,6 +26,7 @@
 - `title` on the save-settings button so its purpose is exposed on hover and to assistive tech
 
 ### Security
+- Throttle and log failed dashboard logins — password guessing was free and invisible: nothing slowed a wordlist run against the basic auth and nothing recorded it; five misses from one address now earn a 30s lockout (with `Retry-After`, and the password isn't even checked during it, so a lucky guess mid-cooldown looks like any other miss) and every miss lands a warning with the source IP in the log
 - Bounce state-changing requests that arrive cross-site (CSRF) — the browser attaches the dashboard's basic auth to any request, even one a hostile page fires off, so a hidden form on another site could rewrite settings, delete sources, or trigger a pipeline run without knowing the password; POST/PUT/PATCH/DELETE now get a 403 unless `Sec-Fetch-Site`/`Origin` say same-origin (curl and scripts send neither header and carry no ambient credentials, so they're unaffected)
 - Ignore `*.session` / `*.session-journal` files in git — we connect with Telethon's `StringSession` from the env, but the default file-session constructor drops a `.session` holding the full account auth into the working dir, and one stray commit would leak the whole Telegram login
 - Send `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer` on every response — the dashboard never needs framing, so this blocks clickjacking the settings form and run-pipeline button, and keeps the dashboard URL out of the Referer sent to the tailwind CDN

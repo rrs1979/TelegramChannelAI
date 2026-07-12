@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import hmac
+import time
 import logging
 import threading
 from urllib.parse import urlsplit
@@ -33,6 +34,14 @@ app.secret_key = SECRET_KEY
 _AUTH_USER = os.getenv("DASHBOARD_USER", "admin")
 _AUTH_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")
 
+# guessing the password was free: nothing throttled it and nothing logged it, so a
+# script could hammer the login with a wordlist all night and the log would stay clean.
+# five misses from one address now buy a 30s timeout, and each miss leaves a
+# warning in the log so a brute-force run is at least visible after the fact.
+_FAILED_LOGINS = {}  # ip -> (miss count, monotonic time of the last miss)
+_LOCKOUT_MISSES = 5
+_LOCKOUT_SECONDS = 30
+
 
 @app.before_request
 def require_auth():
@@ -40,12 +49,36 @@ def require_auth():
         return  # auth disabled
     if request.path == "/health":
         return  # keep uptime/load-balancer probes unauthenticated
+    ip = request.remote_addr or "unknown"
+    now = time.monotonic()
+    misses, last_miss = _FAILED_LOGINS.get(ip, (0, 0.0))
+    if now - last_miss > _LOCKOUT_SECONDS:
+        misses = 0  # old misses age out, no need to serve a stale lockout
+    if misses >= _LOCKOUT_MISSES:
+        # locked out — don't even check the password, so a correct guess made
+        # during the cooldown can't be told apart from another wrong one
+        retry = max(1, int(_LOCKOUT_SECONDS - (now - last_miss)) + 1)
+        return Response(
+            "Too many failed logins, try again shortly", 429,
+            {"Retry-After": str(retry)},
+        )
     auth = request.authorization
     # compare_digest on both fields so a wrong username can't be timed apart from a wrong password
     if (auth and auth.type == "basic"
             and hmac.compare_digest(auth.username or "", _AUTH_USER)
             and hmac.compare_digest(auth.password or "", _AUTH_PASSWORD)):
+        _FAILED_LOGINS.pop(ip, None)
         return
+    if auth:
+        # only count requests that actually carried credentials — the browser's
+        # first bare request just hasn't seen the 401 challenge yet. and log the
+        # ip but never the username: people paste passwords into that field.
+        _FAILED_LOGINS[ip] = (misses + 1, now)
+        logger.warning(f"Failed dashboard login from {ip} ({misses + 1} recent)")
+        # sweep aged entries while we're here so an address-hopping scan
+        # can't grow the table forever
+        for stale in [k for k, (_, t) in _FAILED_LOGINS.items() if now - t > _LOCKOUT_SECONDS]:
+            del _FAILED_LOGINS[stale]
     return Response(
         "Authentication required", 401,
         {"WWW-Authenticate": 'Basic realm="TelegramChannelAI dashboard"'},
