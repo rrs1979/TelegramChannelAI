@@ -38,7 +38,7 @@
                 class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.POLLINATIONS_API_KEY %}
             <button type="button" onclick="copyValue('{{ settings.POLLINATIONS_API_KEY }}', this)"
-                class="text-gray-500 hover:text-gray-200 text-xs px-2 border border-gray-700 rounded transition"
+                class="copy-field"
                 title="Copy API key">copy</button>
             {% endif %}
         </div>
@@ -62,7 +62,7 @@
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 {% if settings.TELEGRAM_API_ID %}
                 <button type="button" onclick="copyValue('{{ settings.TELEGRAM_API_ID }}', this)"
-                    class="text-gray-500 hover:text-gray-200 text-xs px-2 border border-gray-700 rounded transition"
+                    class="copy-field"
                     title="Copy API ID">copy</button>
                 {% endif %}
             </div>
@@ -83,7 +83,7 @@
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 {% if settings.TELEGRAM_API_HASH %}
                 <button type="button" onclick="copyValue('{{ settings.TELEGRAM_API_HASH }}', this)"
-                    class="text-gray-500 hover:text-gray-200 text-xs px-2 border border-gray-700 rounded transition"
+                    class="copy-field"
                     title="Copy API hash">copy</button>
                 {% endif %}
             </div>
@@ -106,7 +106,7 @@
                 class="flex-1 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.CHANNEL_ID %}
             <button type="button" onclick="copyValue('{{ settings.CHANNEL_ID }}', this)"
-                class="text-gray-500 hover:text-gray-200 text-xs px-2 border border-gray-700 rounded transition"
+                class="copy-field"
                 title="Copy channel ID">copy</button>
             {% endif %}
         </div>
