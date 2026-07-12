@@ -28,7 +28,7 @@ async function runPipeline() {
             btn.textContent = 'Started!';
             setTimeout(() => location.reload(), 3000);
         }
-    } catch (e) {
+    } catch {
         alert('Could not start the pipeline. Check your connection and try again.');
     } finally {
         setTimeout(() => {
@@ -95,7 +95,7 @@ if (addForm) {
             } else {
                 alert(data.error || 'Could not add this source. Please try again.');
             }
-        } catch (err) {
+        } catch {
             alert('Could not reach the server. Check your connection and try again.');
         } finally {
             btn.disabled = false;
@@ -122,7 +122,7 @@ async function deleteSource(id, btn) {
             row.classList.add('leaving');
             setTimeout(function () { row.remove(); }, 260);
         }
-    } catch (e) {
+    } catch {
         alert('Could not remove this source. Please try again.');
         btn.disabled = false;
         btn.textContent = prev;
@@ -143,7 +143,7 @@ async function toggleSource(id, isActive, btn) {
     try {
         await api(`/api/sources/${id}/toggle`, 'POST');
         location.reload();
-    } catch (e) {
+    } catch {
         alert('Could not update this source. Please try again.');
         btn.disabled = false;
         btn.textContent = 'toggle';
@@ -200,7 +200,7 @@ async function approveItem(id, btn) {
     try {
         await api(`/api/queue/${id}/approve`, 'POST');
         fadeOutCard(id);
-    } catch (e) {
+    } catch {
         alert('Could not approve this post. Please refresh the page and try again.');
         wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
         btn.textContent = prev;
@@ -221,7 +221,7 @@ async function rejectItem(id, btn) {
     try {
         await api(`/api/queue/${id}/reject`, 'POST');
         fadeOutCard(id);
-    } catch (e) {
+    } catch {
         alert('Could not reject this post. Please refresh the page and try again.');
         wrap.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
         btn.textContent = prev;
@@ -677,7 +677,7 @@ if (document.getElementById('stat-published')) {
                 showUpdatedTime();
                 var lr = s.last_run;
                 updateLastRunAgo(lr ? lr.started_at : null);
-            } catch (e) {
+            } catch {
                 // poll failed — drop the "Updating…" hint so it doesn't get stuck
                 if (stamp) stamp.textContent = prev;
             }
