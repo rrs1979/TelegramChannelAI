@@ -194,6 +194,12 @@
                pad out the hit area and pull it back with negative margin so the
                layout around them doesn't shift */
             .copy-btn { padding: .35rem .45rem; margin: -.35rem -.45rem; }
+            /* same problem with the Copy buttons pinned over the queue/published
+               text bodies (py-0.5) and the bordered ones on /settings (no vertical
+               padding at all) — neither sits inline with text, so plain padding
+               does it, no negative-margin trick needed */
+            .copy-overlay { padding: .4rem .6rem; }
+            .copy-field { padding-top: .3rem; padding-bottom: .3rem; }
             /* the runs/published tables sit in an overflow-x-auto box and scroll
                sideways on phones — give them the same momentum scroll the nav got
                so a flick doesn't stop dead halfway across the row */
