@@ -209,12 +209,12 @@
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-6">
             <a href="/" class="text-lg font-bold text-white" title="Go to the dashboard">ChannelAI</a>
             <div class="nav-links flex gap-4 text-sm">
-                <a href="/" class="nav-link {% if request.path == '/' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/' %}aria-current="page"{% endif %}>Dashboard</a>
-                <a href="/sources" class="nav-link {% if request.path == '/sources' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/sources' %}aria-current="page"{% endif %}>Sources</a>
-                <a href="/queue" class="nav-link {% if '/queue' in request.path %}text-white{% else %}text-gray-400{% endif %}" {% if '/queue' in request.path %}aria-current="page"{% endif %}>Queue</a>
-                <a href="/published" class="nav-link {% if request.path == '/published' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/published' %}aria-current="page"{% endif %}>Published</a>
-                <a href="/analytics" class="nav-link {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
-                <a href="/settings" class="nav-link {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/settings' %}aria-current="page"{% endif %}>Settings</a>
+                <a href="/" title="Stats and pipeline runs" class="nav-link {% if request.path == '/' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/' %}aria-current="page"{% endif %}>Dashboard</a>
+                <a href="/sources" title="Manage source channels" class="nav-link {% if request.path == '/sources' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/sources' %}aria-current="page"{% endif %}>Sources</a>
+                <a href="/queue" title="Review posts waiting for approval" class="nav-link {% if '/queue' in request.path %}text-white{% else %}text-gray-400{% endif %}" {% if '/queue' in request.path %}aria-current="page"{% endif %}>Queue</a>
+                <a href="/published" title="Everything already posted to the channel" class="nav-link {% if request.path == '/published' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/published' %}aria-current="page"{% endif %}>Published</a>
+                <a href="/analytics" title="Run history and costs" class="nav-link {% if request.path == '/analytics' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
+                <a href="/settings" title="API keys and pipeline options" class="nav-link {% if request.path == '/settings' %}text-white{% else %}text-gray-400{% endif %}" {% if request.path == '/settings' %}aria-current="page"{% endif %}>Settings</a>
             </div>
             <div class="ml-auto flex items-center gap-4">
                 {% if global_last_run %}
