@@ -655,6 +655,14 @@ if (document.getElementById('stat-published')) {
     var refreshTimer = null;
     var toggleBox = document.getElementById('auto-refresh-toggle');
 
+    // the poll below only swaps the stat numbers — the run card and the
+    // Recent Runs table are rendered server-side and go stale. remember
+    // which run we're showing and pull the whole page when it changes.
+    var seenRun;
+    function runKey(lr) {
+        return lr ? lr.started_at + '/' + (lr.finished_at || 'running') : 'none';
+    }
+
     function refreshStats() {
         refreshTimer = setInterval(async () => {
             if (document.hidden) return;
@@ -677,6 +685,13 @@ if (document.getElementById('stat-published')) {
                 showUpdatedTime();
                 var lr = s.last_run;
                 updateLastRunAgo(lr ? lr.started_at : null);
+                var key = runKey(lr);
+                if (seenRun === undefined) {
+                    seenRun = key;
+                } else if (key !== seenRun) {
+                    location.reload();
+                    return;
+                }
             } catch {
                 // poll failed — drop the "Updating…" hint so it doesn't get stuck
                 if (stamp) stamp.textContent = prev;
