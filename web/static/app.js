@@ -500,6 +500,19 @@ wireReloadRefresh('published-auto-refresh', 'publishedAutoRefresh', 60000);
 // no point reloading as often as queue/published
 wireReloadRefresh('analytics-auto-refresh', 'analyticsAutoRefresh', 120000);
 
+// one-click way out of a dead-end filter combo — the no-match card calls
+// this instead of making people walk back each control they touched
+function clearFilters(ids) {
+    ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+        // fire whichever event the filter code listens for on this control
+        el.dispatchEvent(new Event(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input'));
+    });
+}
+
 // filter published posts
 var searchInput = document.getElementById('published-search');
 if (searchInput) {

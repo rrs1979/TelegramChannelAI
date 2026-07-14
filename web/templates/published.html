@@ -90,7 +90,9 @@
 </div>
 <div id="published-no-match" class="hidden bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center mt-3">
     <div class="text-gray-400 text-sm">No posts match.</div>
-    <div class="text-gray-500 text-xs mt-2">Try clearing the search box or picking a different source.</div>
+    <button onclick="clearFilters(['published-search', 'published-source', 'published-range'])"
+        class="mt-3 text-blue-400 hover:text-blue-300 text-xs transition"
+        title="Reset the search box, source and date range">Clear filters</button>
 </div>
 {% else %}
 <div class="bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center">
