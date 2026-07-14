@@ -106,7 +106,8 @@
                 class="copy-overlay bg-dark-800"
                 title="Copy rewritten text">Copy</button>
             <div class="post-text text-sm bg-dark-900 rounded p-3 mb-3 pr-16 whitespace-pre-wrap leading-relaxed">{{ item.rewritten_text[:800] }}</div>
-            <span class="text-xs text-gray-500">{{ item.rewritten_text|length }} chars · {{ item.rewritten_text.split()|length }} words</span>
+            <span class="text-xs text-gray-500">{{ item.rewritten_text|length }} chars · {{ item.rewritten_text.split()|length }} words{% if item.image_prompt and item.rewritten_text|length > 1024 %}
+                <span class="text-yellow-500" title="Telegram captions max out at 1024 chars — the text will follow the image as its own message">· too long for a caption</span>{% endif %}</span>
         </div>
         {% endif %}
 
