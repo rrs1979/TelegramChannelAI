@@ -8,6 +8,11 @@ from web.config import DB_PATH
 
 
 def get_db():
+    """Open a raw connection with dict-style rows.
+
+    Most callers want db_conn() instead — this one leaves committing and
+    closing up to you.
+    """
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     # WAL so the dashboard can keep reading while the pipeline writes —
