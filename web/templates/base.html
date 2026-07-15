@@ -183,6 +183,10 @@
             div:has(> #queue-search),
             div:has(> #published-search),
             div:has(> #sources-search) { flex-wrap: wrap; }
+            /* once that row wraps, the fixed-width search box (w-56/w-64 in
+               the templates) sits as a stub next to the selects — stretch it
+               so it takes a full row of its own and is easier to tap into */
+            #queue-search, #published-search, #sources-search { width: 100%; }
             /* iOS Safari zooms the whole page in when you focus an input
                whose font is under 16px — every search/settings field is
                text-sm (14px), so tapping one yanks the viewport. 16px on
