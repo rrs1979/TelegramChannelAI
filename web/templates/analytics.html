@@ -20,7 +20,7 @@
 {% if not analytics.daily %}
 <div class="bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center">
     <div class="text-gray-400 text-sm">Nothing to show yet.</div>
-    <div class="text-gray-500 text-xs mt-2">Run the pipeline a few times — charts will appear here.</div>
+    <div class="empty-hint">Run the pipeline a few times — charts will appear here.</div>
 </div>
 {% else %}
 
@@ -36,26 +36,26 @@
 
 <!-- summary cards -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
-        <div class="text-gray-400 text-xs uppercase tracking-wide">Total Runs</div>
-        <div class="text-2xl font-bold mt-1">{{ analytics.totals.completed + analytics.totals.failed + analytics.totals.running }}</div>
+    <div class="card">
+        <div class="stat-label">Total Runs</div>
+        <div class="stat-value">{{ analytics.totals.completed + analytics.totals.failed + analytics.totals.running }}</div>
     </div>
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
-        <div class="text-gray-400 text-xs uppercase tracking-wide">Success Rate</div>
+    <div class="card">
+        <div class="stat-label">Success Rate</div>
         {% set total = analytics.totals.completed + analytics.totals.failed %}
-        <div class="text-2xl font-bold mt-1 text-green-400">
+        <div class="stat-value text-green-400">
             {{ '%d' % ((analytics.totals.completed / total * 100) if total > 0 else 0) }}%
         </div>
     </div>
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
-        <div class="text-gray-400 text-xs uppercase tracking-wide">Total Cost</div>
-        <div class="text-2xl font-bold mt-1">
+    <div class="card">
+        <div class="stat-label">Total Cost</div>
+        <div class="stat-value">
             ${{ '%.2f' % (analytics.daily | sum(attribute='cost')) }}
         </div>
     </div>
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
-        <div class="text-gray-400 text-xs uppercase tracking-wide">Posts Published</div>
-        <div class="text-2xl font-bold mt-1">
+    <div class="card">
+        <div class="stat-label">Posts Published</div>
+        <div class="stat-value">
             {{ analytics.daily | sum(attribute='published') }}
         </div>
     </div>
@@ -64,25 +64,25 @@
 <!-- charts grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <!-- runs per day -->
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <h3 class="chart-title">Pipeline Runs per Day</h3>
         <div style="height:220px"><canvas id="chart-runs" role="img" aria-label="Bar chart of pipeline runs per day over the last 30 days"></canvas></div>
     </div>
 
     <!-- generated vs published -->
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <h3 class="chart-title">Generated vs Published</h3>
         <div style="height:220px"><canvas id="chart-posts" role="img" aria-label="Chart comparing posts generated versus published each day"></canvas></div>
     </div>
 
     <!-- cost per day -->
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <h3 class="chart-title">Cost per Day ($)</h3>
         <div style="height:220px"><canvas id="chart-cost" role="img" aria-label="Bar chart of pipeline cost in dollars per day"></canvas></div>
     </div>
 
     <!-- success rate doughnut -->
-    <div class="bg-dark-800 rounded-lg p-4 border border-gray-700/30">
+    <div class="card">
         <h3 class="chart-title">Success Rate</h3>
         <div style="height:220px"><canvas id="chart-success" role="img" aria-label="Doughnut chart showing the share of completed versus failed runs"></canvas></div>
     </div>
