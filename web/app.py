@@ -336,13 +336,21 @@ def api_add_source():
 
 @app.route("/api/sources/<int:source_id>", methods=["DELETE"])
 def api_remove_source(source_id):
-    remove_source(source_id)
+    try:
+        remove_source(source_id)
+    except Exception as e:
+        logger.error(f"Remove failed for source {source_id}: {e}")
+        return jsonify({"error": "Couldn't remove the source, try again in a moment"}), 500
     return jsonify({"ok": True})
 
 
 @app.route("/api/sources/<int:source_id>/toggle", methods=["POST"])
 def api_toggle_source(source_id):
-    toggle_source(source_id)
+    try:
+        toggle_source(source_id)
+    except Exception as e:
+        logger.error(f"Toggle failed for source {source_id}: {e}")
+        return jsonify({"error": "Couldn't update the source, try again in a moment"}), 500
     return jsonify({"ok": True})
 
 
