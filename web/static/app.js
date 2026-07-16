@@ -284,6 +284,7 @@ function toggleShortcuts() {
         ['/', 'jump to the filter box'],
         ['n', 'new source (sources page)'],
         ['e', 'expand every panel'],
+        ['a', 'toggle auto-refresh'],
         ['Esc', 'clear filter / collapse panels'],
         ['Ctrl+R', 'run the pipeline (dashboard)'],
         ['Ctrl+S', 'save settings'],
@@ -380,6 +381,20 @@ document.addEventListener('keydown', function (e) {
         if (panels.length) {
             e.preventDefault();
             panels.forEach(function (d) { d.setAttribute('open', ''); });
+        }
+    }
+
+    // "a" — flip the auto-refresh toggle on whichever page has one
+    if (e.key === 'a' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var at = (e.target.tagName || '').toLowerCase();
+        if (at === 'input' || at === 'textarea') return;
+        var auto = document.querySelector(
+            '#auto-refresh-toggle, #queue-auto-refresh, #published-auto-refresh, ' +
+            '#analytics-auto-refresh, #sources-auto-refresh, #settings-auto-refresh');
+        if (auto) {
+            e.preventDefault();
+            auto.checked = !auto.checked;
+            auto.dispatchEvent(new Event('change'));
         }
     }
 
