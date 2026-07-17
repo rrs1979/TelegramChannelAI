@@ -183,7 +183,15 @@ function fadeOutCard(id) {
     var el = document.querySelector(`div[data-id="${id}"]`);
     if (!el) return;
     el.classList.add('leaving');
-    setTimeout(function () { el.remove(); }, 260);
+    setTimeout(function () {
+        el.remove();
+        // reviewing the last card used to leave the page blank under the
+        // filter bar — the server-side empty state only shows after a reload
+        var cleared = document.getElementById('queue-cleared');
+        if (cleared && !document.querySelector('div[data-id]')) {
+            cleared.classList.remove('hidden');
+        }
+    }, 260);
 }
 
 async function approveItem(id, btn) {
