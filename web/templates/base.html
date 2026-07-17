@@ -102,6 +102,12 @@
             from { opacity: 0; transform: translateY(-4px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+        /* an expanded post card on /published looks exactly like the closed
+           ones around it — ease its border up to the .card:hover tint so you
+           can tell at a glance which cards are open. scoped to .group so the
+           borderless "Original text" details on /queue stays out of it */
+        details.group { transition: border-color .2s ease; }
+        details.group[open] { border-color: rgba(156,163,175,.25); }
         /* page content just snapped in on each nav click — a quick fade + rise
            takes the edge off jumping between Dashboard/Queue/etc */
         @keyframes page-in {
