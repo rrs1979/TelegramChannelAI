@@ -141,6 +141,18 @@
            shows white spinner buttons against the dark card */
         html { color-scheme: dark; }
 
+        /* chrome paints autofilled fields pale yellow — the password-type key
+           fields on /settings trigger it via the password manager and light up
+           against the dark card. the background can't be overridden directly,
+           so paint over it with an inset shadow in the input's own bg color */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px #0f0f1a inset;
+            -webkit-text-fill-color: #e5e7eb;
+            caret-color: #e5e7eb;
+        }
+
         /* default text-selection blue clashes with the purple palette */
         ::selection { background: #3a3a5e; color: #fff; }
 
