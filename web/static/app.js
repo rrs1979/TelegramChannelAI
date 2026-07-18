@@ -293,6 +293,7 @@ function toggleShortcuts() {
         ['n', 'new source (sources page)'],
         ['e', 'expand every panel'],
         ['a', 'toggle auto-refresh'],
+        ['r', 'reload the page'],
         ['Esc', 'clear filter / collapse panels'],
         ['Ctrl+R', 'run the pipeline (dashboard)'],
         ['Ctrl+S', 'save settings'],
@@ -404,6 +405,14 @@ document.addEventListener('keydown', function (e) {
             auto.checked = !auto.checked;
             auto.dispatchEvent(new Event('change'));
         }
+    }
+
+    // "r" — reload right now, for when auto-refresh is off (or too slow)
+    if (e.key === 'r' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var rt = (e.target.tagName || '').toLowerCase();
+        if (rt === 'input' || rt === 'textarea') return;
+        e.preventDefault();
+        location.reload();
     }
 
     // "1"–"6" — jump to the matching nav link (in the order they appear)
