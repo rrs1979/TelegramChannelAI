@@ -35,6 +35,7 @@
                 data-initial="{{ settings.POLLINATIONS_API_KEY }}"
                 placeholder="pk_..."
                 maxlength="128" pattern="\S+"
+                aria-describedby="pollinations_key-hint"
                 title="An API key is one unbroken string — no spaces or line breaks"
                 class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.POLLINATIONS_API_KEY %}
@@ -43,7 +44,7 @@
                 title="Copy API key">copy</button>
             {% endif %}
         </div>
-        <p class="hint">Used for text and image generation. Leave blank if using free tier.</p>
+        <p class="hint" id="pollinations_key-hint">Used for text and image generation. Leave blank if using free tier.</p>
     </div>
 
     <!-- Telegram API -->
@@ -103,6 +104,7 @@
                 data-initial="{{ settings.CHANNEL_ID }}"
                 placeholder="-1001234567890"
                 pattern="-100[0-9]+" inputmode="numeric"
+                aria-describedby="channel_id-hint"
                 title="Channel ID starts with -100 followed by digits"
                 class="flex-1 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.CHANNEL_ID %}
@@ -111,7 +113,7 @@
                 title="Copy channel ID">copy</button>
             {% endif %}
         </div>
-        <p class="hint">Numeric Telegram channel ID (starts with -100).</p>
+        <p class="hint" id="channel_id-hint">Numeric Telegram channel ID (starts with -100).</p>
     </div>
 
     <!-- Pipeline -->
@@ -121,19 +123,21 @@
             <input type="number" name="pipeline_interval" id="pipeline_interval"
                 value="{{ settings.PIPELINE_INTERVAL }}"
                 min="300" max="86400" step="300"
+                aria-describedby="pipeline_interval-hint"
                 title="Between 300 and 86400 seconds (5 min – 24 h)"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
-            <p class="hint">How often to auto-run. Default 3600 (1h), max 86400 (24h).</p>
+            <p class="hint" id="pipeline_interval-hint">How often to auto-run. Default 3600 (1h), max 86400 (24h).</p>
         </div>
         <div>
             <label for="pipeline_mode" class="block text-sm font-medium text-gray-300 mb-1">Mode</label>
             <select name="pipeline_mode" id="pipeline_mode"
                 data-initial="{{ settings.PIPELINE_MODE }}"
+                aria-describedby="pipeline_mode-hint"
                 class="w-full bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 <option value="auto" {% if settings.PIPELINE_MODE == 'auto' %}selected{% endif %}>Auto (publish immediately)</option>
                 <option value="semi-auto" {% if settings.PIPELINE_MODE == 'semi-auto' %}selected{% endif %}>Semi-auto (queue for review)</option>
             </select>
-            <p class="hint">Semi-auto puts posts in Queue for approval first.</p>
+            <p class="hint" id="pipeline_mode-hint">Semi-auto puts posts in Queue for approval first.</p>
         </div>
     </div>
 
