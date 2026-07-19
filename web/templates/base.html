@@ -115,6 +115,15 @@
             to   { opacity: 1; transform: translateY(0); }
         }
         main { animation: page-in .2s ease-out; }
+        /* the "?" shortcuts cheatsheet blinked straight in over the page —
+           fade the dark backdrop and let the card ride the same page-in rise
+           everything else uses. open-only, same as the details panels */
+        @keyframes backdrop-in {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        #shortcuts-overlay { animation: backdrop-in .15s ease-out; }
+        #shortcuts-overlay > .card { animation: page-in .2s ease-out; }
         /* the "nothing matches" card on queue/published/sources blinks in the
            instant a filter empties the list — same fade as the page itself.
            (an animation replays when display:none comes off, so the hidden
