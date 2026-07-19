@@ -63,10 +63,13 @@ def require_auth():
             {"Retry-After": str(retry)},
         )
     auth = request.authorization
-    # compare_digest on both fields so a wrong username can't be timed apart from a wrong password
+    # compare_digest on both fields so a wrong username can't be timed apart from a wrong
+    # password. compared as bytes because the str form only accepts ascii — a cyrillic
+    # DASHBOARD_PASSWORD used to TypeError here, turning every login into a 500 (and the
+    # miss never reached the lockout counter below)
     if (auth and auth.type == "basic"
-            and hmac.compare_digest(auth.username or "", _AUTH_USER)
-            and hmac.compare_digest(auth.password or "", _AUTH_PASSWORD)):
+            and hmac.compare_digest((auth.username or "").encode(), _AUTH_USER.encode())
+            and hmac.compare_digest((auth.password or "").encode(), _AUTH_PASSWORD.encode())):
         _FAILED_LOGINS.pop(ip, None)
         return
     if auth:
