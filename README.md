@@ -262,6 +262,18 @@ DASHBOARD_PASSWORD=something-long
 
 Left unset, the dashboard stays open (so existing localhost setups don't break), but anything bound to `0.0.0.0` or sitting behind nginx really wants this on — the Settings page and the pipeline trigger are otherwise reachable by anyone who can hit the port. The `/health` endpoint stays unauthenticated so uptime probes and load balancers keep working. Pair it with `HOST=127.0.0.1` (see above) if you also want to keep it off the network entirely.
 
+**Does the dashboard have keyboard shortcuts?**
+
+It does — press `?` on any page for the full cheatsheet. The ones that stick:
+
+- `1`–`6` — jump between pages in nav order
+- `/` — focus the filter box on queue/sources/published
+- `r` — reload the page now, `a` — flip auto-refresh
+- `n` — jump to the add-source field on the Sources page
+- `Ctrl+S` on Settings saves the form, `Ctrl+R` on the dashboard runs the pipeline instead of reloading
+
+Shortcuts stay out of your way while you're typing in a field, and `Esc` backs out of whatever's open — the cheatsheet, search, expanded panels.
+
 **Where are the logs?**
 
 The dashboard writes to `web/logs/app.log` (rotating, ~1 MB per file, 3 backups). Tail it while the pipeline runs to see what's happening:
