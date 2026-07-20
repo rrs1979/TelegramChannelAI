@@ -460,6 +460,19 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
         }, intervalMs);
     }
 
+    // the interval skips its reloads while the tab is hidden, so coming
+    // back after lunch meant staring at stale data until the next tick —
+    // catch up right away if we've been gone longer than one cadence
+    var hiddenAt = null;
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            hiddenAt = Date.now();
+        } else if (timer && hiddenAt && Date.now() - hiddenAt > intervalMs &&
+                   !busyTyping() && !busyReading()) {
+            location.reload();
+        }
+    });
+
     if (localStorage.getItem(storageKey) === 'on') {
         toggle.checked = true;
         start();
