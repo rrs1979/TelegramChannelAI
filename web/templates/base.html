@@ -214,6 +214,13 @@
                the templates) sits as a stub next to the selects — stretch it
                so it takes a full row of its own and is easier to tap into */
             #queue-search, #published-search, #sources-search { width: 100%; }
+            /* the add-source form has the same issue — its fixed-width inputs
+               (w-56/w-48) and the button each wrap onto their own row on a
+               phone but stay narrow stubs against the full-width card.
+               stretch the field wrappers, inputs and button edge to edge */
+            #add-source-form > div,
+            #add-source-form input,
+            #add-source-form button { width: 100%; }
             /* iOS Safari zooms the whole page in when you focus an input
                whose font is under 16px — every search/settings field is
                text-sm (14px), so tapping one yanks the viewport. 16px on
