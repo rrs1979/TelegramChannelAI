@@ -90,6 +90,7 @@ IMAGE_HEIGHT = int(os.getenv("IMAGE_HEIGHT", 432))
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "flux")
 TEXT_MODEL = os.getenv("TEXT_MODEL", "claude")  # model used for the main rewrite step
 AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", 30))
+PUBLISH_DELAY = int(os.getenv("PUBLISH_DELAY", 5))  # пауза между публикациями, чтобы не ловить FloodWait
 IMAGE_TIMEOUT = int(os.getenv("IMAGE_TIMEOUT", 120))
 IMAGE_PROXY = os.getenv("IMAGE_PROXY", "")
 # Base URL for the Pollinations API. Override to point at a mirror or local proxy.
@@ -528,7 +529,7 @@ async def run_cycle(channel_key="default", max_posts=MAX_POSTS):
         for result in results:
             msg_id = await publish_post(client, channel_entity, result)
             print(f"  Published to '{channel_key}': msg_id={msg_id}")
-            await asyncio.sleep(5)
+            await asyncio.sleep(PUBLISH_DELAY)
 
     await client.disconnect()
     save_hashes()
