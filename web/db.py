@@ -96,6 +96,7 @@ def init_db():
 # --- sources ---
 
 def get_sources():
+    """Return every source, newest first — paused ones too, check is_active if that matters."""
     with db_conn() as conn:
         return [dict(r) for r in conn.execute(
             "SELECT * FROM sources ORDER BY added_at DESC"
