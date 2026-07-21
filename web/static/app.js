@@ -184,6 +184,13 @@ function fadeOutCard(id) {
     if (!el) return;
     el.classList.add('leaving');
     setTimeout(function () {
+        // the card is invisible now but still holds its slot — pin the
+        // height so the .closing squeeze has a number to ease from
+        el.style.height = el.offsetHeight + 'px';
+        void el.offsetWidth;
+        el.classList.add('closing');
+    }, 260);
+    setTimeout(function () {
         el.remove();
         // reviewing the last card used to leave the page blank under the
         // filter bar — the server-side empty state only shows after a reload
@@ -191,7 +198,7 @@ function fadeOutCard(id) {
         if (cleared && !document.querySelector('div[data-id]')) {
             cleared.classList.remove('hidden');
         }
-    }, 260);
+    }, 480);
 }
 
 async function approveItem(id, btn) {

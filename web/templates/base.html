@@ -138,6 +138,18 @@
             transition: opacity .25s ease, transform .25s ease;
             pointer-events: none;
         }
+        /* ...but the faded card still held its slot, so the cards below jumped
+           up by its full height the moment it was removed. js pins the height
+           inline once the fade is done, then this squeezes it shut. the
+           !importants outrank that inline height and the space-y margin */
+        .leaving.closing {
+            height: 0 !important;
+            margin-top: 0 !important;
+            padding-top: 0;
+            padding-bottom: 0;
+            overflow: hidden;
+            transition: height .2s ease, margin-top .2s ease, padding .2s ease;
+        }
         .skip-link {
             position: absolute;
             left: -9999px;
