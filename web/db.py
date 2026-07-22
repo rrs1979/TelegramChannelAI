@@ -181,18 +181,6 @@ def get_runs(limit: int = 20):
 
 # --- queue ---
 
-def add_to_queue(source: str, original_text: str, rewritten_text: str | None = None,
-                 image_prompt: str | None = None, poll_data: str | None = None):
-    """Stash a post for manual review. Only source and original_text are required;
-    the rewrite, image prompt and poll come in once the pipeline has processed it."""
-    with db_conn() as conn:
-        conn.execute(
-            """INSERT INTO queue (source, original_text, rewritten_text, image_prompt, poll_data)
-               VALUES (?, ?, ?, ?, ?)""",
-            (source, original_text, rewritten_text, image_prompt, poll_data)
-        )
-
-
 def get_queue(status: str = "pending"):
     """Return queue rows filtered by status. Pass status='all' to skip the filter."""
     with db_conn() as conn:
