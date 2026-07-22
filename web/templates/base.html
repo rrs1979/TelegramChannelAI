@@ -88,8 +88,10 @@
         .spinner {
             display: inline-block;
             width: .85em; height: .85em;
+            /* currentColor so the arc matches wherever it sits — white on the
+               buttons like before, yellow next to the running status text */
             border: 2px solid rgba(255,255,255,.3);
-            border-top-color: #fff;
+            border-top-color: currentColor;
             border-radius: 50%;
             animation: spin .6s linear infinite;
             vertical-align: middle;
