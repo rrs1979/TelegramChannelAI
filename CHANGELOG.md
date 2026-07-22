@@ -9,6 +9,8 @@
 - Sort published posts by date or length — the list was fixed newest-first, so there was no way to line up the longest posts to review at a glance
 - Total word count of the posts currently in view, alongside the existing chars/words on each summary — a running tally of how much you're looking at
 - Character and word count on the published-post summary, matching the queue cards
+- "Showing first 500/800" note on long queue previews — a truncated post read like the whole thing, with no hint the tail was only cut in the preview
+- Dashboard keyboard shortcuts are now listed in the README FAQ — the on-page cheatsheet was the only place to see them
 
 ### Changed
 - Pollinations image model is now set via `IMAGE_MODEL` instead of being hardcoded to `flux` — lets you switch models without touching the code
@@ -17,9 +19,14 @@
 - Dashboard stats poll now shows a brief "Updating…" hint while it fetches — the 30s refresh was silent, so nothing told you the numbers were live
 - Auto-refresh toggle tooltip now spells out how often each page reloads, so you know what turning it off actually skips
 - Auto-refresh holds off on reloading while you're typing in a filter box — a mid-search reload used to wipe what you'd typed
+- Pause between publishes is configurable via `PUBLISH_DELAY` (default 5s) — the anti-FloodWait sleep was hardcoded
+- Reviewed queue cards fade out and the list closes the gap smoothly instead of the rows below jumping up
+- Shortcuts cheatsheet fades in instead of blinking over the page
+- Coming back to a hidden tab now reloads it once right away — background ticks were already skipped, so a returning tab could sit on stale data until the next interval
 
 ### Fixed
 - The 404 page now has a real heading instead of just the body text — screen readers and quick scans had nothing to anchor on
+- Add-source form fields stretch the full width on phones instead of staying at their cramped desktop size
 
 ### Accessibility
 - `<caption>` on the recent-runs and sources tables so screen readers announce what each table holds before reading the rows
