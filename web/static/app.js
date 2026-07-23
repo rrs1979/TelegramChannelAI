@@ -571,6 +571,7 @@ if (searchInput) {
     var countEl = document.getElementById('published-count');
     var sourceSel = document.getElementById('published-source');
     var rangeSel = document.getElementById('published-range');
+    var linkedOnly = document.getElementById('published-linked-only');
     var allCards = document.querySelectorAll('.space-y-3 > details');
     var noMatch = document.getElementById('published-no-match');
     var total = allCards.length;
@@ -579,6 +580,7 @@ if (searchInput) {
         var q = searchInput.value.toLowerCase();
         var src = sourceSel ? sourceSel.value : '';
         var range = rangeSel ? rangeSel.value : '';
+        var onlyLinked = linkedOnly && linkedOnly.checked;
         var minDate = '';
         if (range) {
             var d = new Date();
@@ -591,16 +593,17 @@ if (searchInput) {
             var textMatch = !q || el.textContent.toLowerCase().includes(q);
             var srcMatch = !src || el.dataset.source === src;
             var dateMatch = !minDate || (el.dataset.date && el.dataset.date >= minDate);
-            var match = textMatch && srcMatch && dateMatch;
+            var linkMatch = !onlyLinked || el.dataset.linked === '1';
+            var match = textMatch && srcMatch && dateMatch && linkMatch;
             el.style.display = match ? '' : 'none';
             if (match) { visible++; words += cardWords(el); }
         });
         if (countEl) {
-            var base = (q || src || range) ? visible + ' of ' + total : total + ' posts';
+            var base = (q || src || range || onlyLinked) ? visible + ' of ' + total : total + ' posts';
             countEl.textContent = words ? base + ' · ' + words.toLocaleString() + ' words' : base;
         }
         if (noMatch) {
-            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range));
+            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range && !onlyLinked));
         }
     }
 
@@ -636,6 +639,7 @@ if (searchInput) {
     searchInput.addEventListener('input', updateSearchCount);
     if (sourceSel) sourceSel.addEventListener('change', updateSearchCount);
     if (rangeSel) rangeSel.addEventListener('change', updateSearchCount);
+    if (linkedOnly) linkedOnly.addEventListener('change', updateSearchCount);
     if (sortSel) sortSel.addEventListener('change', sortPosts);
     updateSearchCount();
 }

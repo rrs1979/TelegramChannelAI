@@ -35,6 +35,10 @@
             <option value="longest">Longest</option>
             <option value="shortest">Shortest</option>
         </select>
+        <label class="text-xs text-gray-400 flex items-center gap-1.5 cursor-pointer select-none">
+            <input type="checkbox" id="published-linked-only" class="accent-blue-500">
+            With link
+        </label>
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
             <input type="checkbox" id="published-auto-refresh"
                 class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
@@ -48,7 +52,7 @@
 {% if posts %}
 <div class="space-y-3">
     {% for post in posts %}
-    <details class="bg-dark-800 rounded-lg border border-gray-700/30 group" data-source="{{ post.source or '' }}" data-date="{{ post.published_at[:10] if post.published_at else '' }}">
+    <details class="bg-dark-800 rounded-lg border border-gray-700/30 group" data-source="{{ post.source or '' }}" data-date="{{ post.published_at[:10] if post.published_at else '' }}" data-linked="{{ 1 if post.telegram_msg_id else 0 }}">
         <summary class="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-dark-700/30 rounded-lg transition">
             <div class="flex items-center gap-3 min-w-0">
                 <span class="text-gray-500 text-xs shrink-0">{{ post.published_at[:10] if post.published_at else '—' }}</span>
@@ -90,9 +94,9 @@
 </div>
 <div id="published-no-match" class="hidden bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center mt-3">
     <div class="text-gray-400 text-sm">No posts match.</div>
-    <button onclick="clearFilters(['published-search', 'published-source', 'published-range'])"
+    <button onclick="clearFilters(['published-search', 'published-source', 'published-range', 'published-linked-only'])"
         class="mt-3 text-blue-400 hover:text-blue-300 text-xs transition"
-        title="Reset the search box, source and date range">Clear filters</button>
+        title="Reset the search box, source, date range and link filter">Clear filters</button>
 </div>
 {% else %}
 <div class="bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center">
