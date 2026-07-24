@@ -652,7 +652,7 @@ wireReloadRefresh('sources-auto-refresh', 'sourcesAutoRefresh', 90000);
 var srcSearch = document.getElementById('sources-search');
 if (srcSearch) {
     var srcCount = document.getElementById('sources-count');
-    var srcActiveOnly = document.getElementById('sources-active-only');
+    var srcStatus = document.getElementById('sources-status');
     var srcMinSubs = document.getElementById('sources-min-subs');
     var srcRows = document.querySelectorAll('#sources-table tbody tr');
     var srcNoMatch = document.getElementById('sources-no-match');
@@ -660,7 +660,7 @@ if (srcSearch) {
 
     function filterSources() {
         var q = srcSearch.value.toLowerCase();
-        var onlyActive = srcActiveOnly && srcActiveOnly.checked;
+        var status = srcStatus ? srcStatus.value : '';
         var minSubs = srcMinSubs ? parseInt(srcMinSubs.value, 10) || 0 : 0;
         var visible = 0;
         srcRows.forEach(function (row) {
@@ -668,19 +668,18 @@ if (srcSearch) {
                        ' ' + row.children[1].textContent.toLowerCase();
             var subs = parseInt(row.children[2].textContent, 10) || 0;
             var match = (!q || text.includes(q)) &&
-                        (!onlyActive || row.dataset.active === '1') &&
+                        (!status || row.dataset.active === (status === 'active' ? '1' : '0')) &&
                         (!minSubs || subs >= minSubs);
             row.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (srcCount) {
-            var label = onlyActive ? ' active' : ' sources';
-            srcCount.textContent = (q || onlyActive || minSubs)
+            srcCount.textContent = (q || status || minSubs)
                 ? visible + ' of ' + srcTotal
-                : srcTotal + label;
+                : srcTotal + ' sources';
         }
         if (srcNoMatch) {
-            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !onlyActive && !minSubs));
+            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !status && !minSubs));
         }
     }
 
@@ -710,7 +709,7 @@ if (srcSearch) {
     }
 
     srcSearch.addEventListener('input', filterSources);
-    if (srcActiveOnly) srcActiveOnly.addEventListener('change', filterSources);
+    if (srcStatus) srcStatus.addEventListener('change', filterSources);
     if (srcMinSubs) srcMinSubs.addEventListener('change', filterSources);
     if (srcSort) srcSort.addEventListener('change', sortSources);
     filterSources();

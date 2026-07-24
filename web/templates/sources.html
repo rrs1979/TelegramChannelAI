@@ -27,10 +27,12 @@
             <option value="name">Name A–Z</option>
             <option value="added">Recently added</option>
         </select>
-        <label class="text-xs text-gray-400 flex items-center gap-1.5 cursor-pointer select-none">
-            <input type="checkbox" id="sources-active-only" class="accent-blue-500">
-            Active only
-        </label>
+        <select id="sources-status" aria-label="Filter by status"
+            class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
+            <option value="">All statuses</option>
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+        </select>
         <label class="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer select-none">
             <input type="checkbox" id="sources-auto-refresh"
                 class="rounded border-gray-600 bg-dark-900 text-blue-600 focus:ring-blue-500 focus:ring-offset-0">
@@ -129,7 +131,7 @@
 </div>
 <div id="sources-no-match" class="hidden bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center mt-3">
     <div class="text-gray-400 text-sm">No sources match.</div>
-    <div class="text-gray-500 text-xs mt-2">Try clearing the filter box or unchecking Active only.</div>
+    <div class="text-gray-500 text-xs mt-2">Try clearing the filter box or switching the status back to all.</div>
 </div>
 {% else %}
 <div class="bg-dark-800 rounded-lg p-10 border border-gray-700/30 text-center">
