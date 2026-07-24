@@ -198,6 +198,17 @@ PIPELINE_INTERVAL=7200   # every 2 hours
 
 You can also change this from the Settings page without restarting the app.
 
+**Several posts went out at once — can I space them apart?**
+
+When one run produces multiple posts, they're published back to back with a 5-second pause between them (just enough to dodge Telegram's FloodWait). If you'd rather the channel didn't look like a machine-gun burst, stretch the pause:
+
+```env
+PUBLISH_DELAY=60    # a minute between posts
+PUBLISH_DELAY=300   # five minutes
+```
+
+The delay only applies within a single run — posts from separate runs are already spaced by `PIPELINE_INTERVAL`. Keep in mind the run doesn't finish until the last delay has ticked down, so very large values make each run take noticeably longer.
+
 **How far back does the scanner look for new posts?**
 
 Two hours by default. Each run pulls posts from the last `SCAN_HOURS` hours across all source channels and flags stories that appear in 3+ channels as trending. Adjust if your run schedule is unusual:
