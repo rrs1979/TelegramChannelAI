@@ -297,6 +297,7 @@ function toggleShortcuts() {
         ['?', 'show this help'],
         ['1–6', 'jump to a nav section'],
         ['/', 'jump to the filter box'],
+        ['c', 'clear all filters'],
         ['n', 'new source (sources page)'],
         ['e', 'expand every panel'],
         ['a', 'toggle auto-refresh'],
@@ -375,6 +376,26 @@ document.addEventListener('keydown', function (e) {
             e.preventDefault();
             box.focus();
             box.select();
+        }
+    }
+
+    // "c" — clear every filter on whichever list page we're on. Escape only
+    // wipes the focused search box, so a stray source/range dropdown could
+    // still be hiding rows with no obvious way back short of the no-match card
+    if (e.key === 'c' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var ct = (e.target.tagName || '').toLowerCase();
+        if (ct === 'input' || ct === 'textarea') return;
+        var filterSets = [
+            ['queue-search', 'queue-source', 'queue-range'],
+            ['published-search', 'published-source', 'published-range', 'published-linked-only'],
+            ['sources-search', 'sources-status', 'sources-min-subs'],
+        ];
+        for (var fi = 0; fi < filterSets.length; fi++) {
+            if (document.getElementById(filterSets[fi][0])) {
+                e.preventDefault();
+                clearFilters(filterSets[fi]);
+                break;
+            }
         }
     }
 
