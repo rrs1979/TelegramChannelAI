@@ -262,7 +262,13 @@ def get_stats():
 # --- analytics ---
 
 def get_analytics():
-    """Return daily pipeline stats for charts."""
+    """Return chart data as {"daily": [...], "totals": {...}}.
+
+    'daily' is one row per day for the last 30 days, oldest first so it plots
+    left-to-right — runs, completed/failed counts, posts generated/published and
+    cost. 'totals' is the run-status split (completed/failed/running) for the
+    doughnut. Days with no runs simply don't appear.
+    """
     with db_conn() as conn:
         # posts_generated landed in a later schema migration (see init_db) — older
         # rows have NULL there but a real posts_scanned, so COALESCE keeps the
