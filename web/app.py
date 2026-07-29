@@ -237,7 +237,7 @@ def analytics_page():
     return render_template("analytics.html", analytics=data)
 
 
-def _mask(value):
+def _mask(value: str):
     """Mask a secret so the raw value never reaches the browser."""
     if not value or len(value) < 6:
         return ""
