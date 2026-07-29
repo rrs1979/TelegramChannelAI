@@ -74,12 +74,6 @@ def _load_channel_configs():
 
 CHANNEL_CONFIGS = _load_channel_configs()
 
-# Topics to skip
-EXCLUSIONS = [
-    "military positions", "coordinates",
-    "casualties with details", "prisoner lists",
-]
-
 SCAN_HOURS = int(os.getenv("SCAN_HOURS", 2))
 SCAN_LIMIT = int(os.getenv("SCAN_LIMIT", 5))
 MAX_POSTS = int(os.getenv("MAX_POSTS", 3))  # posts published per channel per cycle

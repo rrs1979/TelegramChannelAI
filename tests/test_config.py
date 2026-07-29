@@ -55,12 +55,6 @@ def test_run_all_channels_exists():
     assert hasattr(channel_ai, "run_all_channels")
 
 
-def test_exclusions_list():
-    import channel_ai
-    assert isinstance(channel_ai.EXCLUSIONS, list)
-    assert len(channel_ai.EXCLUSIONS) > 0
-
-
 def test_image_dimensions():
     import channel_ai
     assert 0 < channel_ai.IMAGE_WIDTH <= 2048
