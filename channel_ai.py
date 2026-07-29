@@ -203,6 +203,8 @@ async def scan_sources(client, channels, hours=SCAN_HOURS):
             pass
         await asyncio.sleep(0.5)
 
+    # most-viewed first: run_cycle later trims to max_posts, so this ordering is
+    # what decides which stories survive the cap and actually get published
     posts.sort(key=lambda p: p["views"], reverse=True)
     return posts
 
