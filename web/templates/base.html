@@ -274,6 +274,12 @@
                sideways on phones — give them the same momentum scroll the nav got
                so a flick doesn't stop dead halfway across the row */
             .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+            /* every .card carries p-4 (1rem) all round — fine on desktop but on
+               a phone that gutter on each side squeezes the grid-cols-2 stat
+               numbers and the full-width tables into even less room. pull it to
+               .75rem so they get the width back, matching the tighter main
+               padding above (this rule comes after the base .card, so it wins) */
+            .card { padding: .75rem; }
         }
     </style>
 </head>
