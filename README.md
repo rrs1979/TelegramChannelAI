@@ -209,6 +209,17 @@ PUBLISH_DELAY=300   # five minutes
 
 The delay only applies within a single run — posts from separate runs are already spaced by `PIPELINE_INTERVAL`. Keep in mind the run doesn't finish until the last delay has ticked down, so very large values make each run take noticeably longer.
 
+**How many posts does one run publish, and can I cap it?**
+
+Up to 3 per channel per cycle by default. Lower or raise it with `MAX_POSTS`:
+
+```env
+MAX_POSTS=1   # one story per run, keeps the channel calm
+MAX_POSTS=5   # busier channel, more throughput
+```
+
+When a run turns up more candidates than the cap, the most-viewed stories win the slots — the rest are dropped, but they're still marked seen, so lowering the cap won't make them resurface as reposts next cycle. If you want more volume without a bigger burst, it usually reads better to leave `MAX_POSTS` low and shorten `PIPELINE_INTERVAL` instead.
+
 **How far back does the scanner look for new posts?**
 
 Two hours by default. Each run pulls posts from the last `SCAN_HOURS` hours across all source channels and flags stories that appear in 3+ channels as trending. Adjust if your run schedule is unusual:
