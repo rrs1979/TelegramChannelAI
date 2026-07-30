@@ -206,6 +206,19 @@
             * { scrollbar-color: #2a2a45 #0f0f1a; scrollbar-width: thin; }
         }
 
+        /* respect the OS "reduce motion" toggle — the page-in rise, card lift,
+           details/backdrop fades and the copy-pop are all just decoration and
+           can make people with vestibular issues queasy, so drop them. the
+           spinner stays: it's a loading state, killing its spin loses meaning */
+        @media (prefers-reduced-motion: reduce) {
+            *:not(.spinner) {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+            .card:hover { transform: none; }
+        }
+
         /* nav gets cramped on phones — let the links scroll sideways */
         @media (max-width: 640px) {
             nav > div { gap: .75rem; padding: .5rem .75rem; }
