@@ -302,6 +302,7 @@ function toggleShortcuts() {
         ['e', 'expand every panel'],
         ['a', 'toggle auto-refresh'],
         ['r', 'reload the page'],
+        ['t', 'back to the top'],
         ['Esc', 'clear filter / collapse panels'],
         ['Ctrl+R', 'run the pipeline (dashboard)'],
         ['Ctrl+S', 'save settings'],
@@ -441,6 +442,16 @@ document.addEventListener('keydown', function (e) {
         if (rt === 'input' || rt === 'textarea') return;
         e.preventDefault();
         location.reload();
+    }
+
+    // "t" — jump back to the top, saves scrolling all the way up after
+    // reading down a long queue or archive; smooth unless motion's dialled back
+    if (e.key === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var tt = (e.target.tagName || '').toLowerCase();
+        if (tt === 'input' || tt === 'textarea') return;
+        e.preventDefault();
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
     }
 
     // "1"–"6" — jump to the matching nav link (in the order they appear)
