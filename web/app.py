@@ -290,6 +290,12 @@ def settings_page():
         # and a junk hash just makes Telethon fail to log in
         if fields["TELEGRAM_API_HASH"] and not re.fullmatch(r"[a-f0-9]{32}", fields["TELEGRAM_API_HASH"]):
             fields["TELEGRAM_API_HASH"] = current.get("TELEGRAM_API_HASH", "")
+        # the key is one unbroken token up to 128 chars (form says \S+, maxlength=128), but a
+        # raw POST can slip in whitespace or an overlong paste — either way it's not a real key,
+        # so keep whatever was there instead of writing garbage to .env
+        pk = fields["POLLINATIONS_API_KEY"]
+        if pk and (len(pk) > 128 or re.search(r"\s", pk)):
+            fields["POLLINATIONS_API_KEY"] = current.get("POLLINATIONS_API_KEY", "")
 
         save_settings(fields)
         logger.info("Settings updated")
