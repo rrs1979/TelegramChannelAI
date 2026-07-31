@@ -130,7 +130,7 @@ async def ai_call(session, model, system, user, max_tokens=1200):
     return None
 
 
-async def generate_image(prompt, vpn_proxy=None):
+async def generate_image(prompt: str, vpn_proxy=None):
     """Generate image via Pollinations Flux model."""
     encoded = urllib.parse.quote(prompt[:500])
     seed = random.randint(1, 999999)
