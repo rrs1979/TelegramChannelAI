@@ -763,41 +763,56 @@ if (document.getElementById('stat-published')) {
         return lr ? lr.started_at + '/' + (lr.finished_at || 'running') : 'none';
     }
 
+    async function pull() {
+        var stamp = document.getElementById('last-updated');
+        var prev = stamp ? stamp.textContent : '';
+        if (stamp) {
+            // same spinner dot the buttons use, so the poll matches the rest of the UI
+            stamp.textContent = '';
+            var dot = document.createElement('span');
+            dot.className = 'spinner';
+            stamp.appendChild(dot);
+            stamp.appendChild(document.createTextNode('Updating…'));
+        }
+        try {
+            const s = await api('/api/stats');
+            document.getElementById('stat-published').textContent = s.total_published;
+            document.getElementById('stat-sources').textContent = s.total_sources;
+            document.getElementById('stat-queue').textContent = s.queue_size;
+            document.getElementById('stat-runs').textContent = s.total_runs;
+            showUpdatedTime();
+            var lr = s.last_run;
+            updateLastRunAgo(lr ? lr.started_at : null);
+            var key = runKey(lr);
+            if (seenRun === undefined) {
+                seenRun = key;
+            } else if (key !== seenRun) {
+                location.reload();
+                return;
+            }
+        } catch {
+            // poll failed — drop the "Updating…" hint so it doesn't get stuck
+            if (stamp) stamp.textContent = prev;
+        }
+    }
+
     function refreshStats() {
-        refreshTimer = setInterval(async () => {
-            if (document.hidden) return;
-            var stamp = document.getElementById('last-updated');
-            var prev = stamp ? stamp.textContent : '';
-            if (stamp) {
-                // same spinner dot the buttons use, so the poll matches the rest of the UI
-                stamp.textContent = '';
-                var dot = document.createElement('span');
-                dot.className = 'spinner';
-                stamp.appendChild(dot);
-                stamp.appendChild(document.createTextNode('Updating…'));
-            }
-            try {
-                const s = await api('/api/stats');
-                document.getElementById('stat-published').textContent = s.total_published;
-                document.getElementById('stat-sources').textContent = s.total_sources;
-                document.getElementById('stat-queue').textContent = s.queue_size;
-                document.getElementById('stat-runs').textContent = s.total_runs;
-                showUpdatedTime();
-                var lr = s.last_run;
-                updateLastRunAgo(lr ? lr.started_at : null);
-                var key = runKey(lr);
-                if (seenRun === undefined) {
-                    seenRun = key;
-                } else if (key !== seenRun) {
-                    location.reload();
-                    return;
-                }
-            } catch {
-                // poll failed — drop the "Updating…" hint so it doesn't get stuck
-                if (stamp) stamp.textContent = prev;
-            }
+        refreshTimer = setInterval(function () {
+            if (!document.hidden) pull();
         }, 30000);
     }
+
+    // the tick skips while the tab's hidden, so glancing back at the dashboard
+    // left the numbers (and the "Updated Xs ago" line) stale until the next
+    // 30s tick — catch up right away on return, same as the reload pages do
+    var hiddenSince = null;
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            hiddenSince = Date.now();
+        } else if (refreshTimer && hiddenSince && Date.now() - hiddenSince > 30000) {
+            pull();
+        }
+    });
 
     if (localStorage.getItem('autoRefresh') === 'off') {
         toggleBox.checked = false;
