@@ -303,6 +303,7 @@ function toggleShortcuts() {
         ['a', 'toggle auto-refresh'],
         ['r', 'reload the page'],
         ['t', 'back to the top'],
+        ['b', 'jump to the bottom'],
         ['Esc', 'clear filter / collapse panels'],
         ['Ctrl+R', 'run the pipeline (dashboard)'],
         ['Ctrl+S', 'save settings'],
@@ -452,6 +453,16 @@ document.addEventListener('keydown', function (e) {
         e.preventDefault();
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    // "b" — and the other way, down to the bottom; the archive's oldest posts
+    // sit way past a long scroll, no point dragging the bar all the way there
+    if (e.key === 'b' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var bt = (e.target.tagName || '').toLowerCase();
+        if (bt === 'input' || bt === 'textarea') return;
+        e.preventDefault();
+        var reduceB = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: reduceB ? 'auto' : 'smooth' });
     }
 
     // "1"–"6" — jump to the matching nav link (in the order they appear)
