@@ -331,6 +331,8 @@ async def process_post(session, post, prompt_config):
         rewritten,
         1500,
     )
+    # only swap in the humanized version if it looks like a full post — a short reply
+    # here usually means a refusal or a truncated blurb, so keep the original rewrite
     if humanized and len(humanized) > 100:
         rewritten = humanized
 
