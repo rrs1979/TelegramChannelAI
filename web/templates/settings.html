@@ -198,14 +198,31 @@
             el.textContent = prev;
         }
     }
+    // no point polling a hidden tab — skip the tick and catch up on return,
+    // same as the dashboard and reload pages do
+    function start() {
+        poll = setInterval(function () {
+            if (!document.hidden) check();
+        }, 60000);
+    }
+
+    var hiddenAt = null;
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            hiddenAt = Date.now();
+        } else if (poll && hiddenAt && Date.now() - hiddenAt > 60000) {
+            check();
+        }
+    });
+
     if (localStorage.getItem('settingsAutoRefresh') === 'on') {
         toggle.checked = true;
-        poll = setInterval(check, 60000);
+        start();
     }
     toggle.addEventListener('change', function () {
         if (this.checked) {
             localStorage.setItem('settingsAutoRefresh', 'on');
-            poll = setInterval(check, 60000);
+            start();
         } else {
             localStorage.setItem('settingsAutoRefresh', 'off');
             clearInterval(poll);
