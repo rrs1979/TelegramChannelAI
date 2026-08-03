@@ -48,7 +48,11 @@
 <!-- last run -->
 {% if stats.last_run %}
 <div class="card mb-8">
-    <h2 class="text-sm font-medium text-gray-400 mb-2">Last Pipeline Run</h2>
+    <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-medium text-gray-400">Last Pipeline Run</h2>
+        <button onclick="copyValue('{{ stats.last_run.status }} · started {{ stats.last_run.started_at[:19] }}{% if stats.last_run.finished_at %} · finished {{ stats.last_run.finished_at[:19] }}{% endif %} · {{ stats.last_run.posts_published }} published', this)"
+            class="copy-btn" title="Copy this run's summary as text">Copy summary</button>
+    </div>
     <div class="flex flex-wrap gap-4 text-sm">
         <div>
             <span class="text-gray-500">Status:</span>
