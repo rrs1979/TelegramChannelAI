@@ -278,6 +278,15 @@
                sideways on phones — give them the same momentum scroll the nav got
                so a flick doesn't stop dead halfway across the row */
             .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+            /* ...except neither ever scrolled: both tables are w-full, so on a
+               phone they don't overflow, they squeeze — six columns into 360px
+               and the started/finished timestamps wrap over three lines each,
+               rows end up twice as tall as they should be. a min-width lets the
+               row keep its natural size and finally gives that sideways scroll
+               something to move */
+            .overflow-x-auto > table { min-width: 34rem; }
+            .overflow-x-auto > table th,
+            .overflow-x-auto > table td { white-space: nowrap; }
             /* every .card carries p-4 (1rem) all round — fine on desktop but on
                a phone that gutter on each side squeezes the grid-cols-2 stat
                numbers and the full-width tables into even less room. pull it to
