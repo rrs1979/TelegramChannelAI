@@ -390,7 +390,7 @@ document.addEventListener('keydown', function (e) {
         var filterSets = [
             ['queue-search', 'queue-source', 'queue-range'],
             ['published-search', 'published-source', 'published-range', 'published-linked-only'],
-            ['sources-search', 'sources-status', 'sources-min-subs'],
+            ['sources-search', 'sources-status', 'sources-min-subs', 'sources-added'],
         ];
         for (var fi = 0; fi < filterSets.length; fi++) {
             if (document.getElementById(filterSets[fi][0])) {
@@ -697,6 +697,7 @@ if (srcSearch) {
     var srcCount = document.getElementById('sources-count');
     var srcStatus = document.getElementById('sources-status');
     var srcMinSubs = document.getElementById('sources-min-subs');
+    var srcAdded = document.getElementById('sources-added');
     var srcRows = document.querySelectorAll('#sources-table tbody tr');
     var srcNoMatch = document.getElementById('sources-no-match');
     var srcTotal = srcRows.length;
@@ -705,24 +706,33 @@ if (srcSearch) {
         var q = srcSearch.value.toLowerCase();
         var status = srcStatus ? srcStatus.value : '';
         var minSubs = srcMinSubs ? parseInt(srcMinSubs.value, 10) || 0 : 0;
+        // the added column is a plain YYYY-MM-DD, so a string compare is enough
+        var minAdded = '';
+        if (srcAdded && srcAdded.value) {
+            var cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - parseInt(srcAdded.value, 10));
+            minAdded = cutoff.toISOString().slice(0, 10);
+        }
         var visible = 0;
         srcRows.forEach(function (row) {
             var text = row.children[0].textContent.toLowerCase() +
                        ' ' + row.children[1].textContent.toLowerCase();
             var subs = parseInt(row.children[2].textContent, 10) || 0;
+            var added = row.children[3].textContent.trim();
             var match = (!q || text.includes(q)) &&
                         (!status || row.dataset.active === (status === 'active' ? '1' : '0')) &&
-                        (!minSubs || subs >= minSubs);
+                        (!minSubs || subs >= minSubs) &&
+                        (!minAdded || (added && added >= minAdded));
             row.style.display = match ? '' : 'none';
             if (match) visible++;
         });
         if (srcCount) {
-            srcCount.textContent = (q || status || minSubs)
+            srcCount.textContent = (q || status || minSubs || minAdded)
                 ? visible + ' of ' + srcTotal
                 : srcTotal + ' sources';
         }
         if (srcNoMatch) {
-            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !status && !minSubs));
+            srcNoMatch.classList.toggle('hidden', visible > 0 || (!q && !status && !minSubs && !minAdded));
         }
     }
 
@@ -754,6 +764,7 @@ if (srcSearch) {
     srcSearch.addEventListener('input', filterSources);
     if (srcStatus) srcStatus.addEventListener('change', filterSources);
     if (srcMinSubs) srcMinSubs.addEventListener('change', filterSources);
+    if (srcAdded) srcAdded.addEventListener('change', filterSources);
     if (srcSort) srcSort.addEventListener('change', sortSources);
     filterSources();
 }
