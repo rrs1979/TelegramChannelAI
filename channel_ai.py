@@ -168,6 +168,9 @@ async def generate_image(prompt: str, vpn_proxy: str | None = None):
                     if len(data) > 3000:
                         path.write_bytes(data)
                         return str(path)
+    except asyncio.TimeoutError:
+        # same empty str() as in ai_call — a bare "Image error:" tells nobody anything
+        print(f"  Image error: generation timed out after {IMAGE_TIMEOUT}s")
     except Exception as e:
         print(f"  Image error: {e}")
     # nothing usable came back — drop the empty placeholder we reserved above
