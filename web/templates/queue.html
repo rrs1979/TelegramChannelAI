@@ -102,7 +102,7 @@
 
         <!-- rewritten preview -->
         {% if item.rewritten_text %}
-        <div class="text-xs text-gray-500 mb-1">Rewritten text</div>
+        <div class="text-xs text-gray-500 mb-1">Rewritten text · {{ item.rewritten_text|length }} chars · {{ item.rewritten_text.split()|length }} words</div>
         <div class="relative">
             <button onclick="copyText(this)"
                 class="copy-overlay bg-dark-800"
