@@ -504,9 +504,18 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
         return !!document.querySelector('details[open]');
     }
 
+    // and don't reload on top of an approve/reject/remove that's still
+    // waiting on the server — every action button holds a spinner until it
+    // answers, and reloading cancels the request with nothing said about it
+    function busyActing() {
+        return !!document.querySelector('button .spinner');
+    }
+
     function start() {
         timer = setInterval(function () {
-            if (!document.hidden && !busyTyping() && !busyReading()) location.reload();
+            if (!document.hidden && !busyTyping() && !busyReading() && !busyActing()) {
+                location.reload();
+            }
         }, intervalMs);
     }
 
@@ -518,7 +527,7 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
         if (document.hidden) {
             hiddenAt = Date.now();
         } else if (timer && hiddenAt && Date.now() - hiddenAt > intervalMs &&
-                   !busyTyping() && !busyReading()) {
+                   !busyTyping() && !busyReading() && !busyActing()) {
             location.reload();
         }
     });
