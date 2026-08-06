@@ -389,7 +389,7 @@ document.addEventListener('keydown', function (e) {
         if (ct === 'input' || ct === 'textarea') return;
         var filterSets = [
             ['queue-search', 'queue-source', 'queue-range'],
-            ['published-search', 'published-source', 'published-range', 'published-linked-only'],
+            ['published-search', 'published-source', 'published-range', 'published-length', 'published-linked-only'],
             ['sources-search', 'sources-status', 'sources-min-subs', 'sources-added'],
         ];
         for (var fi = 0; fi < filterSets.length; fi++) {
@@ -623,6 +623,7 @@ if (searchInput) {
     var countEl = document.getElementById('published-count');
     var sourceSel = document.getElementById('published-source');
     var rangeSel = document.getElementById('published-range');
+    var lenSel = document.getElementById('published-length');
     var linkedOnly = document.getElementById('published-linked-only');
     var allCards = document.querySelectorAll('.space-y-3 > details');
     var noMatch = document.getElementById('published-no-match');
@@ -632,6 +633,7 @@ if (searchInput) {
         var q = searchInput.value.toLowerCase();
         var src = sourceSel ? sourceSel.value : '';
         var range = rangeSel ? rangeSel.value : '';
+        var minLen = lenSel ? parseInt(lenSel.value, 10) || 0 : 0;
         var onlyLinked = linkedOnly && linkedOnly.checked;
         var minDate = '';
         if (range) {
@@ -646,16 +648,18 @@ if (searchInput) {
             var srcMatch = !src || el.dataset.source === src;
             var dateMatch = !minDate || (el.dataset.date && el.dataset.date >= minDate);
             var linkMatch = !onlyLinked || el.dataset.linked === '1';
-            var match = textMatch && srcMatch && dateMatch && linkMatch;
+            // same char count the summary shows, so the filter agrees with the label
+            var lenMatch = !minLen || cardLen(el) >= minLen;
+            var match = textMatch && srcMatch && dateMatch && lenMatch && linkMatch;
             el.style.display = match ? '' : 'none';
             if (match) { visible++; words += cardWords(el); }
         });
         if (countEl) {
-            var base = (q || src || range || onlyLinked) ? visible + ' of ' + total : total + ' posts';
+            var base = (q || src || range || minLen || onlyLinked) ? visible + ' of ' + total : total + ' posts';
             countEl.textContent = words ? base + ' · ' + words.toLocaleString() + ' words' : base;
         }
         if (noMatch) {
-            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range && !onlyLinked));
+            noMatch.classList.toggle('hidden', visible > 0 || (!q && !src && !range && !minLen && !onlyLinked));
         }
     }
 
@@ -691,6 +695,7 @@ if (searchInput) {
     searchInput.addEventListener('input', updateSearchCount);
     if (sourceSel) sourceSel.addEventListener('change', updateSearchCount);
     if (rangeSel) rangeSel.addEventListener('change', updateSearchCount);
+    if (lenSel) lenSel.addEventListener('change', updateSearchCount);
     if (linkedOnly) linkedOnly.addEventListener('change', updateSearchCount);
     if (sortSel) sortSel.addEventListener('change', sortPosts);
     updateSearchCount();
