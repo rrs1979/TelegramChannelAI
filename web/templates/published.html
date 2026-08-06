@@ -61,7 +61,8 @@
 <div class="space-y-3">
     {% for post in posts %}
     <details class="bg-dark-800 rounded-lg border border-gray-700/30 group" data-source="{{ post.source or '' }}" data-date="{{ post.published_at[:10] if post.published_at else '' }}" data-linked="{{ 1 if post.telegram_msg_id else 0 }}">
-        <summary class="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-dark-700/30 rounded-lg transition">
+        <summary class="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-dark-700/30 rounded-lg transition"
+            title="Expand to read the whole post — the row only shows the first 120 chars">
             <div class="flex items-center gap-3 min-w-0">
                 <span class="text-gray-500 text-xs shrink-0">{{ post.published_at[:10] if post.published_at else '—' }}</span>
                 {% if post.source %}
