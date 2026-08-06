@@ -252,21 +252,24 @@ _SECRET_FIELDS = ("POLLINATIONS_API_KEY", "TELEGRAM_API_HASH")
 @app.route("/settings", methods=["GET", "POST"])
 def settings_page():
     if request.method == "POST":
-        # validate pipeline interval is a positive integer
-        raw_interval = request.form.get("pipeline_interval", "3600").strip()
+        current = load_settings()
+
+        # the number input allows 300-86400 (5 min - 24 h) but a raw POST can send anything,
+        # and falling back to 3600 on a bad value quietly turned a 24h schedule into an hourly
+        # one — keep whatever is saved instead, like the other fields do
+        raw_interval = request.form.get("pipeline_interval", "").strip()
         try:
             interval = int(raw_interval)
-            if interval < 60 or interval > 86400:
+            if interval < 300 or interval > 86400:
                 raise ValueError
         except (ValueError, TypeError):
-            interval = 3600
+            interval = current.get("PIPELINE_INTERVAL") or "3600"
 
         # validate pipeline mode against allowed values
         mode = request.form.get("pipeline_mode", "semi-auto").strip()
         if mode not in ("manual", "semi-auto", "auto"):
             mode = "semi-auto"
 
-        current = load_settings()
         fields = {
             "POLLINATIONS_API_KEY": request.form.get("pollinations_key", "").strip(),
             "TELEGRAM_API_ID": request.form.get("telegram_api_id", "").strip(),
