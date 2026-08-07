@@ -278,6 +278,26 @@ function updateLastRunAgo(ts) {
     el.title = d.toLocaleString();
 }
 
+// the runs table prints started_at/finished_at straight out of the db, which
+// keeps them in UTC — so "Last run 5m ago" up in the nav and the row it points
+// at disagree by however many hours you sit from Greenwich. render the rows in
+// the viewer's own time and keep the raw UTC stamp on hover.
+function localizeRunTimes() {
+    document.querySelectorAll('.run-ts').forEach(function (cell) {
+        var ts = cell.dataset.ts;
+        if (!ts) return;  // run still going, cell is just a dash
+        // newer stamps come out of isoformat() with a +00:00 on the end, the
+        // older sqlite defaults have nothing — those are the ones needing a Z,
+        // and tacking one onto an offset that's already there is an invalid date
+        var iso = ts.replace(' ', 'T');
+        var d = new Date(/(Z|[+-]\d\d:?\d\d)$/.test(iso) ? iso : iso + 'Z');
+        if (isNaN(d.getTime())) return;
+        cell.textContent = d.toLocaleString();
+        cell.title = iso.slice(0, 19).replace('T', ' ') + ' UTC';
+    });
+}
+localizeRunTimes();
+
 // show last-updated timestamp
 function showUpdatedTime() {
     const el = document.getElementById('last-updated');
