@@ -522,7 +522,12 @@ async def run_cycle(channel_key="default", max_posts=MAX_POSTS):
             result = await process_post(session, post, channel_cfg)
             if result:
                 results.append(result)
-                print(f"    Done ({time.time()-t1:.1f}s)")
+                # the rewrite prompt asks for 200-300 words and captions cap at
+                # 1024 chars, so print the size too — a dud rewrite is obvious
+                # from the log instead of only after opening the queue
+                text = result["text"]
+                print(f"    Done ({time.time()-t1:.1f}s, "
+                      f"{len(text)} chars, {len(text.split())} words)")
             await asyncio.sleep(2)
 
     if results and channel_id:
