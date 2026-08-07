@@ -452,7 +452,7 @@ async def publish_post(client, channel_entity, result):
 # MAIN
 # ═══════════════════════════════════════════
 
-async def run_cycle(channel_key="default", max_posts=MAX_POSTS):
+async def run_cycle(channel_key: str = "default", max_posts=MAX_POSTS):
     """Run one full pipeline cycle for a single channel config."""
     from telethon import TelegramClient
     from telethon.sessions import StringSession
