@@ -531,9 +531,23 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
         return !!document.querySelector('button .spinner');
     }
 
+    // a reload isn't instant — on a slow connection the old page sits there for
+    // a second or two looking like the toggle did nothing. mark the label while
+    // the new one is on its way; it goes away with the page itself
+    function markReloading() {
+        if (!label) return;
+        var text = label.lastChild;
+        if (!text || text.nodeType !== 3) return;
+        text.textContent = ' Refreshing…';
+        var dot = document.createElement('span');
+        dot.className = 'spinner';
+        label.insertBefore(dot, text);
+    }
+
     function start() {
         timer = setInterval(function () {
             if (!document.hidden && !busyTyping() && !busyReading() && !busyActing()) {
+                markReloading();
                 location.reload();
             }
         }, intervalMs);
@@ -548,6 +562,7 @@ function wireReloadRefresh(toggleId, storageKey, intervalMs) {
             hiddenAt = Date.now();
         } else if (timer && hiddenAt && Date.now() - hiddenAt > intervalMs &&
                    !busyTyping() && !busyReading() && !busyActing()) {
+            markReloading();
             location.reload();
         }
     });
