@@ -314,12 +314,24 @@ def settings_page():
 
 @app.route("/api/stats")
 def api_stats():
-    return jsonify(get_stats())
+    # the pages behind these two catch a db error and render empty, but the json
+    # twins let it fly and land in the generic 500 handler — nothing in the log
+    # said which query died, and the body came back without any of the keys the
+    # caller asked for
+    try:
+        return jsonify(get_stats())
+    except Exception as e:
+        logger.error(f"Stats API failed: {e}")
+        return jsonify({"error": "Couldn't load the stats, try again in a moment"}), 500
 
 
 @app.route("/api/sources")
 def api_sources():
-    return jsonify(get_sources())
+    try:
+        return jsonify(get_sources())
+    except Exception as e:
+        logger.error(f"Sources API failed: {e}")
+        return jsonify({"error": "Couldn't load the sources, try again in a moment"}), 500
 
 
 @app.route("/api/sources", methods=["POST"])

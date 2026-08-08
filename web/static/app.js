@@ -832,6 +832,9 @@ if (document.getElementById('stat-published')) {
         }
         try {
             const s = await api('/api/stats');
+            // api() hands back whatever parsed, error payloads included — without
+            // this the tiles would happily print "undefined" for a failed poll
+            if (!s || s.error) throw new Error(s && s.error);
             document.getElementById('stat-published').textContent = s.total_published;
             document.getElementById('stat-sources').textContent = s.total_sources;
             document.getElementById('stat-queue').textContent = s.queue_size;
