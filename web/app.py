@@ -379,7 +379,7 @@ def api_toggle_source(source_id):
 
 
 @app.route("/api/queue/<int:item_id>/approve", methods=["POST"])
-def api_approve(item_id):
+def api_approve(item_id: int):
     try:
         update_queue_status(item_id, "approved")
     except Exception as e:
@@ -389,7 +389,7 @@ def api_approve(item_id):
 
 
 @app.route("/api/queue/<int:item_id>/reject", methods=["POST"])
-def api_reject(item_id):
+def api_reject(item_id: int):
     try:
         update_queue_status(item_id, "rejected")
     except Exception as e:
