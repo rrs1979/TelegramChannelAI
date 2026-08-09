@@ -39,7 +39,7 @@
                 title="An API key is one unbroken string — no spaces or line breaks"
                 class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.POLLINATIONS_API_KEY %}
-            <button type="button" onclick="copyValue('{{ settings.POLLINATIONS_API_KEY }}', this)"
+            <button type="button" onclick="copyValue('pollinations_key', this)"
                 class="copy-field"
                 title="Copy API key">copy</button>
             {% endif %}
@@ -63,7 +63,7 @@
                     title="Telegram API ID is a positive integer (digits only)"
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 {% if settings.TELEGRAM_API_ID %}
-                <button type="button" onclick="copyValue('{{ settings.TELEGRAM_API_ID }}', this)"
+                <button type="button" onclick="copyValue('telegram_api_id', this)"
                     class="copy-field"
                     title="Copy API ID">copy</button>
                 {% endif %}
@@ -84,7 +84,7 @@
                     title="Telegram API hash is 32 lowercase hex characters"
                     class="flex-1 min-w-0 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
                 {% if settings.TELEGRAM_API_HASH %}
-                <button type="button" onclick="copyValue('{{ settings.TELEGRAM_API_HASH }}', this)"
+                <button type="button" onclick="copyValue('telegram_api_hash', this)"
                     class="copy-field"
                     title="Copy API hash">copy</button>
                 {% endif %}
@@ -108,7 +108,7 @@
                 title="Channel ID starts with -100 followed by digits"
                 class="flex-1 bg-dark-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-200 focus:border-blue-500 focus:outline-none">
             {% if settings.CHANNEL_ID %}
-            <button type="button" onclick="copyValue('{{ settings.CHANNEL_ID }}', this)"
+            <button type="button" onclick="copyValue('channel_id', this)"
                 class="copy-field"
                 title="Copy channel ID">copy</button>
             {% endif %}

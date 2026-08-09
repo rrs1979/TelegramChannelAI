@@ -162,8 +162,15 @@ function copyText(btn) {
     });
 }
 
-function copyValue(text, btn) {
-    navigator.clipboard.writeText(text).then(() => {
+// copy a settings field, looked up by input id. the value used to be baked
+// straight into the button's onclick, which drops it into a JS string inside an
+// HTML attribute — jinja escapes a quote to &#39;, but the browser decodes the
+// attribute before js parses it, so a quote in .env closed the string and the
+// rest ran as script. reading it off the input keeps the markup value-free.
+function copyValue(inputId, btn) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    navigator.clipboard.writeText(input.value).then(() => {
         var prev = btn.textContent;
         btn.textContent = 'Copied!';
         popButton(btn);
