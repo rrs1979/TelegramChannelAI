@@ -250,6 +250,19 @@
                the templates) sits as a stub next to the selects — stretch it
                so it takes a full row of its own and is easier to tap into */
             #queue-search, #published-search, #sources-search { width: 100%; }
+            /* the selects under it are still a ragged pile — each one sizes to
+               its longest option, so "Added last 30 days" ends up next to a
+               short "Paused" and the four on /published and /sources never
+               line up. let them share the row instead: two per line on a
+               360px screen, both the same width. min-width:0 because the
+               source dropdowns are filled with channel names and one long
+               @username would otherwise push the pair back to one per row */
+            div:has(> #queue-search) select,
+            div:has(> #published-search) select,
+            div:has(> #sources-search) select {
+                flex: 1 1 9rem;
+                min-width: 0;
+            }
             /* the add-source form has the same issue — its fixed-width inputs
                (w-56/w-48) and the button each wrap onto their own row on a
                phone but stay narrow stubs against the full-width card.
