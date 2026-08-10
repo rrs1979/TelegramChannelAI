@@ -185,7 +185,7 @@ async def generate_image(prompt: str, vpn_proxy: str | None = None):
 # TELEGRAM SCANNER
 # ═══════════════════════════════════════════
 
-async def scan_sources(client, channels, hours=SCAN_HOURS):
+async def scan_sources(client, channels, hours: int = SCAN_HOURS):
     """Scan source channels for recent posts."""
     since = datetime.now(timezone.utc) - timedelta(hours=hours)
     posts = []
