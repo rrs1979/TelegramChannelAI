@@ -517,7 +517,11 @@ async def run_cycle(channel_key: str = "default", max_posts=MAX_POSTS):
     results = []
     async with aiohttp.ClientSession() as session:
         for i, post in enumerate(selected):
-            print(f"  [{i+1}/{len(selected)}] Processing: {post['text'][:50]}...")
+            # the preview cuts off at 50 chars, so a one-line blurb and a
+            # 3000-char essay read the same in the log — print the real size
+            src = post["text"]
+            print(f"  [{i+1}/{len(selected)}] Processing: {src[:50]}... "
+                  f"({len(src)} chars, {len(src.split())} words)")
             t1 = time.time()
             result = await process_post(session, post, channel_cfg)
             if result:
