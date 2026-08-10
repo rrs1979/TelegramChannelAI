@@ -331,7 +331,7 @@ function toggleShortcuts() {
         ['r', 'reload the page'],
         ['t', 'back to the top'],
         ['b', 'jump to the bottom'],
-        ['Esc', 'clear filter / collapse panels'],
+        ['Esc', 'clear filter / leave field / collapse panels'],
         ['Ctrl+R', 'run the pipeline (dashboard)'],
         ['Ctrl+S', 'save settings'],
     ].map(function (r) {
@@ -370,6 +370,16 @@ document.addEventListener('keydown', function (e) {
         if (active && searchBoxes.indexOf(active.id) !== -1 && active.value) {
             active.value = '';
             active.dispatchEvent(new Event('input'));
+            return;
+        }
+        // still sitting in a field — step out of it rather than reaching past
+        // it into the page. hitting Esc while typing an api key on /settings
+        // used to slam every open panel shut and leave the cursor where it
+        // was, and every single-key shortcut below ignores you until you've
+        // left the field anyway, so there was no way back out without Tab
+        var tags = ['input', 'select', 'textarea'];
+        if (active && tags.indexOf((active.tagName || '').toLowerCase()) !== -1) {
+            active.blur();
             return;
         }
         document.querySelectorAll('details[open]').forEach(function (d) {
