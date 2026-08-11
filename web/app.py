@@ -40,7 +40,9 @@ _AUTH_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")
 # warning in the log so a brute-force run is at least visible after the fact.
 _FAILED_LOGINS = {}  # ip -> (miss count, monotonic time of the last miss)
 _LOCKOUT_MISSES = 5
-_LOCKOUT_SECONDS = 30
+# 30s is enough to make a wordlist run pointless without locking out the person who
+# just fat-fingered their own password; raise it on anything facing the open internet
+_LOCKOUT_SECONDS = int(os.getenv("LOCKOUT_SECONDS", 30))
 
 
 @app.before_request
