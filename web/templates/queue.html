@@ -113,6 +113,11 @@
                 <span title="Only the first 800 chars fit in this preview — the whole thing still gets published">· showing first 800</span>{% endif %}{% if item.image_prompt and item.rewritten_text|length > 1024 %}
                 <span class="text-yellow-500" title="Telegram captions max out at 1024 chars — the text will follow the image as its own message">· too long for a caption</span>{% endif %}</span>
         </div>
+        {% else %}
+        <div class="text-xs text-gray-500 mb-1">Rewritten text</div>
+        <div class="text-sm text-gray-500 bg-dark-900 rounded p-3 mb-3">
+            No rewrite stored for this one — the original above is all there is.
+        </div>
         {% endif %}
 
         {% if item.status == 'pending' %}
