@@ -438,13 +438,21 @@ def form_add_source():
     username = request.form.get("username", "").strip().lstrip("@")
     if not username or not re.match(r'^[A-Za-z][A-Za-z0-9_]{3,30}$', username):
         return redirect(url_for("sources_page"))
-    add_source(username)
+    # these two are the no-JS path, so a db error must not fall through to the 500
+    # handler — it answers with json, which a browser form post would just show raw
+    try:
+        add_source(username)
+    except Exception as e:
+        logger.error(f"Form add failed for @{username}: {e}")
     return redirect(url_for("sources_page"))
 
 
 @app.route("/sources/<int:source_id>/delete", methods=["POST"])
 def form_delete_source(source_id):
-    remove_source(source_id)
+    try:
+        remove_source(source_id)
+    except Exception as e:
+        logger.error(f"Form delete failed for source {source_id}: {e}")
     return redirect(url_for("sources_page"))
 
 
