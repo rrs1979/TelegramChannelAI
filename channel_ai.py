@@ -132,6 +132,11 @@ async def ai_call(session, model, system, user, max_tokens=1200):
 
 async def generate_image(prompt: str, vpn_proxy: str | None = None):
     """Generate image via Pollinations Flux model."""
+    # the prompt rides in the URL path, so it can't run long — but a bare [:500]
+    # drops the tail with nothing in the log to say so, and a cut prompt is the
+    # usual reason an image comes back not matching the post. say how much went.
+    if len(prompt) > 500:
+        print(f"  Image prompt cut to 500 of {len(prompt)} chars")
     encoded = urllib.parse.quote(prompt[:500])
     seed = random.randint(1, 999999)
     url = (
