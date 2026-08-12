@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- Log line when an image prompt gets cut to the 500-char URL limit — a trimmed prompt is the usual reason the image doesn't match the post, and nothing said it had happened
+- Size of the source post on the processing log line — the 50-char preview made a one-line blurb and a 3000-char essay look identical
+- "Rewrite missing" note on queue cards that have no rewritten text — you got the collapsed original and two buttons with no hint why
 - Fuzzy near-duplicate detection — the same story reworded or reordered by another source slipped past the exact md5 headline fingerprint and got republished; headlines are now also compared by Jaccard token overlap (`NEAR_DUP_THRESHOLD`, default 0.7), so reworded reposts are caught too. Backward-compatible with the existing `published_hashes.json` (old `{md5: ts}` format still loads); set `NEAR_DUP_THRESHOLD=0` to fall back to exact matching only.
 - Number-key shortcuts (1–5) jump straight to each nav section — keyboard users had to tab through the whole bar to reach analytics or sources
 - Character count on the queue card's original-text summary, matching the masked key fields — lets you see at a glance how much a source post got trimmed before rewriting
@@ -13,6 +16,9 @@
 - Dashboard keyboard shortcuts are now listed in the README FAQ — the on-page cheatsheet was the only place to see them
 
 ### Changed
+- Failed-login lockout length is configurable via `LOCKOUT_SECONDS` (default 30) — some deploys want a longer cooldown than the hardcoded one
+- Filter selects share the row evenly on phones instead of each sizing to its longest option and wrapping into a ragged pile
+- Inactive "no" pill on /sources is tinted like the other pills — it was the one solid tailwind gray on the page and sat oddly against the purple card
 - Pollinations image model is now set via `IMAGE_MODEL` instead of being hardcoded to `flux` — lets you switch models without touching the code
 - Rewrite model is now configurable via `TEXT_MODEL` instead of the hardcoded default — same idea as `IMAGE_MODEL`, so you can swap the text model from the env
 - `POLLINATIONS_BASE_URL` can override the API host — handy for pointing at a self-hosted or proxied endpoint instead of the public one
@@ -25,6 +31,8 @@
 - Coming back to a hidden tab now reloads it once right away — background ticks were already skipped, so a returning tab could sit on stale data until the next interval
 
 ### Fixed
+- Escape while typing in a field just lets go of that field instead of collapsing every panel on the page
+- The no-JS add/delete source form routes catch and log database errors — a failure there fell through to the JSON 500 handler, so a browser form post got raw JSON back
 - The 404 page now has a real heading instead of just the body text — screen readers and quick scans had nothing to anchor on
 - Add-source form fields stretch the full width on phones instead of staying at their cramped desktop size
 
