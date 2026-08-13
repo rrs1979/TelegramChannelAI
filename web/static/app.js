@@ -178,6 +178,26 @@ function copyValue(inputId, btn) {
     });
 }
 
+// copy every username in the sources table, one per line. the per-row copy
+// button is fine for one channel, but moving a set of them to another deploy
+// meant clicking down the whole table. filters hide rows with display:none, so
+// what lands on the clipboard is what's on screen.
+function copySourceList(btn) {
+    var names = [];
+    document.querySelectorAll('#sources-table tbody tr').forEach(function (row) {
+        if (row.style.display === 'none') return;
+        var link = row.querySelector('a');
+        if (link) names.push(link.textContent.trim());
+    });
+    if (!names.length) return;
+    navigator.clipboard.writeText(names.join('\n')).then(() => {
+        var prev = btn.textContent;
+        btn.textContent = 'Copied ' + names.length + '!';
+        popButton(btn);
+        setTimeout(() => { btn.textContent = prev; }, 1500);
+    });
+}
+
 // replay the copy-pop animation; the reflow lets it restart on a quick re-copy
 function popButton(btn) {
     btn.classList.remove('copied');
