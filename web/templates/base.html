@@ -137,6 +137,13 @@
         #queue-no-match, #published-no-match, #sources-no-match, #queue-cleared {
             animation: page-in .2s ease-out;
         }
+        /* j/k steps down the list — ring the card it stopped on, then let it
+           fade out on its own so nothing stays highlighted while you read */
+        @keyframes step-ring {
+            from { box-shadow: 0 0 0 2px rgba(96,165,250,.55); }
+            to   { box-shadow: 0 0 0 2px rgba(96,165,250,0); }
+        }
+        .stepped { animation: step-ring 1.4s ease-out; }
         /* queue cards fade out when approved/rejected instead of just popping away */
         .leaving {
             opacity: 0;

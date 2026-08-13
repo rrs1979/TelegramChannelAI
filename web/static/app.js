@@ -351,6 +351,7 @@ function toggleShortcuts() {
         ['r', 'reload the page'],
         ['t', 'back to the top'],
         ['b', 'jump to the bottom'],
+        ['j / k', 'next / previous post'],
         ['Esc', 'clear filter / leave field / collapse panels'],
         ['Ctrl+R', 'run the pipeline (dashboard)'],
         ['Ctrl+S', 'save settings'],
@@ -366,6 +367,31 @@ function toggleShortcuts() {
         '<div class="font-semibold mb-2 text-white">Keyboard shortcuts</div>' + rows + '</div>';
     box.addEventListener('click', function () { box.remove(); });
     document.body.appendChild(box);
+}
+
+// walk the queue/published list a post at a time. t and b only get you to the
+// ends, so working down a long queue meant scrolling by hand and hunting for
+// where you'd got to. filters hide cards with display:none, so this steps
+// through what's actually on screen.
+var stepAt = -1;
+function stepCards(dir) {
+    var cards = document.querySelectorAll('.space-y-4 > [data-id], .space-y-3 > details');
+    var shown = Array.prototype.filter.call(cards, function (el) {
+        return el.style.display !== 'none';
+    });
+    if (!shown.length) return;
+    stepAt = Math.min(Math.max(stepAt + dir, 0), shown.length - 1);
+    var card = shown[stepAt];
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    card.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+    // a smooth scroll just stops somewhere — flash a ring so it's obvious
+    // which card it landed on. clearing the last one first lets the animation
+    // replay when you step back onto a card you've already been on
+    document.querySelectorAll('.stepped').forEach(function (el) {
+        el.classList.remove('stepped');
+    });
+    void card.offsetWidth;
+    card.classList.add('stepped');
 }
 
 // keyboard shortcuts
@@ -520,6 +546,14 @@ document.addEventListener('keydown', function (e) {
         e.preventDefault();
         var reduceB = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         window.scrollTo({ top: document.body.scrollHeight, behavior: reduceB ? 'auto' : 'smooth' });
+    }
+
+    // "j"/"k" — down and up the list one post at a time
+    if ((e.key === 'j' || e.key === 'k') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var jt = (e.target.tagName || '').toLowerCase();
+        if (jt === 'input' || jt === 'textarea') return;
+        e.preventDefault();
+        stepCards(e.key === 'j' ? 1 : -1);
     }
 
     // "1"–"6" — jump to the matching nav link (in the order they appear)
