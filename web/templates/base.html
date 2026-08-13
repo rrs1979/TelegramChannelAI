@@ -287,6 +287,19 @@
                does it, no negative-margin trick needed */
             .copy-overlay { padding: .4rem .6rem; }
             .copy-field { padding-top: .3rem; padding-bottom: .3rem; }
+            /* the copy buttons got sorted out above, but the ones that actually
+               change something never did — Approve/Reject on a queue card and
+               the pending/approved/rejected/All pills are all py-1, so 28px
+               tall on a phone against the ~44px a thumb wants. min-height
+               instead of more padding, otherwise the pill row gets tall enough
+               to push the cards below the fold on a small screen */
+            [role="group"] > a,
+            [data-id] > .flex > button {
+                min-height: 2.5rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
             /* the runs/published tables sit in an overflow-x-auto box and scroll
                sideways on phones — give them the same momentum scroll the nav got
                so a flick doesn't stop dead halfway across the row */
