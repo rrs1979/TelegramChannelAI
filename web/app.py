@@ -403,11 +403,18 @@ def api_reject(item_id: int):
 @app.route("/api/pipeline/run", methods=["POST"])
 def api_run_pipeline():
     """Trigger pipeline run (async, returns immediately)."""
-    last = get_last_run()
-    if last and last.get("status") == "running":
-        return jsonify({"error": "A pipeline run is already in progress. Refresh the page to see its status."}), 409
-
-    run_id = start_run()
+    # both of these hit the db, and sqlite answers "database is locked" often enough
+    # here — the pipeline thread writes while the page polls. that came back as the
+    # generic 500, so the alert said "something went wrong on our side" and the log
+    # had no line saying the run never got off the ground.
+    try:
+        last = get_last_run()
+        if last and last.get("status") == "running":
+            return jsonify({"error": "A pipeline run is already in progress. Refresh the page to see its status."}), 409
+        run_id = start_run()
+    except Exception as e:
+        logger.error(f"Pipeline start failed: {e}")
+        return jsonify({"error": "Couldn't start the run, try again in a moment"}), 500
 
     logger.info(f"Pipeline run #{run_id} started")
 
