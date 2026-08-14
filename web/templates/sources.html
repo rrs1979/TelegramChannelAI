@@ -14,6 +14,7 @@
         <input type="text" id="sources-search" placeholder="Filter sources…" aria-label="Filter sources"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-56">
         <select id="sources-min-subs" aria-label="Filter by subscriber count"
+            title="Subscriber counts come from the last scan, so a fresh channel may read 0"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
             <option value="">Any size</option>
             <option value="1000">1k+ subs</option>
@@ -21,6 +22,7 @@
             <option value="100000">100k+ subs</option>
         </select>
         <select id="sources-added" aria-label="Filter by date added"
+            title="When the channel was added here — not how old the channel is"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
             <option value="">Any date</option>
             <option value="7">Added last 7 days</option>
@@ -28,6 +30,7 @@
             <option value="90">Added last 90 days</option>
         </select>
         <select id="sources-sort" aria-label="Sort sources"
+            title="Default order is the order they were added"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
             <option value="">Default order</option>
             <option value="subs">Most subscribers</option>
@@ -35,6 +38,7 @@
             <option value="added">Recently added</option>
         </select>
         <select id="sources-status" aria-label="Filter by status"
+            title="Paused channels stay in the table but get skipped on the next run"
             class="bg-dark-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
             <option value="">All statuses</option>
             <option value="active">Active</option>
