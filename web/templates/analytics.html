@@ -29,9 +29,11 @@
 {% set rate = '%d' % ((analytics.totals.completed / rated * 100) if rated > 0 else 0) %}
 {% set spent = '%.2f' % (analytics.daily | sum(attribute='cost')) %}
 {% set pub = analytics.daily | sum(attribute='published') %}
-<div class="flex justify-end mb-2">
+<div class="flex justify-end gap-4 mb-2">
     <button onclick="copyValue('Runs: {{ runs }} · Success: {{ rate }}% · Cost: ${{ spent }} · Published: {{ pub }} (last 30 days)', this)"
         class="copy-btn" title="Copy these figures as text">Copy summary</button>
+    <button type="button" id="copy-daily" class="copy-btn"
+        title="Copy the day-by-day rows as CSV — headers plus one line per day">Copy CSV</button>
 </div>
 
 <!-- summary cards -->
@@ -101,6 +103,22 @@
     const totals = {{ analytics.totals | tojson }};
 
     if (!daily.length) return;
+
+    // the summary button copies the four headline figures, but the per-day
+    // numbers only exist as chart shapes — reading a cost off the line chart is
+    // guesswork. hand over the same rows as csv so they can go in a sheet.
+    const cols = ['day', 'runs', 'completed', 'failed', 'generated', 'published', 'cost'];
+    const csvBtn = document.getElementById('copy-daily');
+    csvBtn.onclick = function () {
+        // a day with no runs of a given kind comes back null from the SUM, and
+        // 'null' is not what you want landing in a spreadsheet cell
+        const rows = daily.map(d => cols.map(c => d[c] == null ? '' : d[c]).join(','));
+        navigator.clipboard.writeText([cols.join(',')].concat(rows).join('\n')).then(() => {
+            csvBtn.textContent = 'Copied ' + rows.length + ' days!';
+            popButton(csvBtn);
+            setTimeout(() => { csvBtn.textContent = 'Copy CSV'; }, 1500);
+        });
+    };
 
     const labels = daily.map(d => d.day ? d.day.slice(5) : '');
 
